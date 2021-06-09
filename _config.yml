@@ -13,8 +13,8 @@ timezone: ''
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://example.com/child' and root as '/child/'
-url: https://nanxfu.github.io/nanxfu/
-root: /nanxfu/
+url: https://nanxfu.github.io
+root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -105,5 +105,5 @@ theme: fluid  # 指定主题
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: 'git'
-  respository: 'https://github.com/nanxfu/nanxfu.git'
+  respository: 'https://github.com/nanxfu/nanxfu.github.io'
   branch: 'master'
