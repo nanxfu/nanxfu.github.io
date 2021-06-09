@@ -105,5 +105,5 @@ theme: fluid  # 指定主题
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: 'git'
-  respository: 'https://gitee.com/mogudd/myblog.git'
+  respository: 'https://github.com/nanxfu/nanxfu.git'
   branch: 'master'
