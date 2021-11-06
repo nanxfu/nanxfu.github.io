@@ -109,7 +109,7 @@ fun_features:
   progressbar:
     enable: true
     height_px: 3
-    color: "#29d"
+    color: "#e84393"
     # See: https://github.com/rstacruz/nprogress
     options: { showSpinner: false, trickleSpeed: 100 }
 
@@ -135,7 +135,7 @@ color:
 
   # 顶部菜单背景色
   # Color of navigation bar background
-  navbar_bg_color: "#2f4154"
+  navbar_bg_color: "#fd79a8"
   navbar_bg_color_dark: "#1f3144"
 
   # 顶部菜单字体色
@@ -170,7 +170,7 @@ color:
 
   # 超链接悬浮时字体色
   # Color of link when hovering
-  link_hover_color: "#30a9de"
+  link_hover_color: "#e84393"
   link_hover_color_dark: "#30a9de"
 
   # 超链接悬浮背景色
@@ -473,13 +473,13 @@ index:
 # Post Page
 #---------------------------
 post:
-  banner_img: /img/default.png
+  banner_img: /img/1623251880550.jpg
   banner_img_height: 70
   banner_mask_alpha: 0.3
 
   # 文章在首页的默认封面图，当没有指定 index_img 时会使用该图片，若两者都为空则不显示任何图片
   # Path of the default post cover when `index_img` is not set. If both are empty, no image will be displayed
-  default_index_img:
+  default_index_img: /img/1623251892858.jpeg
 
   # 文章标题下方的元信息
   # Meta information below title
@@ -840,7 +840,7 @@ page404:
 #---------------------------
 links:
   enable: true
-  banner_img: /img/default.png
+  banner_img: 
   banner_img_height: 60
   banner_mask_alpha: 0.3
   subtitle:
@@ -864,6 +864,12 @@ links:
       intro: "主题 GitHub 仓库",
       link: "https://github.com/fluid-dev/hexo-theme-fluid",
       image: "/img/favicon.png"
+    }
+    - {
+      title: "皮皮凌の小窝",
+      intro: "皮皮凌の小窝",
+      link: "https://owomoe.net",
+      image: "https://cdn.jsdelivr.net/gh/AyagawaSeirin/homepage@latest/assets/img/logo.jpg"
     }
 
 
