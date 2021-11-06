@@ -347,9 +347,9 @@ img[srcset] {
   --post-text-color: #2c3e50;
   --post-heading-color: #1a202c;
   --post-link-color: #0366d6;
-  --link-hover-color: #30a9de;
+  --link-hover-color: #e84393;
   --link-hover-bg-color: #f8f9fa;
-  --navbar-bg-color: #2f4154;
+  --navbar-bg-color: #fd79a8;
   --navbar-text-color: #fff;
 }
 @media (prefers-color-scheme: dark) {
@@ -1184,10 +1184,10 @@ a.fancybox:hover {
 }
 #nprogress .bar {
   height: 3px !important;
-  background-color: #29d !important;
+  background-color: #e84393 !important;
 }
 #nprogress .peg {
-  box-shadow: 0 0 14px #29d, 0 0 8px #29d !important;
+  box-shadow: 0 0 14px #e84393, 0 0 8px #e84393 !important;
 }
 @media (max-width: 575px) {
   #nprogress .bar {
