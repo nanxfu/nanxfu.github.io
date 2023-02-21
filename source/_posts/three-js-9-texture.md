@@ -8,7 +8,7 @@ tags:
 index_img: /img/threejs.png
 ---
 ## 1.什么是材质?
-材质就是覆盖在集合体上的图片，并且也能有不同的视觉效果（例如反射），不仅仅是贴图
+材质就是覆盖在几何体上的图片，并且也能有不同的视觉效果（例如反射），不仅仅是贴图
 
 ## 2.材质种类
 ### 2.1 alpha
@@ -49,15 +49,12 @@ index_img: /img/threejs.png
 > PBR定义了一系列的算法用来模拟现实世界物体的渲染效果
 
 ## 3.使用材质
-首先使用一个由Paulo做的[门材质](https://3dtextures.me/2019/04/16/door-wood-001/),这是一个很有名的库
-
+了解了几种材质类型后就可以开始使用材质了。首先使用一个由Paulo做的[门材质](https://3dtextures.me/2019/04/16/door-wood-001/),这是一个很有名的库
 <div align="center"> {% asset_img door-texture.png 400%}</div>
-我们先来介绍一下材质的种类
-> ALPHA HEIGHT NORMAL AMBIENT OCCLUSION METALNESS ROUGHNESS
 
 ### 3.1加载材质静态资源
 
-使用材质首先需要解决的是引入材质图片，我们有两种方法引入
+使用材质首先需要解决的问题是引入材质图片，我们有两种方法引入
 1. 可以使用 import 导入
 ```javascript
 import imageSource from './color.jpg'
