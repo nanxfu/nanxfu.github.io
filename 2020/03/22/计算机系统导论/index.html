@@ -1,0 +1,697 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="description" content="日常&amp;技术&amp;生活">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>计算机系统导论 - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>南小府</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/">
+                <i class="iconfont icon-notebook"></i>
+                心情
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/1623251880550.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="计算机系统导论">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-22 01:23" pubdate>
+        March 22, 2020 am
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.5k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      17
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">计算机系统导论</h1>
+            
+            <div class="markdown-body">
+              <h2 id="1-5计算机系统性能评价"><a href="#1-5计算机系统性能评价" class="headerlink" title="1.5计算机系统性能评价"></a>1.5计算机系统性能评价</h2><ul>
+<li><p>  吞吐率：表示在单位时间内所完成的工作量，例如：带宽</p>
+</li>
+<li><p>  响应时间：指从作业提交开始到作业完成所用的时间，例如:执行时间、等待时间。</p>
+</li>
+<li><p>  存储容量：存储器存放的二进制位数，反应存储器存储能力的指标。</p>
+</li>
+<li><p>  机器字长： CPU一次处理的二进制位，反应CPU工作能力</p>
+</li>
+<li><p>  指令字长： 一条指令用多少位二进制数表示</p>
+</li>
+<li><p>  存储字长： 一个存储单元能存放的二进制位数。</p>
+</li>
+</ul>
+<h2 id="1-6数制相互转换"><a href="#1-6数制相互转换" class="headerlink" title="1.6数制相互转换"></a>1.6数制相互转换</h2><p>例1：<br>将（1010111011.0010111）2转换为八进制</p>
+<p>001</p>
+<p>010</p>
+<p>111</p>
+<p>001</p>
+<p>.</p>
+<p>001</p>
+<p>011</p>
+<p>100</p>
+<p>1</p>
+<p>2</p>
+<p>7</p>
+<p>3</p>
+<p>.</p>
+<p>1</p>
+<p>3</p>
+<p>4</p>
+<p>例2：<br>将（2754.41）8转换为二进制</p>
+<p>2</p>
+<p>7</p>
+<p>5</p>
+<p>4</p>
+<p>.</p>
+<p>4</p>
+<p>1</p>
+<p>010</p>
+<p>111</p>
+<p>101</p>
+<p>100</p>
+<p>.</p>
+<p>100</p>
+<p>001</p>
+<h2 id="2-2二进制数的表示"><a href="#2-2二进制数的表示" class="headerlink" title="2.2二进制数的表示"></a>2.2二进制数的表示</h2><ul>
+<li><p>  真值：数的真实值。例如: +1011 , -1011 , +0.1010 , -0.1010</p>
+</li>
+<li><p>机器数：真值的符号位数字化成0表示正1表示负。例如: 0,1011 、1,1011 、 0.1010 、 1,1010</p>
+<h3 id="2-2-3机器数的表示"><a href="#2-2-3机器数的表示" class="headerlink" title="2.2.3机器数的表示"></a>2.2.3机器数的表示</h3><ul>
+<li><p>  原码：等于机器数</p>
+</li>
+<li><p>  反码：正数反码等于原码，负数反码等于原码符号位不变数值位取反。</p>
+</li>
+<li><p>  补码：正数补码等于原码，负数补码等于反码末位加1。</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>### 2.2.4定点数和浮点数的表示
+
+*   定点数概念：指计算机中的小数点位置固定不变的数的表示方式。
+*   分类
+
+    *   定点整数：小数点固定在数的最低位之后。设字长为8位,能表示的数值范围为: 0000000 - 01111111即0 - (27 - 1 )
+
+    *   定点小数: 小数点固定在数的最高位之前。设字长为8位,能表示的范围为: 0.00000 ~ 1111111即0 - (1 - 2\-7 )
+
+    *   浮点数概念：指计算机中的小数点位置不是固定的，或者说是“浮动”的。
+
+    *   数的表示方式：通过阶码和尾数表示：N=2±E × (±S)
+
+    *   E称为**阶码**，它是一个二进制正整数;
+
+    *   E前的土为阶码的符号，称为**阶符**(Ef);表示了是扩大还是缩小，正数则为扩大，负数则为缩小
+
+    *   S称为**尾数**，它是一个二进制正小数;
+
+    *   S前的±为尾数的符号，称为**尾符**(Sf)
+
+    *   “2”是阶码E的**底数**。</code></pre>
+<p><img src="https://i.loli.net/2020/03/24/ZEeqYbAvSNKdQxr.png" srcset="/img/loading.gif" alt="例子"></p>
+<h2 id="2-3十进制数表示"><a href="#2-3十进制数表示" class="headerlink" title="2.3十进制数表示"></a>2.3十进制数表示</h2><ul>
+<li><p>BCD码(二进制 -&gt; 十进制)：用四位二进制代码对一位十进制数进行编码，它既具有二进制码的形式(四位二进制码)，又有十进制数的特点(每四位二进制码是一位十进制数)。</p>
+<p>  例：（931）10 = (?)BCD</p>
+<p>  9</p>
+<p>  3</p>
+<p>  1</p>
+<p>  1001</p>
+<p>  0011</p>
+<p>  0001</p>
+<p>  = (1001 0011 0001)BCD</p>
+</li>
+</ul>
+<h2 id="2-4字符编码"><a href="#2-4字符编码" class="headerlink" title="2.4字符编码"></a>2.4字符编码</h2><ul>
+<li>  ASCII编码：用一个字节表示，最高位置0，只用低七位，收集了128个字符和符号。当ASCII码的最高位取1时，又可表示128个字符,这种编码称为扩展ASCII码， 主要是一些制符</li>
+</ul>
+<p><img src="https://i.loli.net/2020/03/24/9ksDlhywvS3tRdC.png" srcset="/img/loading.gif" alt="p1"></p>
+<h3 id="2-4-2-文字编码"><a href="#2-4-2-文字编码" class="headerlink" title="2.4.2 文字编码"></a>2.4.2 文字编码</h3><ul>
+<li><p>文字编码（↓汉字的输入码（外码））</p>
+<ul>
+<li><p>  数字编码： 如电报码或国家标准GB2312 - 80规定的汉字交(国标、区位码)来输入汉字都是数字编码。数字编码法不会产生重码，但难以记忆不易推广</p>
+</li>
+<li><p>  字音编码： 一种基于汉语拼音的编码方法。由于同音字很多，因此这种编码方法会产生很多重码</p>
+</li>
+<li><p>  字形编码:根据汉字的字形而给出编码方法。把汉宇分解为字根、部首、偏旁、笔划等基本单位，每种基本单位与健盘上的一个健相对应，从而构成一个汉字的编码。这种输人法不易记忆但具有重码少，输入速度快等优点。</p>
+</li>
+<li><p>  形音编码:形音编码法吸取字音编码和字形编码两种编码的特点，使编码规则简单，重码少。</p>
+</li>
+<li><p>  汉字的机内码:是供计算机系统内部进行存储、加工处理传输统一使用的代码。目前使用最广泛的是变形的国标码将GB2312-80交换码的两个字节的最高位分别置为1而得到的。</p>
+</li>
+<li><p>  汉字字形码:是指汉字字形点阵的代码，用于汉字的显示 和打印。目前汉字字形的产生方式大多是数字式，即以点阵方式形成汉字。</p>
+</li>
+<li><p>  汉字字库:是汉字字形数字化后，以二进制文件形式存储在存储器中而形成的汉字字模库。</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>![p2](https://i.loli.net/2020/03/24/u4qSgioHh81CxIs.png)</code></pre>
+<h2 id="2-5数据基本运算"><a href="#2-5数据基本运算" class="headerlink" title="2.5数据基本运算"></a>2.5数据基本运算</h2><ul>
+<li>  算数移位</li>
+</ul>
+<p> </p>
+<p>码制</p>
+<p>添补代码</p>
+<p>正数</p>
+<p>原码、补码、反码</p>
+<p>0</p>
+<p>负数</p>
+<p>原码</p>
+<p>0</p>
+<p>补码</p>
+<p>左移 添0</p>
+<p>右移 添1 </p>
+<p>反码</p>
+<p>添1</p>
+<ul>
+<li><p>逻辑位移</p>
+<ul>
+<li><p>  逻辑左移 低位添0，高位移丢</p>
+</li>
+<li><p>逻辑右移 高位添0，低位移丢</p>
+<p>例如</p>
+<p>01010011</p>
+<p> </p>
+<p>10110010</p>
+<p>逻辑左移</p>
+<p>1010011<strong>0</strong></p>
+<p>逻辑右移</p>
+</li>
+<li><p>*01**011001</p>
+<p>算术左移</p>
+<p>0010011<strong>0</strong></p>
+<p>逻辑右移</p>
+</li>
+<li><p>*11**011001（补码）</p>
+<h3 id="2-5-3加减运算"><a href="#2-5-3加减运算" class="headerlink" title="2.5.3加减运算"></a>2.5.3加减运算</h3></li>
+</ul>
+<ol>
+<li> 加法(补码)</li>
+</ol>
+<p>  <strong>整数</strong> : [A]补 + [B]补 = [A+B]补（mod 2n+1)<br>  <strong>小数</strong> : [A]补 + [B]补 = [A+B]补（mod 2）</p>
+<ol start="2">
+<li><p>减法<br> A - B = A + (-B)<br> <strong>整数</strong> : [A - B]补 = [A + (-B)]补 = [A + (-B)]补（mod 2n+1)<br> <strong>小数</strong> : [A - B]补 = [A + (-B)]补 = [A + (-B)]补（mod 2n+1)</p>
+<blockquote>
+<p>连同符号位一起相加，符号位产生的进位自然丢掉</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code>*   **例子一**
+
+    设 _A_\= 0.1011 , _B_ = -0.0101 求 \[A+B\]补
+
+
+解:
+
+\[A\]补
+
+\=
+
+0.1011
+
+ 
+
+ 
+
++\[B\]补
+
+\=
+
+1.1011
+
+ 
+
+\[A\]补
+
++\[B\]补
+
+\=
+
+10.0110
+
+\= \[A\]补+\[B\]补
+
+注：
+
+A + B
+
+\=
+
+0.0110
+
+*   **例子二**  
+    ![例子二](https://i.loli.net/2020/03/24/eZOikX1xr2G5JaL.png)</code></pre>
+<h2 id="3-1-程序的链接"><a href="#3-1-程序的链接" class="headerlink" title="3.1 程序的链接"></a>3.1 程序的链接</h2><ul>
+<li><p>程序的执行过程<br>  <img src="https://i.loli.net/2020/03/24/cUK5j4AFI7gYB3b.png" srcset="/img/loading.gif"><br>  <img src="https://i.loli.net/2020/03/24/ZxXyOg9TQfGJhtB.png" srcset="/img/loading.gif"></p>
+<ul>
+<li><p>程序的执行<br>  指令：计算机的一条命令<br>  指令的一般格式：操作码字段 - 地址码字段</p>
+<blockquote>
+<ul>
+<li>  操作码： 作何操作</li>
+<li>  地址吗：操作数存放的位置</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>寻址方式：  
+确定**本条指令**的**操作数地址**  
+**下一条**欲执行指令的**指令地址**  
+![图片.png](https://i.loli.net/2020/03/24/eQAkM6qcBgIZoWh.png)</code></pre>
+<p>[toc]</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6/">计算机科学</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/03/27/phpGD%E5%BA%93%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">phpGD库图像处理</span>
+                        <span class="visible-mobile">Vorheriger</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/17/Vue%E7%AC%94%E8%AE%B0/">
+                        <span class="hidden-mobile">Vue笔记。</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

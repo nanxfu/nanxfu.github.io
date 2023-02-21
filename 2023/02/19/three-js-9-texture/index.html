@@ -251,7 +251,7 @@
             <h1 style="display: none">three.js_9-texture</h1>
             
             <div class="markdown-body">
-              <h2 id="1-什么是材质"><a href="#1-什么是材质" class="headerlink" title="1.什么是材质?"></a>1.什么是材质?</h2><p>材质就是覆盖在集合体上的图片，并且也能有不同的视觉效果（例如反射），不仅仅是贴图</p>
+              <h2 id="1-什么是材质"><a href="#1-什么是材质" class="headerlink" title="1.什么是材质?"></a>1.什么是材质?</h2><p>材质就是覆盖在几何体上的图片，并且也能有不同的视觉效果（例如反射），不仅仅是贴图</p>
 <h2 id="2-材质种类"><a href="#2-材质种类" class="headerlink" title="2.材质种类"></a>2.材质种类</h2><h3 id="2-1-alpha"><a href="#2-1-alpha" class="headerlink" title="2.1 alpha"></a>2.1 alpha</h3><ul>
 <li>alpha 材质是一个灰度图，白色的地方代表可见，黑色则代表不可见，如下图<div align="center"> <img src="/2023/02/19/three-js-9-texture/door/alpha.jpg" srcset="/img/loading.gif" class="" width="400"> </div>
 
@@ -292,12 +292,10 @@
 <blockquote>
 <h3 id="PBR-规范"><a href="#PBR-规范" class="headerlink" title="PBR 规范"></a>PBR 规范</h3><p>PBR是基于物理表现的渲染，例如光照、金属光泽、粗糙度（实际上大多数技术都倾向于遵循现实世界的物理效果）<br>PBR定义了一系列的算法用来模拟现实世界物体的渲染效果</p>
 </blockquote>
-<h2 id="3-使用材质"><a href="#3-使用材质" class="headerlink" title="3.使用材质"></a>3.使用材质</h2><p>首先使用一个由Paulo做的<a target="_blank" rel="noopener" href="https://3dtextures.me/2019/04/16/door-wood-001/">门材质</a>,这是一个很有名的库</p>
+<h2 id="3-使用材质"><a href="#3-使用材质" class="headerlink" title="3.使用材质"></a>3.使用材质</h2><p>了解了几种材质类型后就可以开始使用材质了。首先使用一个由Paulo做的<a target="_blank" rel="noopener" href="https://3dtextures.me/2019/04/16/door-wood-001/">门材质</a>,这是一个很有名的库</p>
 <div align="center"> <img src="/2023/02/19/three-js-9-texture/door-texture.png" srcset="/img/loading.gif" class="" width="400"></div>
-我们先来介绍一下材质的种类
-> ALPHA HEIGHT NORMAL AMBIENT OCCLUSION METALNESS ROUGHNESS
 
-<h3 id="3-1加载材质静态资源"><a href="#3-1加载材质静态资源" class="headerlink" title="3.1加载材质静态资源"></a>3.1加载材质静态资源</h3><p>使用材质首先需要解决的是引入材质图片，我们有两种方法引入</p>
+<h3 id="3-1加载材质静态资源"><a href="#3-1加载材质静态资源" class="headerlink" title="3.1加载材质静态资源"></a>3.1加载材质静态资源</h3><p>使用材质首先需要解决的问题是引入材质图片，我们有两种方法引入</p>
 <ol>
 <li><p>可以使用 import 导入</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">import</span> imageSource <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./color.jpg&#x27;</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(imageSource)    <span class="hljs-comment">//http://localhost/images/c43f...jpg</span><br></code></pre></td></tr></table></figure></li>
@@ -416,13 +414,19 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2023/02/20/three-js-10-Materials/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">three.js_10-Materials</span>
+                        <span class="visible-mobile">Vorheriger</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
                       <a href="/2021/11/03/CSS-Box-Model/">
                         <span class="hidden-mobile">CSS - Box Model</span>
-                        <span class="visible-mobile">Next</span>
+                        <span class="visible-mobile">Nächster</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
@@ -465,7 +469,7 @@
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -474,7 +478,7 @@
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
           <label data-error="x" data-success="v"
-                 for="local-search-input">keyword</label>
+                 for="local-search-input">Stichwort</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
