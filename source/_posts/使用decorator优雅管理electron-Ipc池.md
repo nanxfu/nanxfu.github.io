@@ -17,9 +17,10 @@ typescript的decorator一共有五种可被我们使用:
 3. Accessor Decorators(访问器装饰器)
 4. Property Decorators
 5. Parameter Decorators
+
 鉴于需求的原因，在本文仅介绍前两种装饰器。其它装饰器的介绍可在官网查阅
 [中文手册](https://www.tslang.cn/docs/handbook/decorators.html) [官网手册](https://www.typescriptlang.org/docs/handbook/decorators.html)
-
+(先咕咕咕一下...)
 ### 1.1 Class Decorators
 
 ### 1.2 Method Decorators
