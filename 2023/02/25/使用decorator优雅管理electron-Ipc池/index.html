@@ -17,9 +17,25 @@
   <meta name="description" content="日常&amp;技术&amp;生活">
   <meta name="author" content="nanxfu">
   <meta name="keywords" content="">
-  <title>Archiv - 南小府の小屋</title>
+  <title>使用decorator优雅管理electron-Ipc池 - 南小府の小屋</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -47,7 +63,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -165,14 +181,51 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('/img/default.png') no-repeat center center;
+         style="background: url('/img/1623251880550.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Archiv">
+            <span class="h2" id="subtitle" title="使用decorator优雅管理electron-Ipc池">
               
             </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-02-25 22:43" pubdate>
+        February 25, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      141 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      1
+       分钟
+    </span>
+  
+
+  
+  
+</div>
 
             
           </div>
@@ -185,40 +238,94 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">Insgesamt 26 Artikel.</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2019</p>
-    
-    <a href="/2019/12/02/PhotoShop%E6%89%92%E5%9B%BE/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">PhotoShop扒图（知乎读书封面）</span>
-      <time style="float: right;">12-02</time>
-    </a>
-  
-</div>
 
-
-
-
-
-              </div>
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">使用decorator优雅管理electron-Ipc池</h1>
+            
+            <div class="markdown-body">
+              <h2 id="1-decorator简介"><a href="#1-decorator简介" class="headerlink" title="1.decorator简介"></a>1.decorator简介</h2><blockquote>
+<p>要启用对装饰器的实验性支持，您必须在命令行或 tsconfig.json 中启用 experimentalDecorators 编译器选项</p>
+</blockquote>
+<p>typescript的decorator一共有五种可被我们使用:</p>
+<ol>
+<li>Class Decorators</li>
+<li>Method Decorators</li>
+<li>Accessor Decorators(访问器装饰器)</li>
+<li>Property Decorators</li>
+<li>Parameter Decorators<br>鉴于需求的原因，在本文仅介绍前两种装饰器。其它装饰器的介绍可在官网查阅<br><a target="_blank" rel="noopener" href="https://www.tslang.cn/docs/handbook/decorators.html">中文手册</a> <a target="_blank" rel="noopener" href="https://www.typescriptlang.org/docs/handbook/decorators.html">官网手册</a></li>
+</ol>
+<h3 id="1-1-Class-Decorators"><a href="#1-1-Class-Decorators" class="headerlink" title="1.1 Class Decorators"></a>1.1 Class Decorators</h3><h3 id="1-2-Method-Decorators"><a href="#1-2-Method-Decorators" class="headerlink" title="1.2 Method Decorators"></a>1.2 Method Decorators</h3><h2 id="2-Ipc通信"><a href="#2-Ipc通信" class="headerlink" title="2.Ipc通信"></a>2.Ipc通信</h2><h3 id="2-1-单向通信"><a href="#2-1-单向通信" class="headerlink" title="2.1 单向通信"></a>2.1 单向通信</h3><h3 id="2-2-双向通信"><a href="#2-2-双向通信" class="headerlink" title="2.2 双向通信"></a>2.2 双向通信</h3><h2 id="3-使用decorator管理Ipc"><a href="#3-使用decorator管理Ipc" class="headerlink" title="3.使用decorator管理Ipc"></a>3.使用decorator管理Ipc</h2><h2 id="4-进阶：自动加载-Ipc-handler"><a href="#4-进阶：自动加载-Ipc-handler" class="headerlink" title="4.进阶：自动加载 Ipc handler"></a>4.进阶：自动加载 Ipc handler</h2>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/typescript/">typescript</a>
+                    
+                      <a class="hover-with-bg" href="/tags/electron/">electron</a>
+                    
+                      <a class="hover-with-bg" href="/tags/ipc%E9%80%9A%E4%BF%A1/">ipc通信</a>
+                    
+                      <a class="hover-with-bg" href="/tags/decorator/">decorator</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/24/three-js-11-3D-Text/">
+                        <span class="hidden-mobile">three.js-11:3D-Text</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -298,9 +405,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
