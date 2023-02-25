@@ -1,0 +1,515 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="description" content="日常&amp;技术&amp;生活">
+  <meta name="author" content="nanxfu">
+  <meta name="keywords" content="">
+  <title>three.js-11:3D-Text - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>南小府</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/">
+                <i class="iconfont icon-notebook"></i>
+                心情
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/1623251880550.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="three.js-11:3D-Text">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-02-24 21:11" pubdate>
+        February 24, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.2k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      16
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">three.js-11:3D-Text</h1>
+            
+            <div class="markdown-body">
+              <p>在这本节中，我们将实现 ilithya的<a target="_blank" rel="noopener" href="https://www.ilithya.rocks/">3D文本</a>特效。如下图所示</p>
+<div align="center"> <img src="/2023/02/24/three-js-11-3D-Text/3Dtext.png" srcset="/img/loading.gif" class="" width="400"> </div>
+
+<h2 id="1-字体加载"><a href="#1-字体加载" class="headerlink" title="1.字体加载"></a>1.字体加载</h2><p>我们首先使用 <code>TextBufferGeometry</code> 在场景中创建一个3D文本。要设定字体需要使用<a target="_blank" rel="noopener" href="https://gero3.github.io/facetype.js/">typeface</a>将字体转换为指定格式。或者使用 Three.js 提供的字体。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">import</span> typefaceFont <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;three/example/fonts/helvetiker_regular.typeface.json&#x27;</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>要练习通过静态资源加载字体的方法可以采用以下步骤：</p>
+<ul>
+<li>打开 /node_modules/three/example/fonts/</li>
+<li>将 helvetiker_regular.typeface.json 文件和 LICENSE 文件粘贴到 /static/fonts 文件夹下</li>
+<li>然后就可以通过访问 /font/helvetiker_regular.typeface.json URL 加载字体资源了</li>
+</ul>
+</blockquote>
+<p>加载字体需要使用 <code>FontLoader</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Fonts</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">const</span> fontLoader = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">FontLoader</span>()<br>fontLoader.<span class="hljs-title function_">load</span>(<br>    <span class="hljs-string">&#x27;/font/helvetiker_regular.typeface.json&#x27;</span>,<br>    <span class="hljs-function">(<span class="hljs-params">font</span>)=&gt;</span>&#123;<br>        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;font loaded&#x27;</span>)<br>    &#125;<br>)<br><br><span class="hljs-comment">//注意，此处与材质加载器不同，材质加载器加载后会得到材质，而字体加载器加载后需要在回调函数里获取字体</span><br><span class="hljs-keyword">const</span> texture = textureLoader.<span class="hljs-title function_">load</span>()    <span class="hljs-comment">//得到材质</span><br></code></pre></td></tr></table></figure>
+<h2 id="2-文本创建"><a href="#2-文本创建" class="headerlink" title="2.文本创建"></a>2.文本创建</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs javascript">fontLoader.<span class="hljs-title function_">load</span>(    <span class="hljs-comment">//加载字体</span><br>    <span class="hljs-string">&#x27;/font/helvetiker_regular.typeface.json&#x27;</span>,<br>    <span class="hljs-function">(<span class="hljs-params">font</span>)=&gt;</span>&#123;<br>        <span class="hljs-comment">//创建文本顶点数据</span><br>        <span class="hljs-keyword">const</span> textGeometry = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ThREE</span>.<span class="hljs-title class_">TextBufferGeometry</span>(<br>            <span class="hljs-string">&quot;Hello Three.js&quot;</span>,<br>            &#123;<br>                <span class="hljs-comment">//font config</span><br>                font,<br>                <span class="hljs-attr">size</span>: <span class="hljs-number">0.5</span>,<br>                <span class="hljs-attr">height</span>: <span class="hljs-number">0.2</span>,<br>                <span class="hljs-attr">curveSegments</span>: <span class="hljs-number">12</span>,<br>                <span class="hljs-attr">bevelEnable</span>: <span class="hljs-literal">true</span>,<br>                <span class="hljs-attr">bevelThickness</span>: <span class="hljs-number">0.03</span>,<br>                <span class="hljs-attr">bevelSize</span>: <span class="hljs-number">0.02</span>,<br>                <span class="hljs-attr">bevelOffset</span>: <span class="hljs-number">0</span>,<br>                <span class="hljs-attr">bevelSegments</span>: <span class="hljs-number">5</span><br>            &#125;<br>        )<br>        <span class="hljs-comment">//创建材质</span><br>        <span class="hljs-keyword">const</span> textMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshBasicMaterial</span>()<br>        <span class="hljs-comment">//创建网格</span><br>        <span class="hljs-keyword">const</span> text = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(textGeometry, textMaterial)<br>        <span class="hljs-comment">//加入场景</span><br>        scene.<span class="hljs-title function_">add</span>(text)<br>    &#125;<br>)<br></code></pre></td></tr></table></figure>
+<p>注意创建文字几何体是非常耗费资源的，因为一段文字会包含许多的几何体（三角形、圆形），所以我们尽量通过减少 <code>curveSegments</code> 和 <code>bevelSegments</code>的值来保持文本几何体是低模的</p>
+<h3 id="2-1-文本居中"><a href="#2-1-文本居中" class="headerlink" title="2.1 文本居中"></a>2.1 文本居中</h3><p>居中文本的方式有很多种。</p>
+<ol>
+<li>BOUNDING</li>
+</ol>
+<p><strong>BOUNDING</strong> 就是几何体的边界信息，意味着几何体在空间中占用的大小，他可能是一个立方体，也可能是一个球体</p>
+<div align="center">  </div>。它可以让 **THree.js** 计算哪些物体应该在视锥范围内显示。所以我们可以用 **bounding** 让文本居中
+
+<p>默认情况下， <strong>THree.js</strong> 使用球面 <strong>BOUNDING</strong>，我们可以用 <code>computeBoundingBox()</code> 计算 <strong>Bounding</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">textGeometry.<span class="hljs-title function_">computeBoundingBox</span>()<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(textGeometry.<span class="hljs-property">boundingBox</span>)   <span class="hljs-comment">//注意，在使用textGeometry.boundingBox之前需要先使用computeBoundingBox</span><br></code></pre></td></tr></table></figure>
+<p><strong>textGeometry.boundingBox</strong> 的结果是 <code>Box3</code> 实例，具有 <strong>min</strong> 和 <strong>max属性</strong>。如果你观察上面打印出来的结果会发现即使文本是从原点开始创建的但 <strong>min</strong> property并不是0，这是因为 <strong>bevelThickness</strong> 和 <strong>bevelSize</strong>的影响。</p>
+<p>我们接下来使用 <code>translate</code> 方法来移动整个几何体的顶点，而不是移动 mesh。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript">textGeometry.<span class="hljs-title function_">translate</span>(<br>    - textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">x</span> * <span class="hljs-number">0.5</span>,<br>    - textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">y</span> * <span class="hljs-number">0.5</span>,<br>    - textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">z</span> * <span class="hljs-number">0.5</span><br>)<br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/02/24/three-js-11-3D-Text/translate.png" srcset="/img/loading.gif" class="" width="400"> </div>
+
+<p>表面看起来移动在中心了，实际上并没有。因为bevelThickness和bevelSize的影响。所以还需微调以下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript">textGeometry.<span class="hljs-title function_">translate</span>(<br>    - ( textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">x</span> - <span class="hljs-number">0.02</span>) * <span class="hljs-number">0.5</span>,<br>    - ( textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">y</span> - <span class="hljs-number">0.02</span> )* <span class="hljs-number">0.5</span>, <span class="hljs-comment">// -0.02是因为 bevelsize（从字体内部到外部的距离）</span><br>    - ( textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">z</span> - <span class="hljs-number">0.03</span> ) * <span class="hljs-number">0.5</span> <span class="hljs-comment">// -0.03是因为bevelThickness</span><br>)<br></code></pre></td></tr></table></figure>
+<p>这样才能是真正的居中</p>
+<h3 id="2-2-使用-center-居中"><a href="#2-2-使用-center-居中" class="headerlink" title="2.2 使用 center() 居中"></a>2.2 使用 center() 居中</h3><p>实际上three.js内置了一个 center() 函数来使文字居中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">textGeometry.<span class="hljs-title function_">center</span>()<br></code></pre></td></tr></table></figure>
+<p>center函数也是基于BOUNDING实现的</p>
+<h2 id="3-添加MATCAT"><a href="#3-添加MATCAT" class="headerlink" title="3.添加MATCAT"></a>3.添加MATCAT</h2><p>我们使用 <strong>MeshMatcapMaterial</strong> 应用 matcaps(模拟光照阴影)，你可以在这里<a target="_blank" rel="noopener" href="https://github.com/nidorx/matcaps">下载matcaps</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> textureLoader = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TextureLoader</span>()<br><span class="hljs-keyword">const</span> matcapTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/matcaps/1.png&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<p>然后使用 <strong>MeshMatcapMaterial</strong> 替换 <strong>MeshBasicMaterial</strong>，并使用 matcap</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> textMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshMatcapMaterial</span>(&#123;<span class="hljs-attr">matcap</span>: matcapTexture&#125;)<br><br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/02/24/three-js-11-3D-Text/matcap.png" srcset="/img/loading.gif" class="" width="400"> </div>
+
+<h2 id="4-添加装饰几何体"><a href="#4-添加装饰几何体" class="headerlink" title="4.添加装饰几何体"></a>4.添加装饰几何体</h2><p>在场景中创建完3D文本后我们可以添加100个几何体用来装饰周围环境，首先我们用一个低效的方法实现创建100个几何体</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i&lt;<span class="hljs-number">100</span>; i++)&#123;<br>    <span class="hljs-keyword">const</span> donutGeometry = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TorusBufferGeometry</span>(<span class="hljs-number">0.3</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">20</span>, <span class="hljs-number">45</span>)<br>    <span class="hljs-keyword">const</span> donutMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshMatcapMaterial</span>(&#123;<span class="hljs-attr">matcap</span>: matcapTexture&#125;)<br>    <span class="hljs-keyword">const</span> donut = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(donutGeometry, donutMaterial)<br>    <br>    donut.<span class="hljs-property">position</span>.<span class="hljs-property">x</span> = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span>) * <span class="hljs-number">10</span><br>    donut.<span class="hljs-property">position</span>.<span class="hljs-property">y</span> = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span>) * <span class="hljs-number">10</span><br>    donut.<span class="hljs-property">position</span>.<span class="hljs-property">z</span> = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span>) * <span class="hljs-number">10</span><br>    <br>    scene.<span class="hljs-title function_">add</span>(donut)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>效果如下</p>
+<div align="center"> <img src="/2023/02/24/three-js-11-3D-Text/donut.png" srcset="/img/loading.gif" class="" width="400"> </div>
+所有的甜甜圈都朝向一个地方,且大小相同，所以我们最好给甜甜圈旋转以下，并缩放甜甜圈
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//...</span><br>donut.<span class="hljs-property">rotation</span>.<span class="hljs-property">x</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span><br>donut.<span class="hljs-property">rotation</span>.<span class="hljs-property">y</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span><br><br><span class="hljs-keyword">const</span> scale = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()<br>donut.<span class="hljs-property">scale</span>.<span class="hljs-property">x</span> = scale<br>donut.<span class="hljs-property">scale</span>.<span class="hljs-property">y</span> = scale<br>donut.<span class="hljs-property">scale</span>.<span class="hljs-property">z</span> = scale<br><br><span class="hljs-comment">//或者使用 donut.scale.set(scale, scale, scale)</span><br>scene.<span class="hljs-title function_">add</span>(donut)<br><span class="hljs-comment">//...</span><br></code></pre></td></tr></table></figure>
+<h2 id="5-优化"><a href="#5-优化" class="headerlink" title="5.优化"></a>5.优化</h2><p>实际上以上的性能非常低效，我们可以用 <code>console.time(donuts)</code> 看一下性能消耗</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&quot;donuts&quot;</span>)<br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i= <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span> ; i++)<br>&#123;<br>    <span class="hljs-comment">//...</span><br>&#125;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&quot;donuts&quot;</span>)  <span class="hljs-comment">//44...ms</span><br></code></pre></td></tr></table></figure>
+<p>可以看出是非常消耗性能的，所以我们有一个优化思路：我们可以用同样的 <strong>geometry</strong> 和 <strong>material</strong> 在多个 <strong>Meshes</strong> 上</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&quot;donuts&quot;</span>)<br><span class="hljs-keyword">const</span> donutGeometry = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TorusBufferGeometry</span>(<span class="hljs-number">0.3</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">20</span>, <span class="hljs-number">45</span>)<br><span class="hljs-keyword">const</span> donutMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshMatcapMaterial</span>(&#123;<span class="hljs-attr">matcap</span>: matcapTexture&#125;)<br><br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++)&#123;<br>    <span class="hljs-comment">//...</span><br>&#125;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&quot;donuts&quot;</span>) <span class="hljs-comment">//1.... ms</span><br></code></pre></td></tr></table></figure>
+<p>可以看到优化非常的明显</p>
+<p>此外，我们还可以让 <strong>donut</strong> 和 <strong>text</strong> 使用同一个 <strong>material</strong>，而不必再为 <strong>donut</strong> 实例化一个 <strong>material</strong></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/javascript/">javascript</a>
+                    
+                      <a class="hover-with-bg" href="/tags/three-js/">three.js</a>
+                    
+                      <a class="hover-with-bg" href="/tags/web/">web</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/20/three-js-10-Materials/">
+                        <span class="hidden-mobile">three.js_10-Materials</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
