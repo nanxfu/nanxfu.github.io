@@ -29,7 +29,7 @@ tags:
 
 **DirectionalLight** 会模拟太阳光照效果（平行光）
 
-它也有两个属性：color 和 intensity
+它也有两个属性：**color** 和 **intensity**
 
 <div align="center"> {% asset_img direc.png 400%} </div>
 
