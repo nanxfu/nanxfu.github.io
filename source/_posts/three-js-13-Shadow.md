@@ -7,7 +7,7 @@ tags:
 - web
 - javascript
 ---
-在添加光源后我们就可以看到物体上的明暗变化了，这个阴影实际叫做 **core shadows**，但是我没还没有投射到其他物体上的 **drop shadow**，本章将讲解如何获得 **drop shadows**
+在添加光源后我们就可以看到物体上的明暗变化了，这个阴影实际叫做 **core shadows**，但是我们还没有投射到其他物体上的 **drop shadow**，本章将讲解如何获得 **drop shadows**
 
 光线追踪实际是个很耗费资源的计算，开发者需要用一些小技巧来增强视觉体验
 
@@ -47,17 +47,17 @@ directionalLight.castShadow = true
 ```
 
 ## 2.优化阴影
-下图就是默认的阴影效果了，可以看到非常不好看，所以我没需要优化阴影
+下图就是默认的阴影效果了，可以看到非常不好看，所以我们需要优化阴影
 <div align="center"> {% asset_img example.png 400 %} </div>
 
-我没可以通过光源的 ```shadow``` 属性来访问 shadow map
+我们可以通过光源的 ```shadow``` 属性来访问 shadow map
 
 ```javascript
 console.log(directionalLight.shadow)
 ```
 <div align="center"> {% asset_img shadow.png 400 %} </div>
 
-默认情况下 shadow map大小是512x512的，我没可以将它增大。不过增大后当然会增加渲染压力，所以需要做好性能与视觉效果的平衡
+默认情况下 shadow map大小是512x512的，我们可以将它增大。不过增大后当然会增加渲染压力，所以需要做好性能与视觉效果的平衡
 
 ```javascript
 directionalLight.shadow.mapSize.width = 1024
@@ -109,10 +109,156 @@ directionalLight.shadow.radius = 10
 ## 3.阴影贴图算法
 
 - THREE.BasicShadowMap: 效率高，但是质量低。会出现锯齿状边缘
-- THREE.PCFShadowMap：
+- THREE.PCFShadowMap：效率低，阴影质量和平滑度提高。（默认）
 - THREE.PCFSoftShadowMap
+- THREE.VSMShadowMap: 该算法使用两个深度图像素，一个用于存储平均深度，另一个用于存储深度方差。通过使用深度方差来计算阴影强度，可以提高阴影质量和平滑度。
 
 应用阴影贴图属性通过设置renderer.shaodwMap.type属性改变。使用PCFSoftShadowMap算法时，radius会失效
 ```javascript
 renderer.shaodwMap.type = THREE.PCFSoftShadowMap
 ```
+
+## 4.SPOTLIGHT
+讲解完以DirectionalLight为例的阴影。接下来以SPOTLIGHT为例解说阴影
+
+先创建一个SPOTLIGHT
+
+```javascript
+const spotLight = new THREE.SpotLight(0xffffff, 0.4, 10, Math.PI * 0.3)
+
+spotLight.castShadow = true
+
+spotLight.position.set(0, 2, 2)
+
+scene.add(spotLight)
+scene.add(spotLight.target)
+//添加helper
+const spotLightCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera)
+scene.add(spotLightCameraHelper)
+
+//降低其他灯光的亮度
+
+const ambientLight = new THREE.AmbitenLight(0xffffff, 0.4)
+
+const directionalLight = new THREE.directionalLight(0xffffff, 0.4)
+```
+
+<div align="center"> {% asset_img spotlight.png 400 %}</div>
+
+可以看出几个灯光混合出来的阴影和现实世界的并不相符，但起码有阴影了（
+
+SpotLight会使用透视相机生成阴影，所以我们可以改变相机的fov来影响阴影。
+
+同样也可以调整相机的 near 和 far
+
+隐藏helper
+```javascript
+spotLight.shadow.camera.fov = 30
+```
+
+## 5.PointLight
+
+第三个支持阴影的就是 pointlight, 我们再添加一个PointLight
+
+```javascript
+const pointLight = new THREE.pointLight(0xffffff, 0.3)
+
+pointLight.castShadow = true
+
+spotLight.position.set(-1, 1, 0)
+
+scene.add(spotLight)
+
+```
+
+能设置的东西都差不多，懒得写了
+
+如果你给PointLight的camera添加了helper会看见一个朝向一个方向的透视相机，看起来很不合理。实际上PointLight的camera已经完成了六个方向的阴影生成，我们看见的camera朝向仅是最后一步
+
+注意，点光源需要渲染生成周围所有的阴影。所以它的camera不能设置fov
+
+## 6.Baking shadow
+如果你有很多光源，需要生成一个好看的阴影，GPU是个挑战，所以我们需要烘焙阴影来减少GPU的负担。我们将来看一个使用烘焙阴影的例子。
+
+首先关闭渲染器生成阴影贴图
+
+```javascript
+renderer.shadowMap.enabled = false
+```
+
+然后使用这张在blender生成的材质，要使用这张材质，我们要先加载
+
+<div align="center"> {% asset_img bakedShadow.jpg 600 %}</div>
+
+```javascript
+//加载shadow
+const textureLoader = new THREE.TextureLoader()
+const bakedShadow = textureLoader.load('/textures/bakedShadow.jpg')
+```
+
+然后用 MeshBasicMaterial 代替平面上的 MeshStandarMaterial。并加载材质
+```javascript
+const plane = new THREE.Mesh(
+    new THREE.PlaneBufferGeometry(5, 5),
+    new THREE.MeshBasicMaterial({
+        map: bakedShadow
+    })
+)
+```
+然后你就能看见比较好看的阴影效果了，但注意因为是贴图所以移动球体后阴影并不会产生变化
+<div align="center"> {% asset_img baked.png 400 %} {% asset_img posi.png 400 %}</div>
+
+为了解决动态问题，我们可以在平面上创建一个小的平面，然后跟着球体运动
+
+我们用这张阴影，来实现当球体移动的时候，阴影也随之移动。当球体上升时将阴影透明度降低
+<div align="center"> {% asset_img simpleShadow.jpg 400 %}</div>
+首先使用 MeshStandarMaterial 放回去，我们将simpleShadow应用在alpha贴图上
+
+```javascript
+
+///...load simpleShadow
+const sphereShadow = new THREE.Mesh(
+    new THREE.PlaneBufferGeometry(5, 5),
+    new THREE.MeshStandarMaterial({
+        color: 0xff0000,
+        //transparent: true,
+        alphaMap: simpleShadow
+    })
+)
+
+sphereShadow.rotation.x = - Math.PI * 0.5
+
+scene.add(sphereShadow,)
+```
+<div align="center"> {% asset_img sphere.png 400 %}</div>
+
+然后就可以看到这个鬼样子，并且会产生plane与sphere层叠打架的问题,所以我们需要移动一下sphereShadow
+
+```javascript
+sphereShadow.position.y = plane.position.y + 0.01
+```
+
+然后将transparent的注释取消掉，并将color变成黑色，就可以得到一个比较好看的阴影了
+
+<div align="center"> {% asset_img perfect.png 400 %}</div>
+
+然后我们让球体动起来,转着圈跳动。并让阴影跟随
+
+```javascript
+const clock = new THREE.Clock() 
+const tick = () => {
+    const elapsedTime = clock.getElapsedTime()
+    
+    //update sphere
+    sphere.position.x = Math.cos(elapsedTime) * 1.5
+    sphere.position.z = Math.sin(elapsedTime) * 1.5
+    sphere.position.y = Math.abs(Math.sin(elapsedTime * 3))
+    
+    //update shadow
+    sphereShadow.position.x = sphere.position.x
+    sphereShadow.position.z = shpere.position.z
+    sphereShadow.material.opacity = (1 - Math.abs(sphere.position.y)) * 0.3
+}
+```
+
+<div align="center"> {% asset_img follow2.png 400 %} {% asset_img fllow.png 400 %}</div>
