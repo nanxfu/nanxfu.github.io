@@ -203,6 +203,56 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2023/07/16/%E4%BD%BF%E7%94%A8IIFE%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD/" target="_self">
+          <img src="/img/IIFE.png" srcset="/img/loading.gif" alt="使用IIFE优化性能">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2023/07/16/%E4%BD%BF%E7%94%A8IIFE%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD/">使用IIFE优化性能</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2023/07/16/%E4%BD%BF%E7%94%A8IIFE%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD/">
+          
+          
+            
+          
+          1.问题引入考虑一个兼容浏览器事件添加的代码段
+123456789function addEvent(ele, eventName, handler)&#123;    if(ele.addEventListener)&#123;        ele.addEventListener(eventName, handler)    &#125;else if(ele.attachEvent)&#1
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-07-16 16:03" pubdate>
+              2023-07-16
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/javascript/">javascript</a>
+            
+              <a href="/tags/IIFE/">IIFE</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2023/04/01/threejs-16-galaxy-generate/" target="_self">
           <img src="/img/threejs.png" srcset="/img/loading.gif" alt="threejs-16:galaxy-generate">
         </a>
@@ -705,57 +755,6 @@ HEIGHT 材质也是一个灰度图，代表高度。
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/11/03/CSS-Box-Model/" target="_self">
-          <img src="/img/1623251892858.jpeg" srcset="/img/loading.gif" alt="CSS - Box Model">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/11/03/CSS-Box-Model/">CSS - Box Model</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/11/03/CSS-Box-Model/">
-          
-          
-            
-          
-          CSS 显示的所有内容都是一个’盒子’，所以了解 CSS 盒模型工作原理是 学习CSS 的基本功
-假如你写了这段 HTML
-1&lt;p&gt; 这是一段简短的文字 &lt;/p&gt;
-然后添加了一段 CSS 样式
-123456p &#123;    width: 100px;    height: 50px;    padding: 20px;    bordere:1px solid;&#1
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-11-03 13:26" pubdate>
-              2021-11-03
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/CSS/">CSS</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
@@ -791,7 +790,7 @@ HEIGHT 材质也是一个灰度图，代表高度。
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -800,7 +799,7 @@ HEIGHT 材质也是一个灰度图，代表高度。
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
           <label data-error="x" data-success="v"
-                 for="local-search-input">Stichwort</label>
+                 for="local-search-input">キーワード</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
