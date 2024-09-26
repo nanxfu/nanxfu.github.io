@@ -1,6 +1,7 @@
 ---
 title: 读书管理后台开发项目-3.Nest框架搭建
 date: 2024-09-23 22:01:09
+index_img: /img/Nest.png
 tags:
   - web
   - Typescript
