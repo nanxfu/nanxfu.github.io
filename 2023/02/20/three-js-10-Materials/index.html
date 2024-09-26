@@ -1,0 +1,807 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="author" content="nanxfu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.什么是 MaterialsMaterials用来给几何体上每个可见的像素染色。这种染色算法在程序里叫做 Shaders. 我们不需要自己手写 Shaders 可以使用内置的 materials 2.使用 Materials2.1 创建场景我们创建三种不同的几何体(spehre, plane, torus)来练习Materials的使用 12345678910111213141516171819">
+<meta property="og:type" content="article">
+<meta property="og:title" content="three.js_10-Materials">
+<meta property="og:url" content="https://nanxfu.github.io/2023/02/20/three-js-10-Materials/index.html">
+<meta property="og:site_name" content="南小府の小屋">
+<meta property="og:description" content="1.什么是 MaterialsMaterials用来给几何体上每个可见的像素染色。这种染色算法在程序里叫做 Shaders. 我们不需要自己手写 Shaders 可以使用内置的 materials 2.使用 Materials2.1 创建场景我们创建三种不同的几何体(spehre, plane, torus)来练习Materials的使用 12345678910111213141516171819">
+<meta property="og:locale">
+<meta property="og:image" content="https://nanxfu.github.io/img/threejs.png">
+<meta property="article:published_time" content="2023-02-20T08:17:37.000Z">
+<meta property="article:modified_time" content="2024-09-23T06:57:03.977Z">
+<meta property="article:author" content="nanxfu">
+<meta property="article:tag" content="three.js">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nanxfu.github.io/img/threejs.png">
+  
+  
+  
+  <title>three.js_10-Materials - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>南小府</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/" target="_self">
+                <i class="iconfont icon-notebook"></i>
+                <span>心情</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/1623251880550.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="three.js_10-Materials"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-20 16:17" pubdate>
+          February 20, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">three.js_10-Materials</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-什么是-Materials"><a href="#1-什么是-Materials" class="headerlink" title="1.什么是 Materials"></a>1.什么是 Materials</h2><p><strong>Materials</strong>用来给几何体上每个可见的像素染色。这种染色算法在程序里叫做 <strong>Shaders</strong>. 我们不需要自己手写 <strong>Shaders</strong> 可以使用内置的 materials</p>
+<h2 id="2-使用-Materials"><a href="#2-使用-Materials" class="headerlink" title="2.使用 Materials"></a>2.使用 Materials</h2><h3 id="2-1-创建场景"><a href="#2-1-创建场景" class="headerlink" title="2.1 创建场景"></a>2.1 创建场景</h3><p>我们创建三种不同的几何体(spehre, plane, torus)来练习Materials的使用</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><br><span class="hljs-keyword">const</span> material = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshBasicMaterial</span>(&#123;<span class="hljs-attr">color</span>: <span class="hljs-number">0xff0000</span>&#125;)<br><br><span class="hljs-keyword">const</span> sphere = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">SphereBufferGeometry</span>(<span class="hljs-number">0.5</span>, <span class="hljs-number">16</span>, <span class="hljs-number">16</span>),<br>    material<br>)<br>sphere.<span class="hljs-property">position</span>.<span class="hljs-property">x</span> = - <span class="hljs-number">1.5</span><br><br><span class="hljs-keyword">const</span> plane = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PlaneBufferGeometry</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>),<br>    material<br>)<br><br><br><span class="hljs-keyword">const</span> torus = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TorusBufferGeometry</span>(<span class="hljs-number">0.3</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">16</span>, <span class="hljs-number">32</span>),<br>    material<br>)<br>torus.<span class="hljs-property">position</span>.<span class="hljs-property">x</span> = <span class="hljs-number">1.5</span><br><br>scene.<span class="hljs-title function_">add</span>(sphere, plane, torus)<br></code></pre></td></tr></table></figure>
+<p>以上代码创建了三个几何体，并设置了color。效果如图</p>
+<div align="center"> <img src="/2023/02/20/three-js-10-Materials/material.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<p>接下来，我们让几何体自己旋转以便观察到各个部位</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> clock = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Clock</span>()<br><span class="hljs-keyword">const</span> <span class="hljs-title function_">tick</span> =(<span class="hljs-params"></span>) =&gt;&#123;<br>    <span class="hljs-keyword">const</span> elapsedTime = clock.<span class="hljs-title function_">getElapsedTime</span>()<br>    sphere.<span class="hljs-property">rotation</span>.<span class="hljs-property">y</span> = <span class="hljs-number">0.1</span> * elapsedTime<br>    plane.<span class="hljs-property">rotation</span>.<span class="hljs-property">y</span> = <span class="hljs-number">0.1</span> * elapsedTime<br>    torus.<span class="hljs-property">rotation</span>.<span class="hljs-property">y</span> = <span class="hljs-number">0.1</span> * elapsedTime<br><br>    sphere.<span class="hljs-property">rotation</span>.<span class="hljs-property">x</span> = <span class="hljs-number">0.15</span> * elapsedTime<br>    plane.<span class="hljs-property">rotation</span>.<span class="hljs-property">x</span> = <span class="hljs-number">0.15</span> * elapsedTime<br>    torus.<span class="hljs-property">rotation</span>.<span class="hljs-property">x</span> = <span class="hljs-number">0.15</span> * elapsedTime<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>然后加载纹理</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> textureLoader = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TextureLoader</span>(loadingManager)<br><span class="hljs-keyword">const</span> doorColorTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/door/color.jpg&#x27;</span>)<br><span class="hljs-keyword">const</span> doorAlphaTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/door/alpha.jpg&#x27;</span>)<br><span class="hljs-keyword">const</span> doorColorTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/door/color.jpg&#x27;</span>)<br><span class="hljs-keyword">const</span> doorColorTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/door/color.jpg&#x27;</span>)<br><span class="hljs-keyword">const</span> matcapTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/matcaps/1.png&#x27;</span>)<br><span class="hljs-keyword">const</span> gradientTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/gradients/1.png&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<h3 id="2-2-MeshBasicalMaterial"><a href="#2-2-MeshBasicalMaterial" class="headerlink" title="2.2 MeshBasicalMaterial"></a>2.2 MeshBasicalMaterial</h3><p>大多数的 <strong>Material</strong> 属性都能用两种设置，例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//实例化时声明</span><br><span class="hljs-keyword">const</span> material = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshBasicMaterial</span>(&#123;<span class="hljs-attr">map</span>: doorColorTexture&#125;)<br><br><span class="hljs-comment">//实例化后声明</span><br><span class="hljs-keyword">const</span> material = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshBasicMaterial</span>()<br>material.<span class="hljs-property">map</span> = doorColorTexture<br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/02/20/three-js-10-Materials/setPro.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<ol>
+<li><p><strong>map</strong> 属性会将 <strong>texture</strong> 设置在几何体的表面.</p>
+</li>
+<li><p><strong>color</strong> 属性会给几何体的表面设置颜色，一旦被实例化后。 <strong>color</strong> 属性就变为 <code>Color</code>**&#96;&#96;&#96; 类型，所以如果在实例化 <strong>Material</strong>  后指定物体的颜色可采用以下两种方法</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 1.采用Color.set 方法</span><br>material.<span class="hljs-property">color</span>.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;#ff00ff&#x27;</span>)<br><br><span class="hljs-comment">// 2.实例化一个 Color 类</span><br>material.<span class="hljs-property">color</span> = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title function_">color</span>(<span class="hljs-string">&#x27;#ff00ff&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<ol start="3">
+<li><p><strong>wireframe</strong> 属性会展示组成几何体的三角形</p>
+</li>
+<li><p><strong>opacity</strong> 控制几何体的透明度。在这之前我们需要设置 <code>transparent = true</code> </p>
+</li>
+<li><p><strong>alphaMap</strong> 控制材质的透明度。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">material.<span class="hljs-property">transparent</span> = <span class="hljs-literal">true</span><br>material.<span class="hljs-property">alphaMap</span> = doorAlphaTexture<br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/02/20/three-js-10-Materials/alpha.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+</li>
+<li><p><strong>side</strong> 可以让你决定哪个面能够显示</p>
+<ul>
+<li>THREE.FrontSide(default)</li>
+<li>THREE.BackSide</li>
+<li>THREE.DoubleSide</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">material.<span class="hljs-property">side</span> = <span class="hljs-variable constant_">THREE</span>.<span class="hljs-property">DoubleSide</span> <span class="hljs-comment">//会造成GPU压力增加</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3MeshNormalMaterial"><a href="#2-3MeshNormalMaterial" class="headerlink" title="2.3MeshNormalMaterial"></a>2.3MeshNormalMaterial</h3><p><strong>MeshNormalMaterial</strong> 会展示一个非常炫酷的紫色效果</p>
+<blockquote>
+<p>normals n.法线</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> material = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshNormalMaterial</span>()<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/02/20/three-js-10-Materials/normal.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<p>实际上 <strong>Normal</strong> 并不仅仅是给几何体添加上了炫彩的颜色，而是给 <strong>Geometry</strong> 自动添加了法线方向属性，以供于光照、反射的计算</p>
+<p><strong>MeshNormalMaterial</strong> 与 <strong>MeshBasicMaterial</strong> 一样拥有 <code>wireframe, transparent, opacity, side</code> 属性。但会额外多一个 <code>flatShading</code> 属性。</p>
+<p><strong>flatShading（平坦着色）</strong> 是指通过三角形三顶点的坐标计算出整个三角形的法向量。 这样就导致相邻两个三角形的法向量差别很大，所以就能看到明显的三角形的边。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">material.<span class="hljs-property">flatShading</span> = <span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/02/20/three-js-10-Materials/flat.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<p>与之相对应的是“Smooth Shading”：先计算三角形三顶点处的法向量，然后将这三个法向量线性插值的结果作为整个三角形的法向量。这样相邻两个三角形的法向量差别就会小很多。</p>
+<p>来两张图感受一下两种着色,前者为 flat 着色，后者为 smooth 着色</p>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/flat.bmp" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/02/20/three-js-10-Materials/smoth.bmp" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+图源：
+
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/libing_zeng/article/details/60760296">平坦着色（Flat Shading）和平滑着色（Smooth Shading)</a></p>
+<p><strong>MeshNormalMaterial</strong>通常是用来调试法线的，且它可以直接用在你的工程中</p>
+<h3 id="2-4-MeshMatcapMaterial"><a href="#2-4-MeshMatcapMaterial" class="headerlink" title="2.4 MeshMatcapMaterial"></a>2.4 MeshMatcapMaterial</h3><p><strong>MeshMatcapMaterial</strong> 会使用法线作为计算应用在几何体上matcap材质正确着色的参考。</p>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/matcap.png" srcset="/img/loading.gif" lazyload class=""></div>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//设置matcap属性应用matcap</span><br><span class="hljs-keyword">const</span> material = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshMatcapMaterial</span>()<br>material.<span class="hljs-property">matcap</span> = matcapTexture<br></code></pre></td></tr></table></figure>
+<p>注意设置mapcap后几何体有光照阴影效果</p>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/matcaps.png" srcset="/img/loading.gif" lazyload class=""></div>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/nidorx/matcaps">下载matcaps</a></p>
+<h3 id="2-5-MeshDepthMaterial"><a href="#2-5-MeshDepthMaterial" class="headerlink" title="2.5 MeshDepthMaterial"></a>2.5 MeshDepthMaterial</h3><p><strong>MeshDepthMaterial</strong> 会在摄像头距离几何体近端染上白色，远端染上黑色</p>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/white0.png" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/02/20/three-js-10-Materials/black.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>可以用来模拟光照</p>
+<h3 id="2-6-MeshLambertMaterial"><a href="#2-6-MeshLambertMaterial" class="headerlink" title="2.6 MeshLambertMaterial"></a>2.6 MeshLambertMaterial</h3><p><strong>MeshLambertMaterial</strong> 可以被光照的效果影响到<br>首先增加灯光来看下效果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> ambienLight = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">AmbientLight</span>(<span class="hljs-number">0xffffff</span>, <span class="hljs-number">0.5</span>)<br>scene.<span class="hljs-title function_">add</span>(ambienLight)<br><br><span class="hljs-keyword">const</span> pointLight = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PointLight</span>(<span class="hljs-number">0xffffff</span>, <span class="hljs-number">0.5</span>)<br>pointLight.<span class="hljs-property">position</span>.<span class="hljs-property">x</span> = <span class="hljs-number">2</span><br>pointLight.<span class="hljs-property">position</span>.<span class="hljs-property">y</span> = <span class="hljs-number">3</span><br>pointLight.<span class="hljs-property">position</span>.<span class="hljs-property">z</span> = <span class="hljs-number">4</span><br><br>scene.<span class="hljs-title function_">add</span>(pointLight)<br><br><span class="hljs-keyword">const</span> material = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshLambertMaterial</span>()<br><br></code></pre></td></tr></table></figure>
+
+<p>左图是有光照的效果，右图是没有光照的效果</p>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/light.png" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/02/20/three-js-10-Materials/none.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p><strong>MeshLambertMaterial</strong> 具有很好的性能表现，但物理效果还有更好的 Material</p>
+<h3 id="2-7-MeshLambertMaterial"><a href="#2-7-MeshLambertMaterial" class="headerlink" title="2.7 MeshLambertMaterial"></a>2.7 MeshLambertMaterial</h3><p>**MeshLambertMaterial 与 ** <strong>MeshLambertMaterial</strong> 表现效果类似，但视觉光反射上会更好。</p>
+<p>可以通过 <code>shininess</code> 和 <code>specular</code> 调整光反射效果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">material.<span class="hljs-property">shininess</span> = <span class="hljs-number">100</span>    <span class="hljs-comment">//值越大光反射效果越明显</span><br>material.<span class="hljs-property">specular</span> = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Color</span>(<span class="hljs-number">0x1188ff</span>)<br></code></pre></td></tr></table></figure>
+
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/specular.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<h3 id="2-8-MeshToonMaterial"><a href="#2-8-MeshToonMaterial" class="headerlink" title="2.8 MeshToonMaterial"></a>2.8 MeshToonMaterial</h3><p><strong>MeshToonMaterial</strong> 效果与 <strong>MeshLambertMaterial</strong> 类似，但会有一种漫画滤镜</p>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/Toon.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<p>要添加更多的色彩渐变，可以使用 gradientMap 赋予渐变材质。下图为渐变材质示例</p>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/gradient.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">material.<span class="hljs-property">gradientMap</span> = gradientTexture<br></code></pre></td></tr></table></figure>
+<p>添加渐变材质后色彩分割感就小时了，因为渐变单位变小了，并且 magFilter 会尝试使用 mipmapping 来优化视觉（模糊）效果</p>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/gMap.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+如果我们想改变这种情况，可以给 THREE.NearestFilter 设置 minFilter 和 magFilter
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript">grdientTexture.<span class="hljs-property">minFilter</span> = <span class="hljs-variable constant_">THREE</span>.<span class="hljs-property">NearestFilter</span><br>grdientTexture.<span class="hljs-property">magFilter</span> = <span class="hljs-variable constant_">THREE</span>.<span class="hljs-property">NearestFilter</span><br><br>grdientTexture.<span class="hljs-property">generateMipmaps</span> = <span class="hljs-literal">false</span> <span class="hljs-comment">//采用了最近点采样方法后建议将 mipmapping生成关掉，这样会优化性能</span><br></code></pre></td></tr></table></figure>
+
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/magFilter.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<h3 id="2-9-MeshStandardMaterial"><a href="#2-9-MeshStandardMaterial" class="headerlink" title="2.9 MeshStandardMaterial"></a>2.9 MeshStandardMaterial</h3><p><strong>MeshStandardMaterial</strong> 采用了 PBR 标准，使得视觉上光照更接近物理效果。与 <strong>MeshLambertMaterial</strong> 和 <strong>MeshPhongMaterial</strong> 类似，它支持很多与光照有关的算法，且额外提供了类似 <code>roughness</code> 和 <code>metalness</code> 这样的参数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> material = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MeshStandardMaterial</span><br><br>material.<span class="hljs-property">metalness</span> = <span class="hljs-number">0.45</span><br>material.<span class="hljs-property">roughness</span> = <span class="hljs-number">0.65</span><br></code></pre></td></tr></table></figure>
+
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/stand.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+
+<p>你可以使用 <strong>map</strong> 属性添加普通材质，也可以用 aoMap(ambient occlusion map) 添加纹理中提供的阴影,当然仅设置 <code>aoMap</code> 还不够，我们还需要提供另一组 UV 数组坐标： <code>uv2</code></p>
+<blockquote>
+<p>uv坐标提供纹理如何应用于材质</p>
+</blockquote>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/ao.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript">plane.<span class="hljs-property">geometry</span>.<span class="hljs-title function_">setAttribute</span>(<br>    <span class="hljs-string">&#x27;uv2&#x27;</span>, <br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">BufferAttribute</span>(plane.<span class="hljs-property">geometry</span>.<span class="hljs-property">attributes</span>.<span class="hljs-property">uv</span>.<span class="hljs-property">arry</span>, <span class="hljs-number">2</span>))<br>    <span class="hljs-comment">//因为阴影材质uv与纹理材质一致，所以直接使用plane.geometry.attributes.uv.arry</span><br></code></pre></td></tr></table></figure>
+<p>左图为未设置 <code>aoMap</code> 右图未设置了 <code>aoMap</code></p>
+<div align="center"> <img src="/2023/02/20/three-js-10-Materials/noaomap.png" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/02/20/three-js-10-Materials/aomap.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>aoMap 添加了 doorAmbientOcclusionTexture 后就可以使用 aoMapIntensity 控制阴影深度</p>
+<p>使用 <code>displacementMap</code> 添加了高度材质后就可以做出浮雕效果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">material.<span class="hljs-property">displacementMap</span> = doorHeightTexture<br></code></pre></td></tr></table></figure>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/dis.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<p>我们发现在使用了 displacement 后几何体就变得很奇怪，这是因为几何体提供的定点数太少了，而 displacement值又太大</p>
+<p>所以我们需要用<br> <figure class="highlight plaintext"><figcaption><span>降低 ```displacement``` 效果, 并给几何体添加细分度。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs displacementScale```"><br>```javascript<br>material.displacementScale = 0.05<br>//...<br>new THREE.PlaneBufferGeometry(1, 1, 100, 100)<br>//...<br></code></pre></td></tr></table></figure></p>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/scale.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<p>除了通过 matalness 和 roughness 添加光照效果，我们也可以用 <code>metalnessMap</code> 和 <code>roughnessMap</code> 来添加光照效果</p>
+<p>当同时使用 <strong>matalness</strong> 与 <strong>metalnessMap</strong>、 <strong>roughness</strong> 与 <strong>roughnessMap</strong> 后效果会很奇怪，因为他们都会起作用从而造成效果叠加</p>
+<p><strong>normalMap</strong>会改变法线朝向并给表面添加更多细节。左图是没有 <strong>normalMap</strong> 的预览，右图是添加 <strong>normalMap</strong> 后的预览</p>
+<div align="center"><img src="/2023/02/20/three-js-10-Materials/nonor.png" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/02/20/three-js-10-Materials/detail.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>我们也可以使用 <code>normalScale: Vector2</code> 改变法线性质</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">material.<span class="hljs-property">normalScale</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>)<br></code></pre></td></tr></table></figure>
+
+<p>最后 ，我们可以使用 <code>alphaMap</code> 属性控制 <strong>alpha</strong>，同时不要忘记将 <code>transparent</code> 设置为 true</p>
+<h3 id="2-10-MeshPhysicalMaterial"><a href="#2-10-MeshPhysicalMaterial" class="headerlink" title="2.10 MeshPhysicalMaterial"></a>2.10 MeshPhysicalMaterial</h3><p><strong>MeshPhysicalMaterial</strong> 和 <strong>MeshStandardMaterial</strong> 一样，不过支持透明涂层效果</p>
+<div align="center"> <img src="/2023/02/20/three-js-10-Materials/phy.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<h3 id="2-11-PointsMaterial"><a href="#2-11-PointsMaterial" class="headerlink" title="2.11 PointsMaterial"></a>2.11 PointsMaterial</h3><p>用于粒子的材质</p>
+<h2 id="3-ENVIRONMENT-MAP"><a href="#3-ENVIRONMENT-MAP" class="headerlink" title="3.ENVIRONMENT MAP"></a>3.ENVIRONMENT MAP</h2><p>环境贴图是周围场景的图片，它不仅可以用来做反射和折射效果，也能做光照效果。通常环境贴图不止有一张，而是很多张的集合(左右上下前后)</p>
+<p>要使用环境贴图需要用 CubeTextureLoader 在 material 实例化之前加载完成</p>
+<div align="center"> <img src="/2023/02/20/three-js-10-Materials/loader.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>获取好看的环境贴图，我们可以在 <a target="_blank" rel="noopener" href="https://polyhaven.com/">HDRI HAVEN</a> 下载，不过从这上面下载下来的图片是 HDRIs(High Dynamic Range Imaging) 图片, 并不是 cube maps。</p>
+<p>所以我们可以使用 <a target="_blank" rel="noopener" href="https://matheowis.github.io/HDRI-to-CubeMap/">在线工具</a> 将 HDRIs 转换为 cube maps</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/three-js/" class="print-no-link">#three.js</a>
+      
+        <a href="/tags/web/" class="print-no-link">#web</a>
+      
+        <a href="/tags/javascript/" class="print-no-link">#javascript</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>three.js_10-Materials</div>
+      <div>https://nanxfu.github.io/2023/02/20/three-js-10-Materials/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Beitragsautor</div>
+          <div>nanxfu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Veröffentlicht am</div>
+          <div>February 20, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Urheberrechtshinweis</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/24/three-js-11-3D-Text/" title="three.js-11:3D-Text">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">three.js-11:3D-Text</span>
+                        <span class="visible-mobile">Vorheriger</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/19/three-js-9-texture/" title="three.js_9-texture">
+                        <span class="hidden-mobile">three.js_9-texture</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Inhaltsverzeichnis</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog funktioniert am besten mit aktiviertem JavaScript</div>
+  </noscript>
+</body>
+</html>

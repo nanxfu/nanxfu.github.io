@@ -1,0 +1,717 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="author" content="nanxfu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在这本节中，我们将实现 ilithya的3D文本特效。如下图所示     1.字体加载我们首先使用 TextBufferGeometry 在场景中创建一个3D文本。要设定字体需要使用typeface将字体转换为指定格式。或者使用 Three.js 提供的字体。 1import typefaceFont from &#x27;three&#x2F;example&#x2F;fonts&#x2F;helvetiker_regula">
+<meta property="og:type" content="article">
+<meta property="og:title" content="three.js-11:3D-Text">
+<meta property="og:url" content="https://nanxfu.github.io/2023/02/24/three-js-11-3D-Text/index.html">
+<meta property="og:site_name" content="南小府の小屋">
+<meta property="og:description" content="在这本节中，我们将实现 ilithya的3D文本特效。如下图所示     1.字体加载我们首先使用 TextBufferGeometry 在场景中创建一个3D文本。要设定字体需要使用typeface将字体转换为指定格式。或者使用 Three.js 提供的字体。 1import typefaceFont from &#x27;three&#x2F;example&#x2F;fonts&#x2F;helvetiker_regula">
+<meta property="og:locale">
+<meta property="og:image" content="https://nanxfu.github.io/img/threejs.png">
+<meta property="article:published_time" content="2023-02-24T13:11:33.000Z">
+<meta property="article:modified_time" content="2024-09-23T06:57:03.995Z">
+<meta property="article:author" content="nanxfu">
+<meta property="article:tag" content="three.js">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nanxfu.github.io/img/threejs.png">
+  
+  
+  
+  <title>three.js-11:3D-Text - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>南小府</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/" target="_self">
+                <i class="iconfont icon-notebook"></i>
+                <span>心情</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/1623251880550.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="three.js-11:3D-Text"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-24 21:11" pubdate>
+          February 24, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          10 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">three.js-11:3D-Text</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在这本节中，我们将实现 ilithya的<a target="_blank" rel="noopener" href="https://www.ilithya.rocks/">3D文本</a>特效。如下图所示</p>
+<div align="center"> <img src="/2023/02/24/three-js-11-3D-Text/3Dtext.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<h2 id="1-字体加载"><a href="#1-字体加载" class="headerlink" title="1.字体加载"></a>1.字体加载</h2><p>我们首先使用 <code>TextBufferGeometry</code> 在场景中创建一个3D文本。要设定字体需要使用<a target="_blank" rel="noopener" href="https://gero3.github.io/facetype.js/">typeface</a>将字体转换为指定格式。或者使用 Three.js 提供的字体。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">import</span> typefaceFont <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;three/example/fonts/helvetiker_regular.typeface.json&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>要练习通过静态资源加载字体的方法可以采用以下步骤：</p>
+<ul>
+<li>打开 &#x2F;node_modules&#x2F;three&#x2F;example&#x2F;fonts&#x2F;</li>
+<li>将 helvetiker_regular.typeface.json 文件和 LICENSE 文件粘贴到 &#x2F;static&#x2F;fonts 文件夹下</li>
+<li>然后就可以通过访问 &#x2F;font&#x2F;helvetiker_regular.typeface.json URL 加载字体资源了</li>
+</ul>
+</blockquote>
+<p>加载字体需要使用 <code>FontLoader</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Fonts</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">const</span> fontLoader = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">FontLoader</span>()<br>fontLoader.<span class="hljs-title function_">load</span>(<br>    <span class="hljs-string">&#x27;/font/helvetiker_regular.typeface.json&#x27;</span>,<br>    <span class="hljs-function">(<span class="hljs-params">font</span>)=&gt;</span>&#123;<br>        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;font loaded&#x27;</span>)<br>    &#125;<br>)<br><br><span class="hljs-comment">//注意，此处与材质加载器不同，材质加载器加载后会得到材质，而字体加载器加载后需要在回调函数里获取字体</span><br><span class="hljs-keyword">const</span> texture = textureLoader.<span class="hljs-title function_">load</span>()    <span class="hljs-comment">//得到材质</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="2-文本创建"><a href="#2-文本创建" class="headerlink" title="2.文本创建"></a>2.文本创建</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs javascript">fontLoader.<span class="hljs-title function_">load</span>(    <span class="hljs-comment">//加载字体</span><br>    <span class="hljs-string">&#x27;/font/helvetiker_regular.typeface.json&#x27;</span>,<br>    <span class="hljs-function">(<span class="hljs-params">font</span>)=&gt;</span>&#123;<br>        <span class="hljs-comment">//创建文本顶点数据</span><br>        <span class="hljs-keyword">const</span> textGeometry = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ThREE</span>.<span class="hljs-title class_">TextBufferGeometry</span>(<br>            <span class="hljs-string">&quot;Hello Three.js&quot;</span>,<br>            &#123;<br>                <span class="hljs-comment">//font config</span><br>                font,<br>                <span class="hljs-attr">size</span>: <span class="hljs-number">0.5</span>,<br>                <span class="hljs-attr">height</span>: <span class="hljs-number">0.2</span>,<br>                <span class="hljs-attr">curveSegments</span>: <span class="hljs-number">12</span>,<br>                <span class="hljs-attr">bevelEnable</span>: <span class="hljs-literal">true</span>,<br>                <span class="hljs-attr">bevelThickness</span>: <span class="hljs-number">0.03</span>,<br>                <span class="hljs-attr">bevelSize</span>: <span class="hljs-number">0.02</span>,<br>                <span class="hljs-attr">bevelOffset</span>: <span class="hljs-number">0</span>,<br>                <span class="hljs-attr">bevelSegments</span>: <span class="hljs-number">5</span><br>            &#125;<br>        )<br>        <span class="hljs-comment">//创建材质</span><br>        <span class="hljs-keyword">const</span> textMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshBasicMaterial</span>()<br>        <span class="hljs-comment">//创建网格</span><br>        <span class="hljs-keyword">const</span> text = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(textGeometry, textMaterial)<br>        <span class="hljs-comment">//加入场景</span><br>        scene.<span class="hljs-title function_">add</span>(text)<br>    &#125;<br>)<br></code></pre></td></tr></table></figure>
+<p>注意创建文字几何体是非常耗费资源的，因为一段文字会包含许多的几何体（三角形、圆形），所以我们尽量通过减少 <code>curveSegments</code> 和 <code>bevelSegments</code>的值来保持文本几何体是低模的</p>
+<h3 id="2-1-文本居中"><a href="#2-1-文本居中" class="headerlink" title="2.1 文本居中"></a>2.1 文本居中</h3><p>居中文本的方式有很多种。</p>
+<ol>
+<li>BOUNDING<br><strong>BOUNDING</strong> 就是几何体的边界信息，意味着几何体在空间中占用的大小，他可能是一个立方体，也可能是一个球体<div align="center">  </div>。它可以让 **THree.js** 计算哪些物体应该在视锥范围内显示。所以我们可以用 **bounding** 让文本居中</li>
+</ol>
+<p>默认情况下， <strong>THree.js</strong> 使用球面 <strong>BOUNDING</strong>，我们可以用 <code>computeBoundingBox()</code> 计算 <strong>Bounding</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">textGeometry.<span class="hljs-title function_">computeBoundingBox</span>()<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(textGeometry.<span class="hljs-property">boundingBox</span>)   <span class="hljs-comment">//注意，在使用textGeometry.boundingBox之前需要先使用computeBoundingBox</span><br></code></pre></td></tr></table></figure>
+<p><strong>textGeometry.boundingBox</strong> 的结果是 <code>Box3</code> 实例，具有 <strong>min</strong> 和 <strong>max属性</strong>。如果你观察上面打印出来的结果会发现即使文本是从原点开始创建的但 <strong>min</strong> property并不是0，这是因为 <strong>bevelThickness</strong> 和 <strong>bevelSize</strong>的影响。</p>
+<p>我们接下来使用 <code>translate</code> 方法来移动整个几何体的顶点，而不是移动 mesh。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript">textGeometry.<span class="hljs-title function_">translate</span>(<br>    - textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">x</span> * <span class="hljs-number">0.5</span>,<br>    - textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">y</span> * <span class="hljs-number">0.5</span>,<br>    - textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">z</span> * <span class="hljs-number">0.5</span><br>)<br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/02/24/three-js-11-3D-Text/translate.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<p>表面看起来移动在中心了，实际上并没有。因为bevelThickness和bevelSize的影响。所以还需微调以下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript">textGeometry.<span class="hljs-title function_">translate</span>(<br>    - ( textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">x</span> - <span class="hljs-number">0.02</span>) * <span class="hljs-number">0.5</span>,<br>    - ( textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">y</span> - <span class="hljs-number">0.02</span> )* <span class="hljs-number">0.5</span>, <span class="hljs-comment">// -0.02是因为 bevelsize（从字体内部到外部的距离）</span><br>    - ( textGeometry.<span class="hljs-property">boundingBox</span>.<span class="hljs-property">max</span>.<span class="hljs-property">z</span> - <span class="hljs-number">0.03</span> ) * <span class="hljs-number">0.5</span> <span class="hljs-comment">// -0.03是因为bevelThickness</span><br>)<br></code></pre></td></tr></table></figure>
+
+<p>这样才能是真正的居中</p>
+<h3 id="2-2-使用-center-居中"><a href="#2-2-使用-center-居中" class="headerlink" title="2.2 使用 center() 居中"></a>2.2 使用 center() 居中</h3><p>实际上three.js内置了一个 center() 函数来使文字居中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">textGeometry.<span class="hljs-title function_">center</span>()<br></code></pre></td></tr></table></figure>
+<p>center函数也是基于BOUNDING实现的</p>
+<h2 id="3-添加MATCAT"><a href="#3-添加MATCAT" class="headerlink" title="3.添加MATCAT"></a>3.添加MATCAT</h2><p>我们使用 <strong>MeshMatcapMaterial</strong> 应用 matcaps(模拟光照阴影)，你可以在这里<a target="_blank" rel="noopener" href="https://github.com/nidorx/matcaps">下载matcaps</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> textureLoader = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TextureLoader</span>()<br><span class="hljs-keyword">const</span> matcapTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/matcaps/1.png&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<p>然后使用 <strong>MeshMatcapMaterial</strong> 替换 <strong>MeshBasicMaterial</strong>，并使用 matcap</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> textMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshMatcapMaterial</span>(&#123;<span class="hljs-attr">matcap</span>: matcapTexture&#125;)<br><br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/02/24/three-js-11-3D-Text/matcap.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<h2 id="4-添加装饰几何体"><a href="#4-添加装饰几何体" class="headerlink" title="4.添加装饰几何体"></a>4.添加装饰几何体</h2><p>在场景中创建完3D文本后我们可以添加100个几何体用来装饰周围环境，首先我们用一个低效的方法实现创建100个几何体</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i&lt;<span class="hljs-number">100</span>; i++)&#123;<br>    <span class="hljs-keyword">const</span> donutGeometry = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TorusBufferGeometry</span>(<span class="hljs-number">0.3</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">20</span>, <span class="hljs-number">45</span>)<br>    <span class="hljs-keyword">const</span> donutMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshMatcapMaterial</span>(&#123;<span class="hljs-attr">matcap</span>: matcapTexture&#125;)<br>    <span class="hljs-keyword">const</span> donut = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(donutGeometry, donutMaterial)<br>    <br>    donut.<span class="hljs-property">position</span>.<span class="hljs-property">x</span> = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span>) * <span class="hljs-number">10</span><br>    donut.<span class="hljs-property">position</span>.<span class="hljs-property">y</span> = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span>) * <span class="hljs-number">10</span><br>    donut.<span class="hljs-property">position</span>.<span class="hljs-property">z</span> = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span>) * <span class="hljs-number">10</span><br>    <br>    scene.<span class="hljs-title function_">add</span>(donut)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>效果如下</p>
+<div align="center"> <img src="/2023/02/24/three-js-11-3D-Text/donut.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+所有的甜甜圈都朝向一个地方,且大小相同，所以我们最好给甜甜圈旋转以下，并缩放甜甜圈
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//...</span><br>donut.<span class="hljs-property">rotation</span>.<span class="hljs-property">x</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span><br>donut.<span class="hljs-property">rotation</span>.<span class="hljs-property">y</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span><br><br><span class="hljs-keyword">const</span> scale = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()<br>donut.<span class="hljs-property">scale</span>.<span class="hljs-property">x</span> = scale<br>donut.<span class="hljs-property">scale</span>.<span class="hljs-property">y</span> = scale<br>donut.<span class="hljs-property">scale</span>.<span class="hljs-property">z</span> = scale<br><br><span class="hljs-comment">//或者使用 donut.scale.set(scale, scale, scale)</span><br>scene.<span class="hljs-title function_">add</span>(donut)<br><span class="hljs-comment">//...</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="5-优化"><a href="#5-优化" class="headerlink" title="5.优化"></a>5.优化</h2><p>实际上以上的性能非常低效，我们可以用 <code>console.time(donuts)</code> 看一下性能消耗</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&quot;donuts&quot;</span>)<br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i= <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span> ; i++)<br>&#123;<br>    <span class="hljs-comment">//...</span><br>&#125;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&quot;donuts&quot;</span>)  <span class="hljs-comment">//44...ms</span><br></code></pre></td></tr></table></figure>
+<p>可以看出是非常消耗性能的，所以我们有一个优化思路：我们可以用同样的 <strong>geometry</strong> 和 <strong>material</strong> 在多个 <strong>Meshes</strong> 上</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&quot;donuts&quot;</span>)<br><span class="hljs-keyword">const</span> donutGeometry = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TorusBufferGeometry</span>(<span class="hljs-number">0.3</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">20</span>, <span class="hljs-number">45</span>)<br><span class="hljs-keyword">const</span> donutMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshMatcapMaterial</span>(&#123;<span class="hljs-attr">matcap</span>: matcapTexture&#125;)<br><br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++)&#123;<br>    <span class="hljs-comment">//...</span><br>&#125;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&quot;donuts&quot;</span>) <span class="hljs-comment">//1.... ms</span><br></code></pre></td></tr></table></figure>
+<p>可以看到优化非常的明显</p>
+<p>此外，我们还可以让 <strong>donut</strong> 和 <strong>text</strong> 使用同一个 <strong>material</strong>，而不必再为 <strong>donut</strong> 实例化一个 <strong>material</strong></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/three-js/" class="print-no-link">#three.js</a>
+      
+        <a href="/tags/web/" class="print-no-link">#web</a>
+      
+        <a href="/tags/javascript/" class="print-no-link">#javascript</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>three.js-11:3D-Text</div>
+      <div>https://nanxfu.github.io/2023/02/24/three-js-11-3D-Text/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Beitragsautor</div>
+          <div>nanxfu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Veröffentlicht am</div>
+          <div>February 24, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Urheberrechtshinweis</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/25/%E4%BD%BF%E7%94%A8decorator%E4%BC%98%E9%9B%85%E7%AE%A1%E7%90%86electron-Ipc%E6%B1%A0/" title="使用decorator优雅管理electron-Ipc池">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">使用decorator优雅管理electron-Ipc池</span>
+                        <span class="visible-mobile">Vorheriger</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/20/three-js-10-Materials/" title="three.js_10-Materials">
+                        <span class="hidden-mobile">three.js_10-Materials</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Inhaltsverzeichnis</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog funktioniert am besten mit aktiviertem JavaScript</div>
+  </noscript>
+</body>
+</html>

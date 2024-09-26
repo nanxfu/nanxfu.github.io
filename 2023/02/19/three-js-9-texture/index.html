@@ -1,0 +1,788 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="author" content="nanxfu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.什么是材质?材质就是覆盖在几何体上的图片，并且也能有不同的视觉效果（例如反射），不仅仅是贴图 2.材质种类2.1 alpha alpha 材质是一个灰度图，白色的地方代表可见，黑色则代表不可见，如下图    2.2 HEIGHT HEIGHT 材质也是一个灰度图，代表高度。 一个像素点的灰度会提高或降低平面的高度。 需要提供细分信息（subdivision）如下图    2.3 NORMAL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="three.js_9-texture">
+<meta property="og:url" content="https://nanxfu.github.io/2023/02/19/three-js-9-texture/index.html">
+<meta property="og:site_name" content="南小府の小屋">
+<meta property="og:description" content="1.什么是材质?材质就是覆盖在几何体上的图片，并且也能有不同的视觉效果（例如反射），不仅仅是贴图 2.材质种类2.1 alpha alpha 材质是一个灰度图，白色的地方代表可见，黑色则代表不可见，如下图    2.2 HEIGHT HEIGHT 材质也是一个灰度图，代表高度。 一个像素点的灰度会提高或降低平面的高度。 需要提供细分信息（subdivision）如下图    2.3 NORMAL">
+<meta property="og:locale">
+<meta property="og:image" content="https://nanxfu.github.io/img/threejs.png">
+<meta property="article:published_time" content="2023-02-19T08:35:10.000Z">
+<meta property="article:modified_time" content="2024-09-23T06:57:04.031Z">
+<meta property="article:author" content="nanxfu">
+<meta property="article:tag" content="three.js">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nanxfu.github.io/img/threejs.png">
+  
+  
+  
+  <title>three.js_9-texture - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>南小府</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/" target="_self">
+                <i class="iconfont icon-notebook"></i>
+                <span>心情</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/1623251880550.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="three.js_9-texture"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-19 16:35" pubdate>
+          February 19, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">three.js_9-texture</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-什么是材质"><a href="#1-什么是材质" class="headerlink" title="1.什么是材质?"></a>1.什么是材质?</h2><p>材质就是覆盖在几何体上的图片，并且也能有不同的视觉效果（例如反射），不仅仅是贴图</p>
+<h2 id="2-材质种类"><a href="#2-材质种类" class="headerlink" title="2.材质种类"></a>2.材质种类</h2><h3 id="2-1-alpha"><a href="#2-1-alpha" class="headerlink" title="2.1 alpha"></a>2.1 alpha</h3><ul>
+<li>alpha 材质是一个灰度图，白色的地方代表可见，黑色则代表不可见，如下图<div align="center"> <img src="/2023/02/19/three-js-9-texture/door/alpha.jpg" srcset="/img/loading.gif" lazyload class="" width="400"> </div></li>
+</ul>
+<h3 id="2-2-HEIGHT"><a href="#2-2-HEIGHT" class="headerlink" title="2.2 HEIGHT"></a>2.2 HEIGHT</h3><ul>
+<li>HEIGHT 材质也是一个灰度图，代表高度。</li>
+<li>一个像素点的灰度会提高或降低平面的高度。 需要提供细分信息（subdivision）如下图<div align="center"> <img src="/2023/02/19/three-js-9-texture/door/height.jpg" srcset="/img/loading.gif" lazyload class="" width="400"> </div></li>
+</ul>
+<h3 id="2-3-NORMAL"><a href="#2-3-NORMAL" class="headerlink" title="2.3 NORMAL"></a>2.3 NORMAL</h3><ul>
+<li>NORMAL 材质需要我们添加一些表面细节，如光照。</li>
+<li>无需细分信息相比HEIGHT材质有更高的性能<div align="center"> <img src="/2023/02/19/three-js-9-texture/door/normal.jpg" srcset="/img/loading.gif" lazyload class="" width="400"> </div></li>
+</ul>
+<h3 id="2-4-AMBIENT-OCCLUSION"><a href="#2-4-AMBIENT-OCCLUSION" class="headerlink" title="2.4 AMBIENT OCCLUSION"></a>2.4 AMBIENT OCCLUSION</h3><ul>
+<li>AMBIENT OCCLUSION 也是一个灰度图，作用是增加物体的阴影</li>
+<li>但它并不会模拟真实的物理光照效果（假阴影）。通常用来添加反差效果和更多细节<div align="center"> <img src="/2023/02/19/three-js-9-texture/door/ambientOcclusion.jpg" srcset="/img/loading.gif" lazyload class="" width="400"> </div></li>
+</ul>
+<h3 id="2-5-METALNESS"><a href="#2-5-METALNESS" class="headerlink" title="2.5 METALNESS"></a>2.5 METALNESS</h3><ul>
+<li>METALNESS 是一个灰度图。白色地方代表金属光泽，黑色代表无金属光照</li>
+<li>大多用来展示光线反射（如镜子）<div align="center"> <img src="/2023/02/19/three-js-9-texture/door/metalness.jpg" srcset="/img/loading.gif" lazyload class="" width="400"> </div></li>
+</ul>
+<h3 id="2-6-ROUGHNESS"><a href="#2-6-ROUGHNESS" class="headerlink" title="2.6 ROUGHNESS"></a>2.6 ROUGHNESS</h3><ul>
+<li>ROUGHNESS 是一个灰度图，通常与 METALNESS 配合使用。</li>
+<li>白色代表粗糙，黑色代表平滑。</li>
+<li>通常用来展示光线漫反射<br>例如用它来展示一个地毯（粗糙）或者金属（光滑）<div align="center"> <img src="/2023/02/19/three-js-9-texture/door/roughness.jpg" srcset="/img/loading.gif" lazyload class="" width="400"> </div></li>
+</ul>
+<h3 id="2-7-PBR-principles"><a href="#2-7-PBR-principles" class="headerlink" title="2.7 PBR principles"></a>2.7 PBR principles</h3><p>这些种类的材质都需要遵循 <strong><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33464301">PBR</a></strong> 规范</p>
+<blockquote>
+<h3 id="PBR-规范"><a href="#PBR-规范" class="headerlink" title="PBR 规范"></a>PBR 规范</h3><p>PBR是基于物理表现的渲染，例如光照、金属光泽、粗糙度（实际上大多数技术都倾向于遵循现实世界的物理效果）<br>PBR定义了一系列的算法用来模拟现实世界物体的渲染效果</p>
+</blockquote>
+<h2 id="3-使用材质"><a href="#3-使用材质" class="headerlink" title="3.使用材质"></a>3.使用材质</h2><p>了解了几种材质类型后就可以开始使用材质了。首先使用一个由Paulo做的<a target="_blank" rel="noopener" href="https://3dtextures.me/2019/04/16/door-wood-001/">门材质</a>,这是一个很有名的库</p>
+<div align="center"> <img src="/2023/02/19/three-js-9-texture/door-texture.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<h3 id="3-1加载材质静态资源"><a href="#3-1加载材质静态资源" class="headerlink" title="3.1加载材质静态资源"></a>3.1加载材质静态资源</h3><p>使用材质首先需要解决的问题是引入材质图片，我们有两种方法引入</p>
+<ol>
+<li><p>可以使用 import 导入</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">import</span> imageSource <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./color.jpg&#x27;</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(imageSource)    <span class="hljs-comment">//http://localhost/images/c43f...jpg</span><br></code></pre></td></tr></table></figure></li>
+<li><p>静态资源服务器<br>我们可以在项目根目录的static目录下放置图片</p>
+<div align="center"> <img src="/2023/02/19/three-js-9-texture/project.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+然后就能在浏览器中直接访问到材质图片了
+<div align="center"> <img src="/2023/02/19/three-js-9-texture/project2.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+以上方式皆基于webpack
+</li>
+<li><p>Native Javascript</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> image = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Image</span>()<br><br>image.<span class="hljs-property">onload</span> = <span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;image loaded&quot;</span>)<br>&#125;<br><br>image.<span class="hljs-property">src</span> = <span class="hljs-string">&#x27;/textures/door/color.jpg&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>缺点：当图片大，宽带小时会花费很长时间加载</p>
+</li>
+</ol>
+<h3 id="3-2初始化材质"><a href="#3-2初始化材质" class="headerlink" title="3.2初始化材质"></a>3.2初始化材质</h3><p>材质被加载进来后就可以开始初始化材质,并将材质应用在物体上了</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> image = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Image</span>()<br><br>image.<span class="hljs-property">onload</span> = <span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-keyword">const</span> texture = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Texture</span>(image)    <span class="hljs-comment">//初始化材质</span><br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;image loaded&quot;</span>)<br>&#125;<br><br>image.<span class="hljs-property">src</span> = <span class="hljs-string">&#x27;/textures/door/color.jpg&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>实际上这段代码可以使用 <strong>texture.needsUpdate</strong> 属性实现材质的自动更新，这样就可以避免因作用域问题需要手动维护texture的状态。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> image = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Image</span>()<br><span class="hljs-keyword">const</span> texture = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Texture</span>(image)<br>image.<span class="hljs-property">onload</span> = <span class="hljs-function">() =&gt;</span> &#123;<br>    texture.<span class="hljs-property">needsUpdate</span> = <span class="hljs-literal">true</span><br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;image loaded&quot;</span>)<br>&#125;<br><br>image.<span class="hljs-property">src</span> = <span class="hljs-string">&#x27;/textures/door/color.jpg&#x27;</span><br></code></pre></td></tr></table></figure>
+<h3 id="TextureLoader"><a href="#TextureLoader" class="headerlink" title="TextureLoader"></a>TextureLoader</h3><p>除了使用img初始化材质以外，还可以使用 <strong>TextureLoader</strong> 直接加载材质</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> textureLoader = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TextureLoader</span>()<br><span class="hljs-keyword">const</span> texture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/door/color.jpg&#x27;</span>)<br><span class="hljs-keyword">const</span> geometry = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">BoxBufferGeometry</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>)<br><span class="hljs-keyword">const</span> material = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Three</span>.<span class="hljs-title class_">MeshBasicMaterial</span>(&#123;<span class="hljs-attr">map</span>:texture&#125;) <span class="hljs-comment">//使用材质</span><br><span class="hljs-keyword">const</span> mesh = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(geometry, material)<br></code></pre></td></tr></table></figure>
+<p><strong>TextureLoader</strong> 可以在第一个参数后添加三个function用来处理加载材质的生命周期</p>
+<ul>
+<li>load -当材质成功加载后触发</li>
+<li>progress -材质加载中触发</li>
+<li>error -材质加载失败触发</li>
+</ul>
+<h3 id="LoadingManager"><a href="#LoadingManager" class="headerlink" title="LoadingManager"></a>LoadingManager</h3><p>当加载字体、模型、材质时就需要一个全局的加载进度来告知用户哪些被加载完成了，这个功能已在three.js中集成，既<strong>LoadingManager</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> loadingManager = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">LoadingManager</span>()<br><span class="hljs-keyword">const</span> textureLoader = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TextureLoader</span>(loadingManager)<br><span class="hljs-keyword">const</span> texture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/door/color.jpg&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<p><strong>LoadingManager</strong>提供了许多事件可供监听,例如 <strong>onStart</strong>、<strong>onLoaded</strong>、<strong>onProgress</strong>、<strong>onError</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> loadingManager = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">LoadingManager</span>()<br>loadingManager.<span class="hljs-property">onStart</span> = <span class="hljs-function">()=&gt;</span>&#123;<br>   <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;onStart&quot;</span>)<br>&#125;<br>loadingManager.<span class="hljs-property">onLoaded</span> = <span class="hljs-function">()=&gt;</span>&#123;<br>   <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;onLoaded&quot;</span>)<br>&#125;<br>loadingManager.<span class="hljs-property">onProgress</span> = <span class="hljs-function">()=&gt;</span>&#123;<br>   <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;onProgress&quot;</span>)<br>&#125;<br><span class="hljs-keyword">const</span> textureLoader = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TextureLoader</span>(loadingManager)<br><span class="hljs-keyword">const</span> texture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/door/color.jpg&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<p>实际上，在写完这些代码后你会发现仅仅触发 “onStart”和”onProgress” ，Loaded事件并未被触发&#x2F;</p>
+<div align="center"> <img src="/2023/02/19/three-js-9-texture/log.png" srcset="/img/loading.gif" lazyload class=""> </div>
+
+<h3 id="UV-UNWRAPPER"><a href="#UV-UNWRAPPER" class="headerlink" title="UV UNWRAPPER"></a>UV UNWRAPPER</h3><p>了解 <strong>UV Unwrapping</strong> 之前先来了解以下 <strong>UV map（贴图)</strong> 和 <strong>UV mapping(映射)</strong></p>
+<p>UV Map 是包裹在3D模型上的材质，创建UV 贴图的过程就叫做UV Unwrapping(拆图)</p>
+<div align="center"> <img src="/2023/02/19/three-js-9-texture/uv.png" srcset="/img/loading.gif" lazyload class=""> </div>
+
+<blockquote>
+<p>U和V指的是2D空间的水平和垂直轴，因为X、Y、Z已经在3D空间中使用</p>
+</blockquote>
+<p>UV mapping即是将 3D网格转换为2D信息，用于指定材质如何”贴在几何体上”</p>
+<p>类似Three.js 内置的 <code>BoxBufferGeometry</code> UV 坐标已经被指定过，可以用 <code>geometry.attributes.uv</code> 访问</p>
+<div align="center"> <img src="/2023/02/19/three-js-9-texture/coodinate.png" srcset="/img/loading.gif" lazyload class=""> </div>
+
+<p>可以看到在这个 <code>Float32Array</code> 里 <code>itemSize = 2</code>，因为 UV 坐标是 2D 的</p>
+<p>如果你创建了自己的几何体，你就需要自己指定 UV coordinates(坐标),当你使用 3D 建模软件建模时，UV Unwrapping 也是必不可少的一步</p>
+<h2 id="4-材质变换"><a href="#4-材质变换" class="headerlink" title="4.材质变换"></a>4.材质变换</h2><h3 id="4-1-重复"><a href="#4-1-重复" class="headerlink" title="4.1 重复"></a>4.1 重复</h3><p>我们可以用 <code>repeat</code> 属性让材质重复，它是一个  <code>Vector2</code> 的属性</p>
+<div align="center"> <img src="/2023/02/19/three-js-9-texture/beRepet.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> colorTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;...&#x27;</span>)<br><br>colorTexture.<span class="hljs-property">repeat</span>.<span class="hljs-property">x</span> = <span class="hljs-number">2</span><br>colorTexture.<span class="hljs-property">repeat</span>.<span class="hljs-property">y</span> = <span class="hljs-number">3</span><br></code></pre></td></tr></table></figure>
+<div align="center">  </div>
+
+<p>注意默认情况下，材质不会重复，采用最后一个材质像素拉伸适应几何体，这也是为什么上面设置 <code>repet</code> 属性后的怪异行为。我们可以给 <code>wrapS</code> 和 <code>wrapT</code> 属性设置 <code>Three.RepeatWrapping</code>改变重复方式 </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">colorTexture.<span class="hljs-property">wrapS</span> = <span class="hljs-title class_">Three</span>.<span class="hljs-property">RepeatWrapping</span><br>colorTexture.<span class="hljs-property">wrapT</span> = <span class="hljs-title class_">Three</span>.<span class="hljs-property">RepeatWrapping</span><br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/02/19/three-js-9-texture/wrap.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<p>我们也可以使用 <code>THREE.MirroredRepeatWrapping</code> 达到重复的目的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">colorTexture.<span class="hljs-property">wrapS</span> = <span class="hljs-title class_">Three</span>.<span class="hljs-property">MirroredRepeatWrapping</span><br>colorTexture.<span class="hljs-property">wrapT</span> = <span class="hljs-title class_">Three</span>.<span class="hljs-property">MirroredRepeatWrapping</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-2-偏移"><a href="#4-2-偏移" class="headerlink" title="4.2 偏移"></a>4.2 偏移</h3><p>要偏移一个材质使用 <code>offset</code> 属性设置，这个属性也是一个 <code>Vector2</code> 的类型</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">colorTexture.<span class="hljs-property">offset</span>.<span class="hljs-property">x</span> = <span class="hljs-number">0.5</span><br>colorTexture.<span class="hljs-property">offset</span>.<span class="hljs-property">y</span> = <span class="hljs-number">0.5</span><br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/02/19/three-js-9-texture/offsetxy.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<h3 id="4-3-旋转"><a href="#4-3-旋转" class="headerlink" title="4.3 旋转"></a>4.3 旋转</h3><p>使用 <code>rotation</code> 属性旋转材质。注意单位是 rad(弧度)</p>
+<div align="center"> <img src="/2023/02/19/three-js-9-texture/rotate.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">colorTexture.<span class="hljs-property">rotation</span> = <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<p>旋转时是按照 pivot point (轴心) 旋转的。可以使用 <code>center</code> 属性修改轴心，这个属性是 <code>Vector2</code> 类型的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">colorTexture.<span class="hljs-property">center</span>.<span class="hljs-property">x</span> = <span class="hljs-number">0.5</span><br>colorTexture.<span class="hljs-property">center</span>.<span class="hljs-property">y</span> = <span class="hljs-number">0.5</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-4-filtering-and-mipmapping"><a href="#4-4-filtering-and-mipmapping" class="headerlink" title="4.4 filtering and mipmapping"></a>4.4 filtering and mipmapping</h3><p>当你把 camera 移动至立方体的顶端至几乎看不见的时候就会发现材质变得模糊，这是因为 <strong>filtering</strong> 和 <strong>mipmapping(多级渐远纹理)</strong> 特性</p>
+<p><strong>mipmapping</strong> 是把一个材质宽高不断减半细分的技术，直到得到 1x1 像素的材质分量。这些材质分量会被送到 GPU 内部，并由 GPU 决定最适合显示的材质分量</p>
+<p>这些过程会被 Three.js 和 GPU 自动接管，不过我们任然能改变两种算法来达到合适的显示效果</p>
+<ol>
+<li><p>minification filtering<br>  当camera与纹理表面距离变的更远时就会发生这种情况，我们可以使用材质的 <code>minFilter</code> 属性来改变 filter. 它有下面六个取值</p>
+<ul>
+<li>THREE.NearestFilter</li>
+<li>THREE.LinearFilter</li>
+<li>THREE.NearestMipmapNearestFilter</li>
+<li>THREE.NearestMipmapLinearFilter</li>
+<li>THREE.LinearMipmapNearestFilter</li>
+<li>THREE.LinearMipmapLinearFilter(default)</li>
+</ul>
+</li>
+<li><p>Magnification filtering<br> 当camera与纹理表面距离变的更远时就会发生这种情况，我们可以使用材质的 <code>magFilter</code> 属性改变 filter. 它有两种取值</p>
+<ul>
+<li>THREE.NearestFilter</li>
+<li>THREE.LinearFilter (default)</li>
+</ul>
+</li>
+</ol>
+<p>当我们在 <strong>minFilter</strong> 使用 <strong>THREE.NearestFilter</strong> 时就不需要  mipmaps 了， 使用 <code>colorTexture.generateMipmaps = false</code> 来禁止生成 mipmaps</p>
+<h2 id="5-材质优化"><a href="#5-材质优化" class="headerlink" title="5.材质优化"></a>5.材质优化</h2><p>材质图片的大小可能很大，所以我们可以使用 TinyPNG 做一个压缩</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/three-js/" class="print-no-link">#three.js</a>
+      
+        <a href="/tags/web/" class="print-no-link">#web</a>
+      
+        <a href="/tags/javascript/" class="print-no-link">#javascript</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>three.js_9-texture</div>
+      <div>https://nanxfu.github.io/2023/02/19/three-js-9-texture/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Beitragsautor</div>
+          <div>nanxfu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Veröffentlicht am</div>
+          <div>February 19, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Urheberrechtshinweis</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/20/three-js-10-Materials/" title="three.js_10-Materials">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">three.js_10-Materials</span>
+                        <span class="visible-mobile">Vorheriger</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/11/03/CSS-Box-Model/" title="CSS - Box Model">
+                        <span class="hidden-mobile">CSS - Box Model</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Inhaltsverzeichnis</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog funktioniert am besten mit aktiviertem JavaScript</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,736 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="author" content="nanxfu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.创建粒子创建粒子就像创建一个 Mesh ，需要有 geometry(BufferGeometry)、material(PointsMaterial) 和 Points 实例(而不是一个 Mesh 实例) 我们先创建一个 sphereBufferGeometry 和 PointsMaterial， geometry的每个坐标都会变成一个粒子 12345678const particlesGeom">
+<meta property="og:type" content="article">
+<meta property="og:title" content="threejs-15:particles">
+<meta property="og:url" content="https://nanxfu.github.io/2023/03/30/threejs-15-particles/index.html">
+<meta property="og:site_name" content="南小府の小屋">
+<meta property="og:description" content="1.创建粒子创建粒子就像创建一个 Mesh ，需要有 geometry(BufferGeometry)、material(PointsMaterial) 和 Points 实例(而不是一个 Mesh 实例) 我们先创建一个 sphereBufferGeometry 和 PointsMaterial， geometry的每个坐标都会变成一个粒子 12345678const particlesGeom">
+<meta property="og:locale">
+<meta property="og:image" content="https://nanxfu.github.io/img/threejs.png">
+<meta property="article:published_time" content="2023-03-30T12:57:38.000Z">
+<meta property="article:modified_time" content="2024-09-23T06:57:04.052Z">
+<meta property="article:author" content="nanxfu">
+<meta property="article:tag" content="three.js">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nanxfu.github.io/img/threejs.png">
+  
+  
+  
+  <title>threejs-15:particles - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>南小府</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/" target="_self">
+                <i class="iconfont icon-notebook"></i>
+                <span>心情</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/1623251880550.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="threejs-15:particles"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-30 20:57" pubdate>
+          March 30, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          2.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">threejs-15:particles</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-创建粒子"><a href="#1-创建粒子" class="headerlink" title="1.创建粒子"></a>1.创建粒子</h1><p>创建粒子就像创建一个 <code>Mesh</code> ，需要有 <strong>geometry(BufferGeometry)、material(PointsMaterial) 和 Points 实例(而不是一个 Mesh 实例)</strong></p>
+<p>我们先创建一个 <strong>sphereBufferGeometry 和 PointsMaterial</strong>， <strong>geometry</strong>的每个坐标都会变成一个粒子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> particlesGeometry = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">SphereBufferGeometry</span>(<span class="hljs-number">1</span>, <span class="hljs-number">32</span>, <span class="hljs-number">32</span>)<br><span class="hljs-keyword">const</span> particlesMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PointsMaterial</span>(&#123;<br>    <span class="hljs-attr">size</span>: <span class="hljs-number">0.02</span>,<br>    <span class="hljs-attr">sizeAttenuation</span>:<span class="hljs-literal">true</span><br>&#125;)<br><br><span class="hljs-keyword">const</span> particles = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Points</span>(particlesGeometry, particlesMaterial)<br>scene.<span class="hljs-title function_">add</span>(particles)<br></code></pre></td></tr></table></figure>
+
+<p>通过设置 <strong>PointsMaterial</strong> 的 <strong>size</strong> 属性改变粒子的大小。通过设置 <strong>sizeAttenuation</strong> 属性决定粒子的透视关系（是否通过摄像机与粒子的距离实现远大近小）</p>
+<div align="center"> <img src="/2023/03/30/threejs-15-particles/spoints.png" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/03/30/threejs-15-particles/spoints2.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<h2 id="2-自定义坐标"><a href="#2-自定义坐标" class="headerlink" title="2.自定义坐标"></a>2.自定义坐标</h2><p>跟前几章一样，我们可以用 <strong>BufferGeometry</strong>上的 <strong>position</strong> 属性生成粒子,这些数据将会被送进gpu处理</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> particlesGeometry = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">BufferGeometry</span>()<br><span class="hljs-keyword">const</span> count = <span class="hljs-number">500</span><br><br><span class="hljs-keyword">const</span> positions = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Float32Array</span>(count * <span class="hljs-number">3</span>) <span class="hljs-comment">//坐标是三个一组（xyz)</span><br><br><span class="hljs-comment">//填充数组</span><br><br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; count * <span class="hljs-number">3</span>; i++)&#123;<br>    positions[i] = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span> ) * <span class="hljs-number">10</span><br>&#125;<br><br>particlesGeometry.<span class="hljs-title function_">setAttribute</span>(<br>    <span class="hljs-string">&#x27;position&#x27;</span>,<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">BufferAttribute</span>(positions, <span class="hljs-number">3</span>)<br>)<br><span class="hljs-keyword">const</span> particlesMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PointsMaterial</span>(&#123;<br>    <span class="hljs-attr">size</span>: <span class="hljs-number">0.02</span>,<br>    <span class="hljs-attr">sizeAttenuation</span>:<span class="hljs-literal">true</span><br>&#125;)<br><br><span class="hljs-keyword">const</span> particles = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Points</span>(particlesGeometry, particlesMaterial)<br>scene.<span class="hljs-title function_">add</span>(particles)<br></code></pre></td></tr></table></figure>
+
+<p>效果如下。第二张图是 <code>positions[i] = Math.random()</code> 的效果</p>
+<div align="center"> <img src="/2023/03/30/threejs-15-particles/dypoint.png" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/03/30/threejs-15-particles/dypo.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<h2 id="3-颜色"><a href="#3-颜色" class="headerlink" title="3.颜色"></a>3.颜色</h2><p>为粒子添加颜色只需改变材质的color属性</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">particlesMaterial.<span class="hljs-property">color</span> = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Color</span>(<span class="hljs-string">&#x27;#ff88cc&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/30/threejs-15-particles/color.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<h2 id="3-材质"><a href="#3-材质" class="headerlink" title="3.材质"></a>3.材质</h2><p>我们同样可以给material添加材质</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> textureLoader = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TextureLoader</span>()<br><span class="hljs-keyword">const</span> particleTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/texture/particles/2.png&#x27;</span>)<br><br><span class="hljs-comment">//...</span><br>particlesMaterial.<span class="hljs-property">map</span> = particleTexture<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/30/threejs-15-particles/texture.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+<div align="center"> <img src="/2023/03/30/threejs-15-particles/effect.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>要获取更多的粒子材质可以去 <a target="_blank" rel="noopener" href="https://www.kenney.nl/">kenney</a> 处获取</p>
+<p>当你仔细看前景的粒子时，会发现前景粒子会以矩形的形式遮挡后面的粒子不是不规则形状遮挡,且内部区域应当透明的地方没有透明。而，所以我们需要添加 alphaMap 来设定透明区域</p>
+<div align="center"> <img src="/2023/03/30/threejs-15-particles/hidding.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">particlesMaterial.<span class="hljs-property">transparent</span> = <span class="hljs-literal">true</span><br>particlesMaterial.<span class="hljs-property">alphaMap</span> = particleTexture<br></code></pre></td></tr></table></figure>
+
+<p>在使用透明贴图后仍会发现部分边缘区域会出现bug，这是因为创建粒子时他们重叠了导致的。解决方法也有很多</p>
+<p>1.使用 <strong>alphatest</strong><br>alphatest 是一个从0到1的值，它让 webgl 根据像素的透明度，什么时候不应该渲染该像素。默认情况下它的值为0，意味着该像素永远都会被绘制<br>我们使用0.001来测试</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">particlesMaterial.<span class="hljs-property">alphaTest</span> = <span class="hljs-number">0.01</span><br></code></pre></td></tr></table></figure>
+
+<p>设置 alphatest 后看起来效果好多了，但某些情况下任然会很怪。比如我们会在一个正方体中看见正方体后面的粒子</p>
+<div align="center"> <img src="/2023/03/30/threejs-15-particles/alphatest.png" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/03/30/threejs-15-particles/cube.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>2.depth test</p>
+<p>在three.js中，depth test是一个用于控制深度测试的属性。深度测试是一种用于检查像素深度信息的技术，以确定在渲染过程中哪些像素应该被渲染。当depth test属性被启用时，它会启用深度测试功能，这意味着每个像素的深度值将与深度缓冲区中的深度值进行比较。</p>
+<p>深度测试通常使用一个叫做深度函数（depth function）的函数来控制。深度函数是一个用于比较像素深度和深度缓冲区中深度值的函数，通常有以下几种选项：</p>
+<p>LESS：像素的深度值小于深度缓冲区中的深度值时通过深度测试。<br>LEQUAL：像素的深度值小于或等于深度缓冲区中的深度值时通过深度测试。<br>EQUAL：像素的深度值等于深度缓冲区中的深度值时通过深度测试。<br>GREATER：像素的深度值大于深度缓冲区中的深度值时通过深度测试。<br>GEQUAL：像素的深度值大于或等于深度缓冲区中的深度值时通过深度测试。<br>NOTEQUAL：像素的深度值不等于深度缓冲区中的深度值时通过深度测试。<br>ALWAYS：始终通过深度测试。<br>NEVER：始终不通过深度测试。<br>使用depth test属性，你可以控制在渲染过程中使用哪种深度函数进行深度测试。以下是一个设置深度测试属性的示例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> material = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshBasicMaterial</span>(&#123;<br>   <span class="hljs-attr">color</span>: <span class="hljs-number">0xff0000</span>,<br>   <span class="hljs-attr">depthTest</span>: <span class="hljs-literal">true</span>,<br>   <span class="hljs-attr">depthFunc</span>: <span class="hljs-variable constant_">THREE</span>.<span class="hljs-property">LessEqualDepth</span>,<br>&#125;);<br><span class="hljs-keyword">const</span> mesh = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(geometry, material);<br>scene.<span class="hljs-title function_">add</span>(mesh);<br></code></pre></td></tr></table></figure>
+
+<p>在这个例子中，depth test属性被设置为true，意味着将启用深度测试。depthFunc属性被设置为THREE.LessEqualDepth，意味着将使用小于等于深度缓冲区深度值的像素通过深度测试。<br>3.depth write<br>在three.js中，depth write是一个用于控制深度缓冲区写入的属性。深度缓冲区是一个特殊的缓冲区，用于存储每个像素的深度信息，它通常用于实现深度测试，以确定在渲染过程中哪些像素应该被渲染。</p>
+<p>当depth write属性设置为true时，深度信息将被写入深度缓冲区，这意味着每个像素的深度值将被记录下来。当它设置为false时，深度信息将不会被写入深度缓冲区，而只会执行深度测试，以便根据需要渲染像素。这意味着在这种情况下，即使像素的深度测试通过，它们的深度信息也不会被写入深度缓冲区。</p>
+<p>使用depth write属性可以在一定程度上控制three.js场景的深度行为，以实现更好的可视化效果。例如，在渲染半透明对象时，你可能想要禁用depth write属性，以便后面的对象能够正确地显示在前面的对象之上，从而实现透明效果。</p>
+<p>——made by chatgpt</p>
+<p>4.blending<br>Blending（混合）是three.js中一个用于控制物体混合透明度的属性。当两个或多个物体重叠时，混合可以使它们看起来更自然和逼真。</p>
+<p>在three.js中，混合可以通过设置材质的blending属性来控制。blending属性是一个包含源混合因子和目标混合因子的数组，它们用于计算片段的颜色和alpha值，以便将其混合到场景中。</p>
+<p>源混合因子（source blending factor）指定了如何混合当前片段的颜色和alpha值，而目标混合因子（destination blending factor）指定了如何混合已经在场景中的颜色和alpha值。</p>
+<p>在three.js中，可以使用以下混合模式：</p>
+<p>THREE.NoBlending: 不混合，即完全覆盖。<br>THREE.NormalBlending: 普通混合模式，即使用默认的混合因子。<br>THREE.AdditiveBlending: 加法混合模式，即将源和目标颜色相加。<br>THREE.SubtractiveBlending: 减法混合模式，即将源和目标颜色相减。<br>THREE.MultiplyBlending: 乘法混合模式，即将源和目标颜色相乘。<br>THREE.CustomBlending: 自定义混合模式，可以自己指定混合因子。<br>以下是一个使用混合的示例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> material = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshBasicMaterial</span>(&#123;<br>   <span class="hljs-attr">color</span>: <span class="hljs-number">0xff0000</span>,<br>   <span class="hljs-attr">opacity</span>: <span class="hljs-number">0.5</span>,<br>   <span class="hljs-attr">transparent</span>: <span class="hljs-literal">true</span>,<br>   <span class="hljs-attr">blending</span>: <span class="hljs-variable constant_">THREE</span>.<span class="hljs-property">AdditiveBlending</span>,<br>&#125;);<br><span class="hljs-keyword">const</span> mesh = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(geometry, material);<br>scene.<span class="hljs-title function_">add</span>(mesh);<br><br></code></pre></td></tr></table></figure>
+
+<p>在这个例子中，材质的opacity属性被设置为0.5，使得物体半透明。transparent属性被设置为true，以启用透明度。blending属性被设置为THREE.AdditiveBlending，以使用加法混合模式。这将使场景中的物体看起来更加逼真和自然。</p>
+<p>注意 使用blending会影响性能</p>
+<div align="center"> <img src="/2023/03/30/threejs-15-particles/blending.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<h2 id="4-随机颜色"><a href="#4-随机颜色" class="headerlink" title="4.随机颜色"></a>4.随机颜色</h2><p>我们可以给每个粒子不同的颜色。通过添加 <strong>color</strong> 属性即可控制颜色。color 是一个 vector3 (r,g,b)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> position = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Float32Array</span>(count * <span class="hljs-number">3</span>)<br><span class="hljs-keyword">const</span> colors = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Float32Array</span>(count * <span class="hljs-number">3</span>)<br><br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; count * <span class="hljs-number">3</span>; i++) &#123;<br>    positions[i] = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span> ) * <span class="hljs-number">10</span><br>    colors[i] = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()<br>&#125;<br>particlesMaterial.<span class="hljs-property">vertexColors</span> = <span class="hljs-literal">true</span>   <span class="hljs-comment">//注意，需在此为粒子设置这个属性</span><br>particlesGeometry.<span class="hljs-title function_">setAttribute</span>(<br>    <span class="hljs-string">&#x27;position&#x27;</span>,<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">BufferAttribute</span>(positions, <span class="hljs-number">3</span>)<br>)<br>particlesGeometry.<span class="hljs-title function_">setAttribute</span>(<br>    <span class="hljs-string">&#x27;color&#x27;</span>,<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">BufferAttribute</span>(colors, <span class="hljs-number">3</span>)<br>)<br></code></pre></td></tr></table></figure>
+
+<p>生成的vertex颜色会被 main material 的颜色影响，为了去除影响，我们可以注释掉这行</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//particlesMaterial.color = new THREE.Color(&#x27;#ff88cc&#x27;)</span><br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/30/threejs-15-particles/colors.png" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/03/30/threejs-15-particles/color2.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<h2 id="5-制作动画"><a href="#5-制作动画" class="headerlink" title="5.制作动画"></a>5.制作动画</h2><p>为粒子制作动画的方式用很多种<br>1.将粒子作为 object 使用</p>
+<p><strong>Points</strong> 类继承于 <strong>Object3D</strong> 类，所以我们可以移动，旋转，缩放粒子<br>例如，我们在 <strong>tick</strong> 函数里旋转粒子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">tick</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>    <span class="hljs-keyword">const</span> elapsedTime = clock.<span class="hljs-title function_">getElpasedTime</span>()<br>    <br>    particles.<span class="hljs-property">rotation</span>.<span class="hljs-property">y</span> = elapsedTime * <span class="hljs-number">0.2</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>2.改变 <strong>attributes</strong></p>
+<p>我们可以改变 <code>particlesGeomerty.attributes.position.array</code> 每个粒子坐标的值操控粒子（每三个值代表一个）<br>接下来看一个</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">tick</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; count; i++)&#123;<br>        <span class="hljs-keyword">const</span> i3 = i * <span class="hljs-number">3</span><br>        <span class="hljs-keyword">const</span> x = particlesGeometry.<span class="hljs-property">attributes</span>.<span class="hljs-property">position</span>.<span class="hljs-property">array</span>[i3]<br>        particlesGeometry.<span class="hljs-property">attributes</span>.<span class="hljs-property">position</span>.<span class="hljs-property">array</span>[i3 + <span class="hljs-number">1</span>] = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sin</span>(elapsedTime + x) <span class="hljs-comment">//改变y值</span><br>    &#125;<br>    particlesGeomerty.<span class="hljs-property">attributes</span>.<span class="hljs-property">position</span>.<span class="hljs-property">needsUpdate</span> = <span class="hljs-literal">true</span>    <span class="hljs-comment">//需要设置这个属性</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/30/threejs-15-particles/i3.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+这样一来就可以看起sin波的粒子动画了。但是你应该避免这样实现动画，因为我们更新了上千个粒子，会造成电脑风扇狂转。这不是一个最佳的实现方案（使用shader）
+<div align="center"> <img src="/2023/03/30/threejs-15-particles/wave.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/three-js/" class="print-no-link">#three.js</a>
+      
+        <a href="/tags/web/" class="print-no-link">#web</a>
+      
+        <a href="/tags/javascript/" class="print-no-link">#javascript</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>threejs-15:particles</div>
+      <div>https://nanxfu.github.io/2023/03/30/threejs-15-particles/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Beitragsautor</div>
+          <div>nanxfu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Veröffentlicht am</div>
+          <div>March 30, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Urheberrechtshinweis</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/01/threejs-16-galaxy-generate/" title="threejs-16:galaxy-generate">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">threejs-16:galaxy-generate</span>
+                        <span class="visible-mobile">Vorheriger</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/04/three-js-14-Haunted-House/" title="three.js-14-Haunted-House">
+                        <span class="hidden-mobile">three.js-14-Haunted-House</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Inhaltsverzeichnis</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog funktioniert am besten mit aktiviertem JavaScript</div>
+  </noscript>
+</body>
+</html>

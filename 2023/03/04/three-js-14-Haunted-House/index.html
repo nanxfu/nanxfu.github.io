@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="author" content="nanxfu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在本节中，我们要造一个鬼屋。用Three.js的基本几何体。并以米作为基本单位 我们先建造基本场景：一个地板、一个球体、一些灯光、不必有阴影、一个Dat.GUI面板。点击下载初始包    然后我们把球体移除  1.创建房子 建立房子我们先创建一个Group12const house &#x3D; new THREE.Group()scene.add(house)  2. 然后创建墙123456const w">
+<meta property="og:type" content="article">
+<meta property="og:title" content="three.js-14-Haunted-House">
+<meta property="og:url" content="https://nanxfu.github.io/2023/03/04/three-js-14-Haunted-House/index.html">
+<meta property="og:site_name" content="南小府の小屋">
+<meta property="og:description" content="在本节中，我们要造一个鬼屋。用Three.js的基本几何体。并以米作为基本单位 我们先建造基本场景：一个地板、一个球体、一些灯光、不必有阴影、一个Dat.GUI面板。点击下载初始包    然后我们把球体移除  1.创建房子 建立房子我们先创建一个Group12const house &#x3D; new THREE.Group()scene.add(house)  2. 然后创建墙123456const w">
+<meta property="og:locale">
+<meta property="og:image" content="https://nanxfu.github.io/img/threejs.png">
+<meta property="article:published_time" content="2023-03-04T14:04:17.000Z">
+<meta property="article:modified_time" content="2024-09-23T06:57:04.017Z">
+<meta property="article:author" content="nanxfu">
+<meta property="article:tag" content="three.js">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nanxfu.github.io/img/threejs.png">
+  
+  
+  
+  <title>three.js-14-Haunted-House - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>南小府</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/" target="_self">
+                <i class="iconfont icon-notebook"></i>
+                <span>心情</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/1623251880550.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="three.js-14-Haunted-House"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-04 22:04" pubdate>
+          March 4, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          981 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">three.js-14-Haunted-House</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在本节中，我们要造一个鬼屋。用Three.js的基本几何体。并以米作为基本单位</p>
+<p>我们先建造基本场景：一个地板、一个球体、一些灯光、不必有阴影、一个Dat.GUI面板。<a target="_blank" rel="noopener" href="https://threejs-journey.com/assets/lessons/16/17-haunted-house.zip">点击下载初始包</a></p>
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/basic.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+然后我们把球体移除
+
+<h2 id="1-创建房子"><a href="#1-创建房子" class="headerlink" title="1.创建房子"></a>1.创建房子</h2><ol>
+<li>建立房子我们先创建一个Group<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> house = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Group</span>()<br>scene.<span class="hljs-title function_">add</span>(house)<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="2-然后创建墙"><a href="#2-然后创建墙" class="headerlink" title="2. 然后创建墙"></a>2. 然后创建墙</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> walls = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">BoxGeometry</span>(<span class="hljs-number">4</span>, <span class="hljs-number">2.5</span>, <span class="hljs-number">4</span>),<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshStandardMaterial</span>(&#123; <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#ac8e82&#x27;</span> &#125;)<br>)<br>walls.<span class="hljs-property">position</span>.<span class="hljs-property">y</span> = <span class="hljs-number">1.25</span> <span class="hljs-comment">//避免防止墙一半在地板下面</span><br>house.<span class="hljs-title function_">add</span>(walls)<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-创建一个房顶"><a href="#3-创建一个房顶" class="headerlink" title="3. 创建一个房顶"></a>3. 创建一个房顶</h2><p>我们使用 <strong>ConeBufferGeometry</strong> 。调整它的细分程度即可变为金字塔性质</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> roof = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">ConeGeometry</span>(<span class="hljs-number">3.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">4</span>),<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshStandardMaterial</span>(&#123; <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#b35f45&#x27;</span> &#125;)<br>)<br>roof.<span class="hljs-property">rotation</span>.<span class="hljs-property">y</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span> * <span class="hljs-number">0.25</span><br>roof.<span class="hljs-property">position</span>.<span class="hljs-property">y</span> = <span class="hljs-number">2.5</span> + <span class="hljs-number">0.5</span><br>house.<span class="hljs-title function_">add</span>(roof)<br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/roof.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+## 4. 用平面创建一个门，并设置上材质
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> door = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PlaneBufferGeometry</span>(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>),<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshStandardMaterial</span>(&#123; <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#aa7b7b&#x27;</span> &#125;)<br>)<br>door.<span class="hljs-property">position</span>.<span class="hljs-property">y</span> = <span class="hljs-number">1</span><br>door.<span class="hljs-property">position</span>.<span class="hljs-property">z</span> = <span class="hljs-number">2</span> + <span class="hljs-number">0.01</span> <span class="hljs-comment">//注意平面竞争（z-fighting</span><br>house.<span class="hljs-title function_">add</span>(door)<br></code></pre></td></tr></table></figure>
+
+<h2 id="5-添加草丛"><a href="#5-添加草丛" class="headerlink" title="5. 添加草丛"></a>5. 添加草丛</h2><p>因为草丛都是一样的材质，形状。所以我们不是创建三个草丛几何体，而是创建三个网格</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> bushGeometry = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">SphereBufferGeometry</span>(<span class="hljs-number">1</span>, <span class="hljs-number">16</span>, <span class="hljs-number">16</span>)<br><span class="hljs-keyword">const</span> bushMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshStandardMaterial</span>(&#123;<span class="hljs-attr">color</span>:<span class="hljs-string">&#x27;#89c854&#x27;</span>&#125;)<br><br><span class="hljs-keyword">const</span> bush1 = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(bushGeometry, bushMaterial)<br>bush1.<span class="hljs-property">scale</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>)<br>bush1.<span class="hljs-property">position</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">0.8</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">2.2</span>)<br><br><span class="hljs-keyword">const</span> bush2 = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(bushGeometry, bushMaterial)<br>bush2.<span class="hljs-property">scale</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">0.25</span>, <span class="hljs-number">0.25</span>, <span class="hljs-number">0.25</span>)<br>bush2.<span class="hljs-property">position</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">1.4</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">2.1</span>)<br><br><span class="hljs-keyword">const</span> bush3 = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(bushGeometry, bushMaterial)<br>bush3.<span class="hljs-property">scale</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">0.4</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">0.4</span>)<br>bush3.<span class="hljs-property">position</span>.<span class="hljs-title function_">set</span>(- <span class="hljs-number">0.8</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">2.2</span>)<br><br><span class="hljs-keyword">const</span> bush4 = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(bushGeometry, bushMaterial)<br>bush4.<span class="hljs-property">scale</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">0.15</span>, <span class="hljs-number">0.15</span>, <span class="hljs-number">0.15</span>)<br>bush4.<span class="hljs-property">position</span>.<span class="hljs-title function_">set</span>(- <span class="hljs-number">1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">2.6</span>)<br>house.<span class="hljs-title function_">add</span>(bush1, bush2, bush3, bush4)<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/bush.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+
+<h2 id="6-添加坟墓"><a href="#6-添加坟墓" class="headerlink" title="6. 添加坟墓"></a>6. 添加坟墓</h2><p>手动生成大量的坟墓会很耗时，所以我们就自动的生成并防止坟墓</p>
+<p>首先我们创建一个坟墓组</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> graves = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Group</span>()<br>scene.<span class="hljs-title function_">add</span>(graves)<br><br><span class="hljs-keyword">const</span> graveGeometry = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">BoxBufferGeometry</span>(<span class="hljs-number">0.6</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.2</span>)<br><span class="hljs-keyword">const</span> graveMaterial = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshStandarMaterial</span>(&#123;<span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#b2b6b1&#x27;</span>&#125;)<br><br><span class="hljs-comment">//范围内随机生成坟墓</span><br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i&lt; <span class="hljs-number">50</span>; i++)&#123;<br>    <span class="hljs-keyword">const</span> angle = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-title class_">Math</span>.<span class="hljs-property">pi</span> * <span class="hljs-number">2</span>  <br>    <span class="hljs-keyword">const</span> radius = <span class="hljs-number">3</span> + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">6</span><br>    <span class="hljs-keyword">const</span> x = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sin</span>(angle) * radius<br>    <span class="hljs-keyword">const</span> z = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">cos</span>(angle) * radius<br>    <br>    <span class="hljs-keyword">const</span> grave = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(graveGeometry, graveMaterial)<br>    grave.<span class="hljs-property">position</span>.<span class="hljs-title function_">set</span>(x, <span class="hljs-number">0.3</span>, z)<br>    graves.<span class="hljs-title function_">add</span>(grave)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/graves.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+
+<p>然后增加点随机旋转</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//...</span><br>grave.<span class="hljs-property">rotation</span>.<span class="hljs-property">y</span> = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span>) * <span class="hljs-number">1</span><br>grave.<span class="hljs-property">rotation</span>.<span class="hljs-property">z</span> = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span>) * <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/rotate.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+
+<h2 id="7-灯光"><a href="#7-灯光" class="headerlink" title="7. 灯光"></a>7. 灯光</h2><p>然后调整灯光效果，并给一种蓝色的氛围色</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> ambientLight = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">AmbientLight</span>(<span class="hljs-string">&#x27;#b9d5ff&#x27;</span>, <span class="hljs-number">0.12</span>)<br><br><span class="hljs-comment">//...</span><br><br><span class="hljs-keyword">const</span> moonLight = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">DirectionalLight</span>(<span class="hljs-string">&#x27;#b9d5ff&#x27;</span>, <span class="hljs-number">0.12</span>)<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/dim.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+
+<p>然后给门加上点光源</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//Door light</span><br><br><span class="hljs-keyword">const</span> doorLight = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PointLight</span>(<span class="hljs-string">&#x27;ff7d46&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">7</span>)<br>doorLight.<span class="hljs-property">position</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">0</span>, <span class="hljs-number">2.2</span>, <span class="hljs-number">2.7</span>)<br>house.<span class="hljs-title function_">add</span>(doorLight)<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/pointlight.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+
+<h2 id="8-雾"><a href="#8-雾" class="headerlink" title="8.雾"></a>8.雾</h2><p>three.js提供了Fog类添加雾,要激活雾就在 <code>scene</code>上添加fog属性</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//Fog</span><br><span class="hljs-keyword">const</span> fog = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Fog</span>(<span class="hljs-string">&#x27;#ff0000&#x27;</span>, <span class="hljs-number">2</span>, <span class="hljs-number">6</span>)<br>scene.<span class="hljs-property">fog</span> = fog<br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/fog.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+
+<p>雾有三个属性：</p>
+<ul>
+<li><p><strong>color</strong></p>
+</li>
+<li><p><strong>near</strong> ——雾距离相机的距离单位，开始的位置</p>
+</li>
+<li><p><strong>far</strong> ——雾完全透明的距离</p>
+<p>调整一下颜色、近端和远端</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> fog = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Fog</span>(<span class="hljs-string">&#x27;#262837&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">15</span>)<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/fogad.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+
+<p>当镜头推远时会发现背景有很强的违和感，我们需要改变<code>renderer</code>的 clearColor 和雾一样的颜色</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">renderer.<span class="hljs-title function_">setClearColor</span>(<span class="hljs-string">&#x27;#262837&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/bg.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+
+<p>这样一来背景和雾的颜色就一样了</p>
+<h2 id="9-添加材质"><a href="#9-添加材质" class="headerlink" title="9.添加材质"></a>9.添加材质</h2><p>添加所有的材质</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> doorColorTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27; /textures/door/color.jpg&#x27;</span> )<br><span class="hljs-keyword">const</span> doorAlphaTexture = textureLoader.<span class="hljs-title function_">load</span>( <span class="hljs-string">&#x27; /textures/door/alpha.jpg&#x27;</span> )<br><span class="hljs-keyword">const</span> doorAmbdientocclusionTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/door/ambientOcclusion.jpg&#x27;</span>)<br><span class="hljs-keyword">const</span> doorHeightTexture = textureLoader.<span class="hljs-title function_">load</span>( <span class="hljs-string">&#x27;/textures/door/height.jpg&#x27;</span> )<br><span class="hljs-keyword">const</span> doorNormalTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/door/normal.jpg&#x27;</span>)<br><span class="hljs-keyword">const</span> doorMetalnessTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/door/metalness.jpg&#x27;</span>)<br><span class="hljs-keyword">const</span> doorRoughnessTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/door/roughness.jpg&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>然后将他们添加到door上</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> door = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PlaneBufferGeometry</span>(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">100</span>, <span class="hljs-number">100</span>),<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshStandarMaterial</span>(&#123;<br>        <span class="hljs-attr">map</span>:doorColorTexture,<br>        <span class="hljs-attr">transparent</span>: ture,<br>        <span class="hljs-attr">alphaMap</span>: doorAlphaTexture,<br>        <span class="hljs-attr">aoMap</span>: doorAmbdientocclusionTexture,<br>        <span class="hljs-attr">displacementMap</span>: doorHeightTexture,<br>        <span class="hljs-attr">displaceMentScale</span>: <span class="hljs-number">0.1</span>,<br>        <span class="hljs-attr">normalMap</span>: doorNormalTexture,<br>        <span class="hljs-attr">metalnessMap</span>:doorMetalnessTexture,<br>        <span class="hljs-attr">roughnessMa</span>:doorRoughnessTexture<br>        <br>    &#125;)<br>)<br><br>door.<span class="hljs-property">geometry</span>.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;uv2&#x27;</span>, <br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Float32BufferAttribute</span>(door.<span class="hljs-property">geometry</span>.<span class="hljs-property">attributes</span>.<span class="hljs-property">uv</span>.<span class="hljs-property">arry</span>, <span class="hljs-number">2</span>)<br>)<br></code></pre></td></tr></table></figure>
+
+<p>调整门的位置</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//...</span><br><span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PlaneBufferGeometry</span>(<span class="hljs-number">2.2</span>, <span class="hljs-number">2.2</span>, <span class="hljs-number">100</span>, <span class="hljs-number">100</span>)<br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/door.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+
+<p>然后添加墙的材质</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> bricksColorTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/bricks/color.jpg&#x27;</span>)<br><span class="hljs-keyword">const</span> bricksAmbientOcclusionTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/bricks/ambientOcclus,jpg&#x27;</span>)<br><span class="hljs-keyword">const</span> bricksNormalTexture = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/bricks/normal.jpg&#x27;</span> )<br><span class="hljs-keyword">const</span> bricksRoughnessTexture = textureLoader.<span class="hljs-title function_">load</span>( <span class="hljs-string">&#x27;/textures/bricks/roughness.jpg&#x27;</span>)<br><br><span class="hljs-comment">/// Walls</span><br><br><span class="hljs-keyword">const</span> walls = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">BoxBufferGeometry</span>(<span class="hljs-number">4</span>, <span class="hljs-number">2.5</span>, <span class="hljs-number">4</span>),<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshStandardMaterial</span>(&#123;<br>        <span class="hljs-attr">map</span>: bricksColorTexture,<br>        <span class="hljs-attr">aoMap</span>: bricksAmbientOcclusionTexture,<br>        <span class="hljs-attr">normalMap</span>:bricksNormalTexture,<br>        <span class="hljs-attr">roughnessMap</span>: bricksRoughnessTexture<br>    &#125;)<br>)<br><br>walls.<span class="hljs-property">geometry</span>.<span class="hljs-title function_">setAttribute</span>(<br>    <span class="hljs-string">&#x27;uv2&#x27;</span>,<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Float32BufferAttribute</span>(walls.<span class="hljs-property">geometry</span>.<span class="hljs-property">attributes</span>.<span class="hljs-property">uv</span>.<span class="hljs-property">arry</span>, <span class="hljs-number">2</span>)<br>)<br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/03/04/three-js-14-Haunted-House/wall.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+
+<p>给草添加材质</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/three-js/" class="print-no-link">#three.js</a>
+      
+        <a href="/tags/web/" class="print-no-link">#web</a>
+      
+        <a href="/tags/javascript/" class="print-no-link">#javascript</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>three.js-14-Haunted-House</div>
+      <div>https://nanxfu.github.io/2023/03/04/three-js-14-Haunted-House/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Beitragsautor</div>
+          <div>nanxfu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Veröffentlicht am</div>
+          <div>March 4, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Urheberrechtshinweis</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/03/30/threejs-15-particles/" title="threejs-15:particles">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">threejs-15:particles</span>
+                        <span class="visible-mobile">Vorheriger</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/02/three-js-13-Shadow/" title="three.js-13:Shadow">
+                        <span class="hidden-mobile">three.js-13:Shadow</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Inhaltsverzeichnis</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog funktioniert am besten mit aktiviertem JavaScript</div>
+  </noscript>
+</body>
+</html>

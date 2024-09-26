@@ -1,0 +1,767 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="author" content="nanxfu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在添加光源后我们就可以看到物体上的明暗变化了，这个阴影实际叫做 core shadows，但是我们还没有投射到其他物体上的 drop shadow，本章将讲解如何获得 drop shadows 光线追踪实际是个很耗费资源的计算，开发者需要用一些小技巧来增强视觉体验 Three.js 中实现阴影是在每一次渲染的时候会假设每一个光源上有个“相机”来计算哪个地方应该会有阴影，最后作为阴影texture贴">
+<meta property="og:type" content="article">
+<meta property="og:title" content="three.js-13:Shadow">
+<meta property="og:url" content="https://nanxfu.github.io/2023/03/02/three-js-13-Shadow/index.html">
+<meta property="og:site_name" content="南小府の小屋">
+<meta property="og:description" content="在添加光源后我们就可以看到物体上的明暗变化了，这个阴影实际叫做 core shadows，但是我们还没有投射到其他物体上的 drop shadow，本章将讲解如何获得 drop shadows 光线追踪实际是个很耗费资源的计算，开发者需要用一些小技巧来增强视觉体验 Three.js 中实现阴影是在每一次渲染的时候会假设每一个光源上有个“相机”来计算哪个地方应该会有阴影，最后作为阴影texture贴">
+<meta property="og:locale">
+<meta property="og:image" content="https://nanxfu.github.io/img/threejs.png">
+<meta property="article:published_time" content="2023-03-02T12:54:41.000Z">
+<meta property="article:modified_time" content="2024-09-23T06:57:04.003Z">
+<meta property="article:author" content="nanxfu">
+<meta property="article:tag" content="three.js">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nanxfu.github.io/img/threejs.png">
+  
+  
+  
+  <title>three.js-13:Shadow - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>南小府</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/" target="_self">
+                <i class="iconfont icon-notebook"></i>
+                <span>心情</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/1623251880550.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="three.js-13:Shadow"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-02 20:54" pubdate>
+          March 2, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">three.js-13:Shadow</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在添加光源后我们就可以看到物体上的明暗变化了，这个阴影实际叫做 <strong>core shadows</strong>，但是我们还没有投射到其他物体上的 <strong>drop shadow</strong>，本章将讲解如何获得 <strong>drop shadows</strong></p>
+<p>光线追踪实际是个很耗费资源的计算，开发者需要用一些小技巧来增强视觉体验</p>
+<p>Three.js 中实现阴影是在每一次渲染的时候会假设每一个光源上有个“相机”来计算哪个地方应该会有阴影，最后作为阴影texture贴在物体上。<br><a target="_blank" rel="noopener" href="https://threejs.org/examples/?q=shadow#webgl_shadowmap_viewer">原理示例</a></p>
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/example.png" srcset="/img/loading.gif" lazyload class="" width="600"> </div>
+
+<p>Three.js实际上采用的就是 shadow map 技术实现阴影，它基于渲染场景时在某个点处拍摄的<strong>深度信息</strong>来确定光线的可见性，从而确定哪些物体会被遮挡，哪些物体应该被照亮。</p>
+<p>Shadow map的大小决定了阴影的质量和分辨率。较大的阴影贴图能够提供更高分辨率的阴影，但也需要更多的GPU资源来渲染。过小的阴影贴图可能会导致阴影出现锯齿状，或者出现无法预期的阴影效果。</p>
+<p>一般来说，选择阴影贴图的大小取决于场景的大小和需要达到的渲染质量。通常可以通过试验和测试来找到适合特定场景的最佳大小</p>
+<h2 id="1-如何激活阴影"><a href="#1-如何激活阴影" class="headerlink" title="1.如何激活阴影"></a>1.如何激活阴影</h2><ol>
+<li>在renderer上激活 shadow maps<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">renderer.<span class="hljs-property">shadowMap</span>.<span class="hljs-property">enabled</span> = <span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+2.在Mesh上启用阴影。如果能投射阴影则启用<code>castShadow</code>,如果能接收阴影影响则启用<code>receiveShadow</code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript">sphere.<span class="hljs-property">castShadow</span> = <span class="hljs-literal">true</span><br><br>plane.<span class="hljs-property">receiveShadow</span> = <span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>3.启动光源上的castShadow属性</p>
+<p>注意，仅以下光源支持阴影</p>
+<ul>
+<li>PointLight</li>
+<li>DirectionalLight</li>
+<li>SpotLight</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">directionalLight.<span class="hljs-property">castShadow</span> = <span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="2-优化阴影"><a href="#2-优化阴影" class="headerlink" title="2.优化阴影"></a>2.优化阴影</h2><p>下图就是默认的阴影效果了，可以看到非常不好看，所以我们需要优化阴影</p>
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/example.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<p>我们可以通过光源的 <code>shadow</code> 属性来访问 shadow map</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(directionalLight.<span class="hljs-property">shadow</span>)<br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/shadow.png" srcset="/img/loading.gif" lazyload class="" width="400"> </div>
+
+<p>默认情况下 shadow map大小是512x512的，我们可以将它增大。不过增大后当然会增加渲染压力，所以需要做好性能与视觉效果的平衡</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">directionalLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">mapSize</span>.<span class="hljs-property">width</span> = <span class="hljs-number">1024</span><br>directionalLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">mapSize</span>.<span class="hljs-property">height</span> = <span class="hljs-number">1024</span><br></code></pre></td></tr></table></figure>
+<p>可以观察一下增大map分辨率后的效果：左图为512像素，右图为1024像素</p>
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/before.png" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/03/02/three-js-13-Shadow/after.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>在Three.js中，光源对象是可以具有camera属性的，这是因为一些光源需要像摄像机一样具有位置和方向，例如投影灯（SpotLight）和逐像素光（PointLight）。这些光源需要发射光线，以便根据场景中的物体计算阴影。</p>
+<p>与摄像机类似，光源的位置和方向是在场景中进行计算的。如果光源的位置或方向发生变化，则必须更新光源的camera属性。这样，当场景被渲染时，Three.js可以在正确的位置和方向发射光线，并生成正确的阴影效果。</p>
+<p>因此，虽然光源不是一个摄像机对象，但为了光源能够在正确的位置和方向发射光线，它需要具有camera属性。这个属性可以使光源与摄像机类似，具有位置和方向等属性，从而在场景中正确地渲染阴影效果。</p>
+<p>我们可以通过 camera 属性访问光源的 camera 来调整shadow map，为了辅助我们调试，我们可以用 CameraHelper</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> directionalLightCamerHelper = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">CameraHelper</span>(directionalLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">camera</span>)<br>scene.<span class="hljs-title function_">add</span>(directionalLightCamerHelper)<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/helper.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>调整一下近端(far)和远端(near)。<br>同样可以通过 top、right、bottom、left调整各个面的距离</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs javascript">directionalLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">camera</span>.<span class="hljs-property">near</span> = <span class="hljs-number">1</span><br>directionalLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">camera</span>.<span class="hljs-property">far</span> = <span class="hljs-number">6</span><br><br>directionalLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">camera</span>.<span class="hljs-property">top</span> = <span class="hljs-number">2</span><br>directionalLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">camera</span>.<span class="hljs-property">left</span> = <span class="hljs-number">2</span><br>directionalLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">camera</span>.<span class="hljs-property">right</span> = <span class="hljs-number">2</span><br>directionalLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">camera</span>.<span class="hljs-property">bottom</span> = <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+<p>我们可以用visible隐藏helper</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">directionalLightCameraHelper.<span class="hljs-property">visible</span> = <span class="hljs-literal">false</span><br></code></pre></td></tr></table></figure>
+
+<p>调整阴影模糊通过改变 radius 的值来改变模糊半径</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">directionalLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">radius</span> = <span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
+<p>这种模糊只是在阴影上面模糊，并没有根据物体与物体、光线之间的距离确定模糊效果</p>
+<h2 id="3-阴影贴图算法"><a href="#3-阴影贴图算法" class="headerlink" title="3.阴影贴图算法"></a>3.阴影贴图算法</h2><ul>
+<li>THREE.BasicShadowMap: 效率高，但是质量低。会出现锯齿状边缘</li>
+<li>THREE.PCFShadowMap：效率低，阴影质量和平滑度提高。（默认）</li>
+<li>THREE.PCFSoftShadowMap</li>
+<li>THREE.VSMShadowMap: 该算法使用两个深度图像素，一个用于存储平均深度，另一个用于存储深度方差。通过使用深度方差来计算阴影强度，可以提高阴影质量和平滑度。</li>
+</ul>
+<p>应用阴影贴图属性通过设置renderer.shaodwMap.type属性改变。使用PCFSoftShadowMap算法时，radius会失效</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">renderer.<span class="hljs-property">shaodwMap</span>.<span class="hljs-property">type</span> = <span class="hljs-variable constant_">THREE</span>.<span class="hljs-property">PCFSoftShadowMap</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="4-SPOTLIGHT"><a href="#4-SPOTLIGHT" class="headerlink" title="4.SPOTLIGHT"></a>4.SPOTLIGHT</h2><p>讲解完以DirectionalLight为例的阴影。接下来以SPOTLIGHT为例解说阴影</p>
+<p>先创建一个SPOTLIGHT</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> spotLight = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">SpotLight</span>(<span class="hljs-number">0xffffff</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">10</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span> * <span class="hljs-number">0.3</span>)<br><br>spotLight.<span class="hljs-property">castShadow</span> = <span class="hljs-literal">true</span><br><br>spotLight.<span class="hljs-property">position</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>)<br><br>scene.<span class="hljs-title function_">add</span>(spotLight)<br>scene.<span class="hljs-title function_">add</span>(spotLight.<span class="hljs-property">target</span>)<br><span class="hljs-comment">//添加helper</span><br><span class="hljs-keyword">const</span> spotLightCameraHelper = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">CameraHelper</span>(spotLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">camera</span>)<br>scene.<span class="hljs-title function_">add</span>(spotLightCameraHelper)<br><br><span class="hljs-comment">//降低其他灯光的亮度</span><br><br><span class="hljs-keyword">const</span> ambientLight = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">AmbitenLight</span>(<span class="hljs-number">0xffffff</span>, <span class="hljs-number">0.4</span>)<br><br><span class="hljs-keyword">const</span> directionalLight = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title function_">directionalLight</span>(<span class="hljs-number">0xffffff</span>, <span class="hljs-number">0.4</span>)<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/spotlight.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>可以看出几个灯光混合出来的阴影和现实世界的并不相符，但起码有阴影了（</p>
+<p>SpotLight会使用透视相机生成阴影，所以我们可以改变相机的fov来影响阴影。</p>
+<p>同样也可以调整相机的 near 和 far</p>
+<p>隐藏helper</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">spotLight.<span class="hljs-property">shadow</span>.<span class="hljs-property">camera</span>.<span class="hljs-property">fov</span> = <span class="hljs-number">30</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="5-PointLight"><a href="#5-PointLight" class="headerlink" title="5.PointLight"></a>5.PointLight</h2><p>第三个支持阴影的就是 pointlight, 我们再添加一个PointLight</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> pointLight = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title function_">pointLight</span>(<span class="hljs-number">0xffffff</span>, <span class="hljs-number">0.3</span>)<br><br>pointLight.<span class="hljs-property">castShadow</span> = <span class="hljs-literal">true</span><br><br>spotLight.<span class="hljs-property">position</span>.<span class="hljs-title function_">set</span>(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>)<br><br>scene.<span class="hljs-title function_">add</span>(spotLight)<br><br></code></pre></td></tr></table></figure>
+
+<p>能设置的东西都差不多，懒得写了</p>
+<p>如果你给PointLight的camera添加了helper会看见一个朝向一个方向的透视相机，看起来很不合理。实际上PointLight的camera已经完成了六个方向的阴影生成，我们看见的camera朝向仅是最后一步</p>
+<p>注意，点光源需要渲染生成周围所有的阴影。所以它的camera不能设置fov</p>
+<h2 id="6-Baking-shadow"><a href="#6-Baking-shadow" class="headerlink" title="6.Baking shadow"></a>6.Baking shadow</h2><p>如果你有很多光源，需要生成一个好看的阴影，GPU是个挑战，所以我们需要烘焙阴影来减少GPU的负担。我们将来看一个使用烘焙阴影的例子。</p>
+<p>首先关闭渲染器生成阴影贴图</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">renderer.<span class="hljs-property">shadowMap</span>.<span class="hljs-property">enabled</span> = <span class="hljs-literal">false</span><br></code></pre></td></tr></table></figure>
+
+<p>然后使用这张在blender生成的材质，要使用这张材质，我们要先加载</p>
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/bakedShadow.jpg" srcset="/img/loading.gif" lazyload class="" width="600"></div>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//加载shadow</span><br><span class="hljs-keyword">const</span> textureLoader = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">TextureLoader</span>()<br><span class="hljs-keyword">const</span> bakedShadow = textureLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;/textures/bakedShadow.jpg&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>然后用 MeshBasicMaterial 代替平面上的 MeshStandarMaterial。并加载材质</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> plane = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PlaneBufferGeometry</span>(<span class="hljs-number">5</span>, <span class="hljs-number">5</span>),<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshBasicMaterial</span>(&#123;<br>        <span class="hljs-attr">map</span>: bakedShadow<br>    &#125;)<br>)<br></code></pre></td></tr></table></figure>
+<p>然后你就能看见比较好看的阴影效果了，但注意因为是贴图所以移动球体后阴影并不会产生变化</p>
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/baked.png" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/03/02/three-js-13-Shadow/posi.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>为了解决动态问题，我们可以在平面上创建一个小的平面，然后跟着球体运动</p>
+<p>我们用这张阴影，来实现当球体移动的时候，阴影也随之移动。当球体上升时将阴影透明度降低</p>
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/simpleShadow.jpg" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+首先使用 MeshStandarMaterial 放回去，我们将simpleShadow应用在alpha贴图上
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><br><span class="hljs-comment">///...load simpleShadow</span><br><span class="hljs-keyword">const</span> sphereShadow = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PlaneBufferGeometry</span>(<span class="hljs-number">5</span>, <span class="hljs-number">5</span>),<br>    <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshStandarMaterial</span>(&#123;<br>        <span class="hljs-attr">color</span>: <span class="hljs-number">0xff0000</span>,<br>        <span class="hljs-comment">//transparent: true,</span><br>        <span class="hljs-attr">alphaMap</span>: simpleShadow<br>    &#125;)<br>)<br><br>sphereShadow.<span class="hljs-property">rotation</span>.<span class="hljs-property">x</span> = - <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span> * <span class="hljs-number">0.5</span><br><br>scene.<span class="hljs-title function_">add</span>(sphereShadow,)<br></code></pre></td></tr></table></figure>
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/sphere.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>然后就可以看到这个鬼样子，并且会产生plane与sphere层叠打架的问题,所以我们需要移动一下sphereShadow</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">sphereShadow.<span class="hljs-property">position</span>.<span class="hljs-property">y</span> = plane.<span class="hljs-property">position</span>.<span class="hljs-property">y</span> + <span class="hljs-number">0.01</span><br></code></pre></td></tr></table></figure>
+
+<p>然后将transparent的注释取消掉，并将color变成黑色，就可以得到一个比较好看的阴影了</p>
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/perfect.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+
+<p>然后我们让球体动起来,转着圈跳动。并让阴影跟随</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> clock = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Clock</span>() <br><span class="hljs-keyword">const</span> <span class="hljs-title function_">tick</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>    <span class="hljs-keyword">const</span> elapsedTime = clock.<span class="hljs-title function_">getElapsedTime</span>()<br>    <br>    <span class="hljs-comment">//update sphere</span><br>    sphere.<span class="hljs-property">position</span>.<span class="hljs-property">x</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">cos</span>(elapsedTime) * <span class="hljs-number">1.5</span><br>    sphere.<span class="hljs-property">position</span>.<span class="hljs-property">z</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sin</span>(elapsedTime) * <span class="hljs-number">1.5</span><br>    sphere.<span class="hljs-property">position</span>.<span class="hljs-property">y</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">abs</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sin</span>(elapsedTime * <span class="hljs-number">3</span>))<br>    <br>    <span class="hljs-comment">//update shadow</span><br>    sphereShadow.<span class="hljs-property">position</span>.<span class="hljs-property">x</span> = sphere.<span class="hljs-property">position</span>.<span class="hljs-property">x</span><br>    sphereShadow.<span class="hljs-property">position</span>.<span class="hljs-property">z</span> = shpere.<span class="hljs-property">position</span>.<span class="hljs-property">z</span><br>    sphereShadow.<span class="hljs-property">material</span>.<span class="hljs-property">opacity</span> = (<span class="hljs-number">1</span> - <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">abs</span>(sphere.<span class="hljs-property">position</span>.<span class="hljs-property">y</span>)) * <span class="hljs-number">0.3</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<div align="center"> <img src="/2023/03/02/three-js-13-Shadow/follow2.png" srcset="/img/loading.gif" lazyload class="" width="400"> <img src="/2023/03/02/three-js-13-Shadow/fllow.png" srcset="/img/loading.gif" lazyload class="" width="400"></div>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/three-js/" class="print-no-link">#three.js</a>
+      
+        <a href="/tags/web/" class="print-no-link">#web</a>
+      
+        <a href="/tags/javascript/" class="print-no-link">#javascript</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>three.js-13:Shadow</div>
+      <div>https://nanxfu.github.io/2023/03/02/three-js-13-Shadow/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Beitragsautor</div>
+          <div>nanxfu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Veröffentlicht am</div>
+          <div>March 2, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Urheberrechtshinweis</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/03/04/three-js-14-Haunted-House/" title="three.js-14-Haunted-House">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">three.js-14-Haunted-House</span>
+                        <span class="visible-mobile">Vorheriger</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/01/12threejs-light/" title="12threejs:light">
+                        <span class="hidden-mobile">12threejs:light</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Inhaltsverzeichnis</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog funktioniert am besten mit aktiviertem JavaScript</div>
+  </noscript>
+</body>
+</html>
