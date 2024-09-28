@@ -21,14 +21,14 @@
   
     <meta name="description" content="前端的权限管理通常是左侧菜单部分的展示权限，以及基于功能的权限vben实际上是动态生成了路由，然后再展示在左边的菜单栏，所以要编写权限相关的代码可以从动态生成路由处着手 buildRoutesAction方法分析 vben通过动态生成路由，控制菜单栏展示权限。核心方法是buildRoutesAction，该方法根据路由的meta.role属性过滤路由，从而生成不同角色的菜单。搜索这个方法的签名可以">
 <meta property="og:type" content="article">
-<meta property="og:title" content="读书管理后台开发项目-6.管理后台权限">
+<meta property="og:title" content="读书管理后台开发项目-6.管理后台前端权限">
 <meta property="og:url" content="https://nanxfu.github.io/2024/09/25/%E8%AF%BB%E4%B9%A6%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE-6-%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E5%89%8D%E7%AB%AF%E6%9D%83%E9%99%90/index.html">
 <meta property="og:site_name" content="南小府の小屋">
 <meta property="og:description" content="前端的权限管理通常是左侧菜单部分的展示权限，以及基于功能的权限vben实际上是动态生成了路由，然后再展示在左边的菜单栏，所以要编写权限相关的代码可以从动态生成路由处着手 buildRoutesAction方法分析 vben通过动态生成路由，控制菜单栏展示权限。核心方法是buildRoutesAction，该方法根据路由的meta.role属性过滤路由，从而生成不同角色的菜单。搜索这个方法的签名可以">
 <meta property="og:locale">
 <meta property="og:image" content="https://nanxfu.github.io/img/Vue.jpg">
 <meta property="article:published_time" content="2024-09-25T12:27:29.000Z">
-<meta property="article:modified_time" content="2024-09-26T12:38:41.714Z">
+<meta property="article:modified_time" content="2024-09-26T13:10:11.164Z">
 <meta property="article:author" content="nanxfu">
 <meta property="article:tag" content="web">
 <meta property="article:tag" content="Vue.js">
@@ -39,7 +39,7 @@
   
   
   
-  <title>读书管理后台开发项目-6.管理后台权限 - 南小府の小屋</title>
+  <title>读书管理后台开发项目-6.管理后台前端权限 - 南小府の小屋</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -229,7 +229,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="读书管理后台开发项目-6.管理后台权限"></span>
+            <span id="subtitle" data-typed-text="读书管理后台开发项目-6.管理后台前端权限"></span>
           
         </div>
 
@@ -253,7 +253,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          873 字
+          936 字
         
       </span>
     
@@ -302,7 +302,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">读书管理后台开发项目-6.管理后台权限</h1>
+            <h1 id="seo-header">读书管理后台开发项目-6.管理后台前端权限</h1>
             
             
               <div class="markdown-body">
@@ -329,6 +329,10 @@
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">addPageNotFoundAtFirst</span> = (<span class="hljs-params">routes</span>) =&gt; &#123;<br>    routes.<span class="hljs-title function_">unshift</span>(<span class="hljs-variable constant_">PAGE_NOT_FOUND_ROUTE</span>);<br>    <span class="hljs-keyword">return</span> routes;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <h1 id="优化：使用现有的路由映射"><a href="#优化：使用现有的路由映射" class="headerlink" title="优化：使用现有的路由映射"></a>优化：使用现有的路由映射</h1><p>手动添加路由与组件的映射关系会很繁琐。为简化操作，我们可以利用asyncRoutes变量，该变量已经包含了完整的路由和组件映射信息。通过遍历asyncRoutes，我们可以自动生成ROUTE_MAP。<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20240926201257.png" srcset="/img/loading.gif" lazyload></p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">import</span> &#123;asyncRoutes&#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@/router/routes&quot;</span>;<br><br><span class="hljs-comment">// export const ROUTE_MAP = &#123;</span><br><span class="hljs-comment">//   PageNotFound: () =&gt; import(&#x27;@/views/sys/exception/Exception.vue&#x27;),</span><br><span class="hljs-comment">//   Dashboard: LAYOUT,</span><br><span class="hljs-comment">//   Analysis: () =&gt; import(&#x27;@/views/dashboard/analysis/index.vue&#x27;),</span><br><span class="hljs-comment">//   Workbench: () =&gt; import(&#x27;@/views/dashboard/workbench/index.vue&#x27;),</span><br><span class="hljs-comment">//   NOT_FOUND: EXCEPTION_COMPONENT,</span><br><span class="hljs-comment">//   Charts: LAYOUT,</span><br><span class="hljs-comment">//   BaiduMap: () =&gt; import(&#x27;@/views/demo/charts/map/Baidu.vue&#x27;),</span><br><span class="hljs-comment">//   AMap: () =&gt; import(&#x27;@/views/demo/charts/map/Gaode.vue&#x27;),</span><br><span class="hljs-comment">//   GoogleMap: () =&gt; import(&#x27;@/views/demo/charts/map/Google.vue&#x27;),</span><br><span class="hljs-comment">//</span><br><span class="hljs-comment">// &#125;;</span><br><span class="hljs-keyword">const</span> flatRoutes = &#123;&#125;;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">generateRouteMap</span>(<span class="hljs-params">routes</span>) &#123;<br>  <span class="hljs-keyword">return</span> routes.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">if</span> (item.<span class="hljs-property">children</span> &amp;&amp; item.<span class="hljs-property">children</span>.<span class="hljs-property">length</span> &gt; <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-title function_">generateRouteMap</span>(item.<span class="hljs-property">children</span>);<br>    &#125;<br>    flatRoutes[item.<span class="hljs-property">name</span>] = item[<span class="hljs-string">&#x27;component&#x27;</span>];<br>  &#125;);<br>&#125;<br><br><span class="hljs-title function_">generateRouteMap</span>(asyncRoutes);<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ROUTE_MAP</span> = flatRoutes<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="后端菜单数据查询API开发"><a href="#后端菜单数据查询API开发" class="headerlink" title="后端菜单数据查询API开发"></a>后端菜单数据查询API开发</h1><p>在menu目录下建立好menu entity、module、data文件并做好接口开发，然后在前端中对接</p>
+<p>src&#x2F;api&#x2F;sys&#x2F;menu 目录下现有获取菜单接口，所以在此处改造即可</p>
+<p><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20240926210955.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>
@@ -359,7 +363,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>读书管理后台开发项目-6.管理后台权限</div>
+      <div>读书管理后台开发项目-6.管理后台前端权限</div>
       <div>https://nanxfu.github.io/2024/09/25/读书管理后台开发项目-6-管理后台前端权限/</div>
     </div>
     <div class="license-meta">
@@ -403,6 +407,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2024/09/26/%E8%AF%BB%E4%B9%A6%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE-7-%E8%8F%9C%E5%8D%95%E6%9D%83%E9%99%90%E9%A1%B5%E9%9D%A2%E5%BC%80%E5%8F%91/" title="读书管理后台开发项目-7.菜单权限页面开发">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">读书管理后台开发项目-7.菜单权限页面开发</span>
+                        <span class="visible-mobile">Vorheriger</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
