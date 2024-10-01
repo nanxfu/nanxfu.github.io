@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="author" content="nanxfu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.快速使用leaflet使用leafleta.新建地图b.在地图上绘制图形c.使用提示信息d.处理画布事件 2.项目工程准备准备如下的目录结构并安装好leaflet依赖，初始化leaflet画布 123456789101112function init() &#123;    let map &#x3D; L.map(&#x27;map&#x27;, &#123;        center: [0, 0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="原神大地图——1.绘制大地图">
+<meta property="og:url" content="https://nanxfu.github.io/2024/10/01/%E5%8E%9F%E7%A5%9E%E5%A4%A7%E5%9C%B0%E5%9B%BE%E2%80%94%E2%80%941-%E7%BB%98%E5%88%B6%E5%A4%A7%E5%9C%B0%E5%9B%BE/index.html">
+<meta property="og:site_name" content="南小府の小屋">
+<meta property="og:description" content="1.快速使用leaflet使用leafleta.新建地图b.在地图上绘制图形c.使用提示信息d.处理画布事件 2.项目工程准备准备如下的目录结构并安装好leaflet依赖，初始化leaflet画布 123456789101112function init() &#123;    let map &#x3D; L.map(&#x27;map&#x27;, &#123;        center: [0, 0">
+<meta property="og:locale">
+<meta property="og:image" content="https://nanxfu.github.io/img/Vue.js">
+<meta property="article:published_time" content="2024-10-01T06:59:07.000Z">
+<meta property="article:modified_time" content="2024-10-01T12:29:31.169Z">
+<meta property="article:author" content="nanxfu">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="Vue.js">
+<meta property="article:tag" content="Typescript">
+<meta property="article:tag" content="Vite">
+<meta property="article:tag" content="Leaflet">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nanxfu.github.io/img/Vue.js">
+  
+  
+  
+  <title>原神大地图——1.绘制大地图 - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>南小府</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/" target="_self">
+                <i class="iconfont icon-notebook"></i>
+                <span>心情</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/1623251880550.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="原神大地图——1.绘制大地图"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-01 14:59" pubdate>
+          October 1, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">原神大地图——1.绘制大地图</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-快速使用leaflet"><a href="#1-快速使用leaflet" class="headerlink" title="1.快速使用leaflet"></a>1.快速使用leaflet</h1><p><a target="_blank" rel="noopener" href="https://leafletjs.cn/examples/quick-start/">使用leaflet</a><br>a.新建地图<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001150407.png" srcset="/img/loading.gif" lazyload><br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001150456.png" srcset="/img/loading.gif" lazyload><br>b.在地图上绘制图形<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001150524.png" srcset="/img/loading.gif" lazyload><br>c.使用提示信息<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001150603.png" srcset="/img/loading.gif" lazyload><br>d.处理画布事件<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001150634.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="2-项目工程准备"><a href="#2-项目工程准备" class="headerlink" title="2.项目工程准备"></a>2.项目工程准备</h1><p>准备如下的目录结构<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001152756.png" srcset="/img/loading.gif" lazyload><br>并安装好leaflet依赖，初始化leaflet画布</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">init</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">let</span> map = L.<span class="hljs-title function_">map</span>(<span class="hljs-string">&#x27;map&#x27;</span>, &#123;<br>        <span class="hljs-attr">center</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],<br>        <span class="hljs-attr">crs</span>: L.<span class="hljs-property">CRS</span>.<span class="hljs-property">Simple</span>,<br>        <span class="hljs-attr">zoom</span>: <span class="hljs-number">5</span><br>    &#125;)<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(map)<br>&#125;<br><br><span class="hljs-title function_">onMounted</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-title function_">init</span>()<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<p>然后将静态的瓦片资源放在public目录中,初始化瓦片地图,添加点击事件<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001155440.png" srcset="/img/loading.gif" lazyload><br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001155257.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs vue"><br>&lt;script&gt;<br>  function init() &#123;<br>    let map = L.map(&#x27;map&#x27;, &#123;<br>      center: [0, 0],<br>      crs: L.CRS.Simple,<br>      zoom: 5<br>    &#125;)<br>    map.on(&#x27;click&#x27;, (workingLayer) =&gt; &#123;<br>      const coordinate = workingLayer.latlng<br>      console.log(coordinate)<br>    &#125;)<br>    L.tileLayer(&#x27;images/map/&#123;z&#125;/&#123;x&#125;/&#123;y&#125;.png&#x27;, &#123;<br>      maxZoom: 7,<br>    &#125;).addTo(map);<br>  &#125;<br><br>  onMounted(() =&gt; &#123;<br>    init()<br>  &#125;)<br><br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;div id=&quot;map-container&quot;&gt;<br>    &lt;div id=&quot;map&quot;&gt;<br><br>    &lt;/div&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;style scoped&gt;<br>  #map-container &#123;<br>    height: 100vh;<br>    width: 100vw;<br>    position: relative;<br>  &#125;<br><br>  #map &#123;<br>    position: absolute;<br>    height: 100%;<br>    width: 100%;<br>  &#125;<br>&lt;/style&gt;<br></code></pre></td></tr></table></figure>
+
+<h1 id="3-实现控制"><a href="#3-实现控制" class="headerlink" title="3.实现控制"></a>3.实现控制</h1><p>地图初始化完成后需要优化现有逻辑，比如地图拖拽范围太大，以及缩放太大。翻阅官方文档可知配置Map函数中的option即可<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001155826.png" srcset="/img/loading.gif" lazyload><br>所以配置map option</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> bounds = L.<span class="hljs-title function_">latLngBounds</span>(L.<span class="hljs-title function_">latLng</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>), L.<span class="hljs-title function_">latLng</span>(-<span class="hljs-number">256</span>, <span class="hljs-number">256</span>))<br><span class="hljs-keyword">let</span> map = L.<span class="hljs-title function_">map</span>(<span class="hljs-string">&#x27;map&#x27;</span>, &#123;<br>    <span class="hljs-attr">maxBounds</span>: bounds,<br>    <span class="hljs-attr">center</span>: [-<span class="hljs-number">102</span>, <span class="hljs-number">148</span>],<br>    <span class="hljs-attr">crs</span>: L.<span class="hljs-property">CRS</span>.<span class="hljs-property">Simple</span>,<br>    <span class="hljs-attr">zoomControl</span>: <span class="hljs-literal">false</span>,<br>    <span class="hljs-attr">attributionControl</span>: <span class="hljs-literal">false</span>,<br>    <span class="hljs-attr">zoom</span>: <span class="hljs-number">5</span>,<br>    <span class="hljs-attr">minZoom</span>: <span class="hljs-number">4</span>,<br>    <span class="hljs-attr">maxZoom</span>: <span class="hljs-number">7</span><br>&#125;)<br>map.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">workingLayer</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">const</span> coordinate = workingLayer.<span class="hljs-property">latlng</span><br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(coordinate)<br>&#125;)<br>L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">&#x27;images/map/&#123;z&#125;/&#123;x&#125;/&#123;y&#125;.png&#x27;</span>, &#123;<br>    bounds,<br>    <span class="hljs-attr">maxZoom</span>: <span class="hljs-number">7</span>,<br>&#125;).<span class="hljs-title function_">addTo</span>(map);<br></code></pre></td></tr></table></figure>
+
+<p>最终效果：<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001160819.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="5-在大地图中展示地名"><a href="#5-在大地图中展示地名" class="headerlink" title="5.在大地图中展示地名"></a>5.在大地图中展示地名</h1><p>在地图中展示地名可用maker方法<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001161038.png" srcset="/img/loading.gif" lazyload><br>并且注意到maker方法中可以使用divIcon,所以我们可以创建divIcon<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001161435.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs typescript">  L.<span class="hljs-title function_">marker</span>(L.<span class="hljs-title function_">latLng</span>([-<span class="hljs-number">99.96875</span>, <span class="hljs-number">125.769</span>]), &#123;<br>    <span class="hljs-attr">icon</span>: L.<span class="hljs-title function_">divIcon</span>(&#123;<br>        <span class="hljs-attr">className</span>: <span class="hljs-string">&#x27;map-marker-item&#x27;</span>,<br>        <span class="hljs-attr">html</span>: <span class="hljs-string">`&lt;div class=&quot;area-mark-item&quot;&gt;碧水源&lt;/div&gt;`</span><br>    &#125;)<br>&#125;).<span class="hljs-title function_">addTo</span>(map)<br></code></pre></td></tr></table></figure>
+
+<p>注意在scope上加样式穿透，相关的RFC可以参考<a target="_blank" rel="noopener" href="https://github.com/vuejs/rfcs/blob/master/active-rfcs/0023-scoped-styles-changes.md">scoped-styles-changes</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs vue">:deep(.area-mark-item)&#123;<br>font-size: 18px;<br>color: #fff;<br>font-weight: bold;<br>text-shadow: 0 0 3px #333;<br>white-space: nowrap;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>刷新即可看见效果<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001162932.png" srcset="/img/loading.gif" lazyload><br>增加完一个地名证实效果后就可以批量生成地名了。添加一个markerList用于保存地名信息，使用<a target="_blank" rel="noopener" href="https://leafletjs.cn/reference.html#layergroup">LayerGroup</a><br>管理marker</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs typescript">  <span class="hljs-keyword">const</span> markerList = [&#123;<br>    <span class="hljs-attr">lat</span>: -<span class="hljs-number">99.96875</span>,<br>    <span class="hljs-attr">lng</span>: <span class="hljs-number">125.71875</span>,<br>    <span class="hljs-attr">areaName</span>: <span class="hljs-string">&#x27;碧水原&#x27;</span><br>&#125;, &#123;<br>    <span class="hljs-attr">lat</span>: -<span class="hljs-number">88.125</span>,<br>    <span class="hljs-attr">lng</span>: <span class="hljs-number">139.40625</span>,<br>    <span class="hljs-attr">areaName</span>: <span class="hljs-string">&#x27;苍风高地&#x27;</span><br>&#125;]<br><br><span class="hljs-keyword">let</span> markers = markerList.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">let</span> &#123;lat, lng, areaName&#125; = item<br>    <span class="hljs-keyword">const</span> marker = L.<span class="hljs-title function_">marker</span>(L.<span class="hljs-title function_">latLng</span>([lat, lng,]), &#123;<br>        <span class="hljs-attr">icon</span>: L.<span class="hljs-title function_">divIcon</span>(&#123;<br>            <span class="hljs-attr">className</span>: <span class="hljs-string">&#x27;map-marker-item&#x27;</span>,<br>            <span class="hljs-attr">html</span>: <span class="hljs-string">`&lt;div class=&quot;area-mark-item&quot;&gt;<span class="hljs-subst">$&#123;areaName&#125;</span>&lt;/div&gt;`</span><br>        &#125;)<br>    &#125;)<br>    <span class="hljs-keyword">return</span> marker<br>&#125;)<br><br><span class="hljs-keyword">let</span> areaNameLayerGroup = L.<span class="hljs-title function_">layerGroup</span>(markers)<br>areaNameLayerGroup.<span class="hljs-title function_">addTo</span>(map)<br></code></pre></td></tr></table></figure>
+
+<p>刷新即可看见效果<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001163948.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="6-在大地图中添加标点"><a href="#6-在大地图中添加标点" class="headerlink" title="6.在大地图中添加标点"></a>6.在大地图中添加标点</h1><p>效果展示：<br><img src="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001195630.png" srcset="/img/loading.gif" lazyload><br>添加标点的实现与添加地名类似，都是在地图上添加marker<br>首先创建管理数据的<code>pointMarkerList</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> pointMarkerList = [&#123;<br>    <span class="hljs-attr">lat</span>: -<span class="hljs-number">90.5625</span>,<br>    <span class="hljs-attr">lng</span>: <span class="hljs-number">144.65625</span>,<br>    <span class="hljs-attr">iconId</span>: <span class="hljs-number">1</span><br>&#125;,<br>    &#123;<br>        <span class="hljs-attr">lat</span>: -<span class="hljs-number">99.53125</span>,<br>        <span class="hljs-attr">lng</span>: <span class="hljs-number">131.65625</span>,<br>        <span class="hljs-attr">iconId</span>: <span class="hljs-number">1</span><br>    &#125;]<br></code></pre></td></tr></table></figure>
+
+<p>然后动态生成标点</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">let</span> pointerMarkers = pointMarkerList.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">let</span> &#123;lat, lng, iconId&#125; = item<br>    <span class="hljs-keyword">let</span> iconUrl = <span class="hljs-string">`images/map-icon/<span class="hljs-subst">$&#123;iconId&#125;</span>.png`</span><br><br>    <span class="hljs-keyword">const</span> marker = L.<span class="hljs-title function_">marker</span>(L.<span class="hljs-title function_">latLng</span>([lat, lng,]), &#123;<br>        <span class="hljs-attr">icon</span>: L.<span class="hljs-title function_">divIcon</span>(&#123;<br>            <span class="hljs-attr">className</span>: <span class="hljs-string">&#x27;map-pointer-item&#x27;</span>,<br>            <span class="hljs-attr">html</span>: <span class="hljs-string">`</span><br><span class="hljs-string">        &lt;div class=&quot;point-item-container&quot;&gt;</span><br><span class="hljs-string">            &lt;div class=&quot;point-pic&quot; style=&quot;background-image: url(<span class="hljs-subst">$&#123;iconUrl&#125;</span>);&quot;&gt;</span><br><span class="hljs-string">            &lt;/div&gt;</span><br><span class="hljs-string">        &lt;/div&gt;`</span><br>        &#125;)<br>    &#125;)<br>    <span class="hljs-keyword">let</span> pointerMarkersLayerGroup = L.<span class="hljs-title function_">layerGroup</span>(pointerMarkers)<br>    pointerMarkersLayerGroup.<span class="hljs-title function_">addTo</span>(map)<br></code></pre></td></tr></table></figure>
+<p>设置标点样式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs vue">:deep(.point-item-container) &#123;<br>  width: 37px;<br>  height: 40px;<br>  background-size: cover;<br>  background-image: url(&quot;../assets/images/map/icon-bg.png&quot;);<br>  display: flex;<br>  justify-content: center;<br>  align-items: center;<br>&#125;<br><br>:deep(.point-pic) &#123;<br>  width: 29px;<br>  height: 29px;<br>  background-size: cover;<br>  margin-bottom: 8px;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="7-代码封装与重构"><a href="#7-代码封装与重构" class="headerlink" title="7.代码封装与重构"></a>7.代码封装与重构</h1><p>到目前位置已经初步实现了地图的展示，完成测试后需要及时重构。重构思路为抽离地图创建，地名显示，地标显示<br>首先抽离地图创建模块，建立map-manager.ts文件并新建MapManager class</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MapManager</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-attr">map</span>: L.<span class="hljs-property">Map</span><br>    <span class="hljs-comment">//private areaNameLayerGroup: L.LayerGroup | undefined</span><br>    <span class="hljs-comment">//private pointerMarkersLayerGroup: L.LayerGroup | undefined</span><br><br><span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-attr">domID</span>:<span class="hljs-built_in">string</span></span>) &#123;<br>    <span class="hljs-keyword">const</span> bounds = L.<span class="hljs-title function_">latLngBounds</span>(L.<span class="hljs-title function_">latLng</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>), L.<span class="hljs-title function_">latLng</span>(-<span class="hljs-number">256</span>, <span class="hljs-number">256</span>))<br><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span> = L.<span class="hljs-title function_">map</span>(domID, &#123;<br>        <span class="hljs-attr">maxBounds</span>: bounds,<br>        <span class="hljs-attr">center</span>: [-<span class="hljs-number">102</span>, <span class="hljs-number">148</span>],<br>        <span class="hljs-attr">crs</span>: L.<span class="hljs-property">CRS</span>.<span class="hljs-property">Simple</span>,<br>        <span class="hljs-attr">zoomControl</span>: <span class="hljs-literal">false</span>,<br>        <span class="hljs-attr">attributionControl</span>: <span class="hljs-literal">false</span>,<br>        <span class="hljs-attr">zoom</span>: <span class="hljs-number">5</span>,<br>        <span class="hljs-attr">minZoom</span>: <span class="hljs-number">4</span>,<br>        <span class="hljs-attr">maxZoom</span>: <span class="hljs-number">7</span><br>    &#125;)<br><br>    L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">&#x27;images/map/&#123;z&#125;/&#123;x&#125;/&#123;y&#125;.png&#x27;</span>, &#123;<br>        bounds,<br>        <span class="hljs-attr">maxZoom</span>: <span class="hljs-number">7</span>,<br>    &#125;).<span class="hljs-title function_">addTo</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>);<br>&#125;&#125;<br></code></pre></td></tr></table></figure>
+<p>然后添加renderAreaNames、renderPoints</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-title function_">renderAreaNames</span>(<span class="hljs-params"><span class="hljs-attr">configList</span>: <span class="hljs-title class_">AreaNameConfig</span>[]</span>) &#123;<br><br>    <span class="hljs-keyword">const</span> markers = configList.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> &#123;<br>        <span class="hljs-keyword">let</span> &#123;lat, lng, areaName&#125; = item<br>        <span class="hljs-keyword">const</span> marker = L.<span class="hljs-title function_">marker</span>(L.<span class="hljs-title function_">latLng</span>([lat, lng,]), &#123;<br>            <span class="hljs-attr">icon</span>: L.<span class="hljs-title function_">divIcon</span>(&#123;<br>                <span class="hljs-attr">className</span>: <span class="hljs-string">&#x27;map-marker-item&#x27;</span>,<br>                <span class="hljs-attr">html</span>: <span class="hljs-string">`&lt;div class=&quot;area-mark-item&quot;&gt;<span class="hljs-subst">$&#123;areaName&#125;</span>&lt;/div&gt;`</span><br>            &#125;)<br>        &#125;)<br>        <span class="hljs-keyword">return</span> marker<br>    &#125;)<br><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">areaNameLayerGroup</span> = L.<span class="hljs-title function_">layerGroup</span>(markers)<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">areaNameLayerGroup</span>.<span class="hljs-title function_">addTo</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>)<br>&#125;,<br><br><span class="hljs-title function_">renderPoints</span>(<span class="hljs-params"><span class="hljs-attr">pointList</span>: <span class="hljs-title class_">PointConfig</span>[]</span>)&#123;<br>    <span class="hljs-keyword">const</span> pointerMarkers = pointList.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> &#123;<br>        <span class="hljs-keyword">let</span> &#123;lat, lng, iconId&#125; = item<br>        <span class="hljs-keyword">let</span> iconUrl = <span class="hljs-string">`images/map-icon/<span class="hljs-subst">$&#123;iconId&#125;</span>.png`</span><br><br>        <span class="hljs-keyword">const</span> marker = L.<span class="hljs-title function_">marker</span>(L.<span class="hljs-title function_">latLng</span>([lat, lng,]), &#123;<br>            <span class="hljs-attr">icon</span>: L.<span class="hljs-title function_">divIcon</span>(&#123;<br>                <span class="hljs-attr">className</span>: <span class="hljs-string">&#x27;map-pointer-item&#x27;</span>,<br>                <span class="hljs-attr">html</span>: <span class="hljs-string">`</span><br><span class="hljs-string">              &lt;div class=&quot;point-item-container&quot;&gt;</span><br><span class="hljs-string">                  &lt;div class=&quot;point-pic&quot; style=&quot;background-image: url(<span class="hljs-subst">$&#123;iconUrl&#125;</span>);&quot;&gt;</span><br><span class="hljs-string">                  &lt;/div&gt;</span><br><span class="hljs-string">              &lt;/div&gt;`</span><br>            &#125;)<br>        &#125;)<br><br>        <span class="hljs-keyword">return</span> marker<br>    &#125;)<br><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">pointerMarkersLayerGroup</span> = L.<span class="hljs-title function_">layerGroup</span>(pointerMarkers)<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">pointerMarkersLayerGroup</span>.<span class="hljs-title function_">addTo</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>最后在Home.vue中调用manager</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs typescript">  <span class="hljs-keyword">const</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MapManager</span>(<span class="hljs-string">&#x27;map&#x27;</span>)<br><span class="hljs-keyword">const</span> markerList = [&#123;<br>    <span class="hljs-attr">lat</span>: -<span class="hljs-number">99.96875</span>,<br>    <span class="hljs-attr">lng</span>: <span class="hljs-number">125.71875</span>,<br>    <span class="hljs-attr">areaName</span>: <span class="hljs-string">&#x27;碧水原&#x27;</span><br>&#125;, &#123;<br>    <span class="hljs-attr">lat</span>: -<span class="hljs-number">88.125</span>,<br>    <span class="hljs-attr">lng</span>: <span class="hljs-number">139.40625</span>,<br>    <span class="hljs-attr">areaName</span>: <span class="hljs-string">&#x27;苍风高地&#x27;</span><br>&#125;]<br><br>map.<span class="hljs-title function_">renderAreaNames</span>(markerList)<br><br><span class="hljs-keyword">const</span> pointMarkerList = [&#123;<br>    <span class="hljs-attr">lat</span>: -<span class="hljs-number">90.5625</span>,<br>    <span class="hljs-attr">lng</span>: <span class="hljs-number">144.65625</span>,<br>    <span class="hljs-attr">iconId</span>: <span class="hljs-number">1</span><br>&#125;,<br>    &#123;<br>        <span class="hljs-attr">lat</span>: -<span class="hljs-number">99.53125</span>,<br>        <span class="hljs-attr">lng</span>: <span class="hljs-number">131.65625</span>,<br>        <span class="hljs-attr">iconId</span>: <span class="hljs-number">1</span><br>    &#125;]<br><br>map.<span class="hljs-title function_">renderPoints</span>(pointMarkerList)<br><br>map.<span class="hljs-title function_">enableClickDebug</span>()<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/web/" class="print-no-link">#web</a>
+      
+        <a href="/tags/Vue-js/" class="print-no-link">#Vue.js</a>
+      
+        <a href="/tags/Typescript/" class="print-no-link">#Typescript</a>
+      
+        <a href="/tags/Vite/" class="print-no-link">#Vite</a>
+      
+        <a href="/tags/Leaflet/" class="print-no-link">#Leaflet</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>原神大地图——1.绘制大地图</div>
+      <div>https://nanxfu.github.io/2024/10/01/原神大地图——1-绘制大地图/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Beitragsautor</div>
+          <div>nanxfu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Veröffentlicht am</div>
+          <div>October 1, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Urheberrechtshinweis</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/09/29/%E8%AF%BB%E4%B9%A6%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE-8-%E8%8F%9C%E5%8D%95%E6%9D%83%E9%99%90%E6%96%B0%E5%A2%9E%E7%BC%96%E8%BE%91API%E5%BC%80%E5%8F%91/" title="读书管理后台开发项目-8.菜单权限新增编辑API开发">
+                        <span class="hidden-mobile">读书管理后台开发项目-8.菜单权限新增编辑API开发</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Inhaltsverzeichnis</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog funktioniert am besten mit aktiviertem JavaScript</div>
+  </noscript>
+</body>
+</html>
