@@ -1,6 +1,6 @@
 ---
 title: 读书管理后台开发项目-8.菜单权限新增编辑API开发
-index_img: /img/Vue.js
+index_img: /img/Vue.jpg
 date: 2024-09-29 14:38:26
 tags:
   - Vue.js
