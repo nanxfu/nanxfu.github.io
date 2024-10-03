@@ -9,6 +9,9 @@ tags:
   - Vite
   - Leaflet
 ---
+> ** 注意！！！** map与ui-layer应该具有同一个父元素，而不是父子关系，否则map会捕获所有鼠标事件
+> ![](https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241002174719.png)
+
 本节将开发
 ![](https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001204056.png)
 ![](https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001204116.png)
@@ -175,3 +178,81 @@ tags:
 ![](https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001214042.png)
 效果展示：
 ![](https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241001214105.png)
+
+# 交互栏开发
+本节搭建搜索框和左侧的筛选列表
+搜索框HTML部分
+```vue
+            <div class="search-container">
+              <div class="search-icon"></div>
+              <div class="search-tip">搜索</div>
+            </div>
+```
+
+CSS部分
+```vue
+.search-container {
+  height: 32px;
+  width:355px;
+  display: flex;
+  align-items: center;
+  background-color: #323947;
+  border-radius: 22px;
+  padding-left: 10px;
+  margin: 10px auto;
+  font-size: 12px;
+  color: #9b9c9f;
+}
+.search-icon {
+  width: 16px;
+  height: 16px;
+  background-image: url("../assets/images/ui/search-icon.png");
+  background-size: cover;
+  margin: 0 5px 0 1px;
+}
+```
+效果：
+![](https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20241002212939.png)
+接着开发筛选列表部分
+```vue
+
+<template>
+<div class="filter-main">
+  <div class="filter-main-left">
+    <div class="filter-type-item" v-for="item in 20" :key="item">
+      <div class="item-name">传送点</div>
+    </div>
+  </div>
+  <div class="filter-main-right"></div>
+</div>
+</template>
+
+<style scoped>
+.filter-main{
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.filter-main-left{
+  width: 97px;
+  background: #323947;
+  overflow-y: auto;
+}
+.filter-main-left::-webkit-scrollbar{
+  display: none;
+}
+.filter-main-right{
+  flex: 1;
+}
+.filter-type-item{
+  display: flex;
+  align-items: center;
+  padding: 16px 16px;
+}
+.item-name{
+  color: hsla(39, 34%, 89%, 0.75);
+  font-size: 12px
+}
+</style>
+```
