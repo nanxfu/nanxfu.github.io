@@ -1,6 +1,6 @@
 ---
 title: 解密 CSS overflow：为何 auto 滚动条会“捣乱”以及 visible 为何“失效”？
-index_img: /img/
+index_img: https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20250422230731.png
 date: 2025-04-22 22:36:12
 tags:
 - CSS

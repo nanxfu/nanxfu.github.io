@@ -1,6 +1,6 @@
 ---
 title: clip-path与transform：scale使用顺序不同会造成结果不同吗？
-index_img: /img/
+index_img: https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/clip-path%20and%20scale%20issue.png
 date: 2025-04-22 22:39:31
 tags:
 - CSS

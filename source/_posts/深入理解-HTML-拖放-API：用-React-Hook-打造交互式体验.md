@@ -1,6 +1,6 @@
 ---
 title: 深入理解 HTML 拖放 API：用 React Hook 打造交互式体验
-index_img: /img/
+index_img: https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3html%20drag%20api.png
 date: 2025-04-22 22:37:51
 tags: 
 - React

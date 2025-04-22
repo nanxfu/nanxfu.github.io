@@ -1,6 +1,6 @@
 ---
 title: 深入理解 css padding百分比规则
-index_img: /img/
+index_img: https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/css-padding-rule.png
 date: 2025-04-22 22:35:11
 tags: 
 - CSS
