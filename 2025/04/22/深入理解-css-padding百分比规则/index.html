@@ -1,0 +1,767 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="author" content="nanxfu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="深入理解 CSS Padding 百分比计算规则核心规则W3C 规范明确规定：  Percentages: refer to width of containing block (百分比值：参照包含块的宽度)  这意味着，无论你设置的是 padding-left, padding-right, padding-top 还是 padding-bottom 的百分比值，其计算基准 始终 是该元素 包含">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解 css padding百分比规则">
+<meta property="og:url" content="https://nanxfu.github.io/2025/04/22/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-css-padding%E7%99%BE%E5%88%86%E6%AF%94%E8%A7%84%E5%88%99/index.html">
+<meta property="og:site_name" content="南小府の小屋">
+<meta property="og:description" content="深入理解 CSS Padding 百分比计算规则核心规则W3C 规范明确规定：  Percentages: refer to width of containing block (百分比值：参照包含块的宽度)  这意味着，无论你设置的是 padding-left, padding-right, padding-top 还是 padding-bottom 的百分比值，其计算基准 始终 是该元素 包含">
+<meta property="og:locale">
+<meta property="og:image" content="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/css-padding-rule.png">
+<meta property="article:published_time" content="2025-04-22T14:35:11.000Z">
+<meta property="article:modified_time" content="2025-04-22T14:48:54.554Z">
+<meta property="article:author" content="nanxfu">
+<meta property="article:tag" content="CSS">
+<meta property="article:tag" content="前端开发">
+<meta property="article:tag" content="布局技巧">
+<meta property="article:tag" content="响应式设计">
+<meta property="article:tag" content="padding">
+<meta property="article:tag" content="盒模型">
+<meta property="article:tag" content="W3C规范">
+<meta property="article:tag" content="宽高比布局">
+<meta property="article:tag" content="工程实践">
+<meta property="article:tag" content="CSS计算规则">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/css-padding-rule.png">
+  
+  
+  
+  <title>深入理解 css padding百分比规则 - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>南小府</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/" target="_self">
+                <i class="iconfont icon-notebook"></i>
+                <span>心情</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/1623251880550.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="深入理解 css padding百分比规则"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-22 22:35" pubdate>
+          April 22, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">深入理解 css padding百分比规则</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="深入理解-CSS-Padding-百分比计算规则"><a href="#深入理解-CSS-Padding-百分比计算规则" class="headerlink" title="深入理解 CSS Padding 百分比计算规则"></a><strong>深入理解 CSS Padding 百分比计算规则</strong></h2><h3 id="核心规则"><a href="#核心规则" class="headerlink" title="核心规则"></a><strong>核心规则</strong></h3><p>W3C 规范明确规定：</p>
+<blockquote>
+<p>Percentages: refer to width of containing block</p>
+<p>(百分比值：参照包含块的宽度)</p>
+</blockquote>
+<p>这意味着，无论你设置的是 <code>padding-left</code>, <code>padding-right</code>, <code>padding-top</code> 还是 <code>padding-bottom</code> 的百分比值，其计算基准 <strong>始终</strong> 是该元素 <strong>包含块（Containing Block）的宽度（width）</strong>。</p>
+<p><strong>什么是包含块 (Containing Block)？</strong></p>
+<p>简单来说，一个元素的包含块通常是其<strong>最近的块级祖先元素的内容区域（content area）</strong>。但在某些情况下（如绝对定位或固定定位），包含块可能会有所不同。对于初学者而言，在大多数标准文档流布局中，你可以暂时将其理解为“父元素的宽度”。</p>
+<h3 id="为什么-padding-top-和-padding-bottom-也参照宽度？"><a href="#为什么-padding-top-和-padding-bottom-也参照宽度？" class="headerlink" title="为什么 padding-top 和 padding-bottom 也参照宽度？"></a><strong>为什么 <code>padding-top</code> 和 <code>padding-bottom</code> 也参照宽度？</strong></h3><p>这确实是初学者容易混淆的地方。直觉上，我们可能会认为 <code>padding-top</code> 和 <code>padding-bottom</code> 的百分比应该参照父元素（或包含块）的 <em>高度</em>。但 CSS 规范选择了宽度作为统一的参照基准。</p>
+<p>虽然官方没有给出明确的“为什么”这么设计的唯一原因，但有几种常见的解释和推测：</p>
+<ol>
+<li><strong>布局一致性与可预测性：</strong> 如果垂直和水平方向的百分比参照不同的基准（高度和宽度），可能会导致更复杂的布局计算和不可预测的行为，尤其是在响应式设计中，元素的宽度通常比高度更具决定性。</li>
+<li><strong>避免循环依赖：</strong> 元素的高度往往受其内容影响，而内容又可能包含有百分比内边距的子元素。如果垂直内边距参照高度，可能会产生计算上的循环依赖问题（高度依赖内边距，内边距依赖高度）。参照宽度则打破了这种潜在的循环。</li>
+<li><strong>实现特定布局技巧：</strong> 这个特性被开发者巧妙地利用来实现一些特定的布局效果，最著名的就是保持元素的宽高比。</li>
+</ol>
+<h3 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a><strong>代码示例</strong></h3><p>让我们通过一个简单的例子来验证这一点：</p>
+<p><strong>HTML:</strong></p>
+<p><strong>HTML</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs jsx">&lt;div <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;parent&quot;</span>&gt;<br>  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;child&quot;</span>&gt;</span></span><br><span class="language-xml">    这是一个子元素。它的 padding 上下左右都是 10%。</span><br><span class="language-xml">    请注意观察它的上下内边距是如何根据父元素的 *宽度* 计算的。</span><br><span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br>&lt;/div&gt;<br></code></pre></td></tr></table></figure>
+
+<p><strong>CSS:</strong></p>
+<p><strong>CSS</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs jsx">.<span class="hljs-property">parent</span> &#123;<br>  <span class="hljs-attr">width</span>: 500px;<br>  <span class="hljs-attr">height</span>: 200px; <span class="hljs-comment">/* 父元素高度，注意这个值不影响子元素的百分比 padding 计算 */</span><br>  background-<span class="hljs-attr">color</span>: lightblue;<br>  <span class="hljs-attr">border</span>: 1px solid blue;<br>  margin-<span class="hljs-attr">bottom</span>: 20px; <span class="hljs-comment">/* 只是为了分隔 */</span><br>&#125;<br><br>.<span class="hljs-property">child</span> &#123;<br>  background-<span class="hljs-attr">color</span>: lightcoral;<br>  <span class="hljs-attr">border</span>: 1px solid red;<br><br>  <span class="hljs-comment">/* 设置所有方向的 padding 为 10% */</span><br>  <span class="hljs-attr">padding</span>: <span class="hljs-number">10</span>%;<br><br>  <span class="hljs-comment">/*</span><br><span class="hljs-comment">   * 计算过程：</span><br><span class="hljs-comment">   * 父元素宽度 = 500px</span><br><span class="hljs-comment">   * padding-top = 10% of 500px = 50px</span><br><span class="hljs-comment">   * padding-bottom = 10% of 500px = 50px</span><br><span class="hljs-comment">   * padding-left = 10% of 500px = 50px</span><br><span class="hljs-comment">   * padding-right = 10% of 500px = 50px</span><br><span class="hljs-comment">   */</span><br>&#125;<br><br><span class="hljs-comment">/* 对比：如果父元素宽度改变 */</span><br>.<span class="hljs-property">parent</span>.<span class="hljs-property">narrow</span> &#123;<br>    <span class="hljs-attr">width</span>: 300px;<br>&#125;<br><br>.<span class="hljs-property">parent</span>.<span class="hljs-property">narrow</span> .<span class="hljs-property">child</span> &#123;<br>    <span class="hljs-comment">/*</span><br><span class="hljs-comment">     * 新的计算过程：</span><br><span class="hljs-comment">     * 父元素宽度 = 300px</span><br><span class="hljs-comment">     * padding-top = 10% of 300px = 30px</span><br><span class="hljs-comment">     * padding-bottom = 10% of 300px = 30px</span><br><span class="hljs-comment">     * padding-left = 10% of 300px = 30px</span><br><span class="hljs-comment">     * padding-right = 10% of 300px = 30px</span><br><span class="hljs-comment">     */</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>你可以复制代码在浏览器中运行，并使用开发者工具检查 <code>.child</code> 元素的盒模型（Box Model），你会清晰地看到其 <code>padding-top</code>, <code>padding-bottom</code>, <code>padding-left</code>, <code>padding-right</code> 的计算值都是父元素宽度的 10%。当你改变父元素的宽度时（比如添加 <code>narrow</code> 类），所有的 <code>padding</code> 值会相应地等比例变化，而改变父元素的 <code>height</code> 则完全不影响这些 <code>padding</code> 的计算值。</p>
+<hr>
+<h2 id="工程实战场景"><a href="#工程实战场景" class="headerlink" title="工程实战场景"></a><strong>工程实战场景</strong></h2><p>理解了这个特性后，我们来看看它在实际开发中有什么用处：</p>
+<h3 id="1-保持元素的宽高比（Aspect-Ratio-Box）-最经典的用法"><a href="#1-保持元素的宽高比（Aspect-Ratio-Box）-最经典的用法" class="headerlink" title="1. 保持元素的宽高比（Aspect Ratio Box） - 最经典的用法"></a><strong>1. 保持元素的宽高比（Aspect Ratio Box） - 最经典的用法</strong></h3><p>这是 <code>padding-top</code> &#x2F; <code>padding-bottom</code> 百分比特性最广为人知的应用场景。当你需要一个容器（比如用于嵌入视频、图片或其他内容）在不同屏幕宽度下始终保持固定的宽高比（如 16:9, 4:3）时，这个技巧非常有用。</p>
+<p><strong>原理：</strong></p>
+<ul>
+<li>将元素的高度设置为 <code>0</code>。</li>
+<li>设置 <code>padding-bottom</code> (或 <code>padding-top</code>) 的百分比值，该百分比等于 <code>(高度 / 宽度) * 100%</code>。因为这个百分比是基于 <em>宽度</em> 计算的，所以 <code>padding-bottom</code> 的实际像素值会随着宽度的变化而变化，从而“撑开”了元素的高度，使其与宽度保持固定的比例。</li>
+<li>通常需要结合 <code>position: relative;</code> (父元素) 和 <code>position: absolute;</code> (子元素) 来将内容正确地放置在由 padding 撑开的区域内。</li>
+</ul>
+<p><strong>示例：创建一个 16:9 的响应式视频容器</strong></p>
+<p><strong>HTML:</strong></p>
+<p><strong>HTML</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs jsx">&lt;div <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;aspect-ratio-box sixteen-nine&quot;</span>&gt;<br>  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span></span></span><br><span class="hljs-tag"><span class="language-xml">    <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.youtube.com/embed/your_video_id&quot;</span></span></span><br><span class="hljs-tag"><span class="language-xml">    <span class="hljs-attr">frameborder</span>=<span class="hljs-string">&quot;0&quot;</span></span></span><br><span class="hljs-tag"><span class="language-xml">    <span class="hljs-attr">allowfullscreen</span></span></span><br><span class="hljs-tag"><span class="language-xml">    <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></span><br>&lt;/div&gt;<br></code></pre></td></tr></table></figure>
+
+<p><strong>CSS:</strong></p>
+<p><strong>CSS</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs jsx">.<span class="hljs-property">aspect</span>-ratio-box &#123;<br>  <span class="hljs-attr">position</span>: relative; <span class="hljs-comment">/* 为绝对定位的子元素提供定位上下文 */</span><br>  <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>%;       <span class="hljs-comment">/* 或者你需要的任何宽度 */</span><br>  <span class="hljs-attr">height</span>: <span class="hljs-number">0</span>;          <span class="hljs-comment">/* 关键：高度设置为 0 */</span><br>  <span class="hljs-attr">overflow</span>: hidden;   <span class="hljs-comment">/* 隐藏可能溢出的内容 */</span><br>&#125;<br><br>.<span class="hljs-property">aspect</span>-ratio-box.<span class="hljs-property">sixteen</span>-nine &#123;<br>  <span class="hljs-comment">/* 关键：padding-bottom = (9 / 16) * 100% = 56.25% */</span><br>  padding-<span class="hljs-attr">bottom</span>: <span class="hljs-number">56.25</span>%;<br>&#125;<br><br><span class="hljs-comment">/* 如果需要 4:3 的比例 */</span><br>.<span class="hljs-property">aspect</span>-ratio-box.<span class="hljs-property">four</span>-three &#123;<br>  <span class="hljs-comment">/* padding-bottom = (3 / 4) * 100% = 75% */</span><br>  padding-<span class="hljs-attr">bottom</span>: <span class="hljs-number">75</span>%;<br>&#125;<br><br>.<span class="hljs-property">aspect</span>-ratio-box .<span class="hljs-property">content</span> &#123;<br>  <span class="hljs-attr">position</span>: absolute; <span class="hljs-comment">/* 关键：绝对定位 */</span><br>  <span class="hljs-attr">top</span>: <span class="hljs-number">0</span>;<br>  <span class="hljs-attr">left</span>: <span class="hljs-number">0</span>;<br>  <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>%;<br>  <span class="hljs-attr">height</span>: <span class="hljs-number">100</span>%;     <span class="hljs-comment">/* 关键：填满由 padding 撑开的空间 */</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样，无论 <code>.aspect-ratio-box</code> 的宽度如何变化（例如在响应式布局中），它内部的高度（由 <code>padding-bottom</code> 决定）都会自动调整，始终保持 16:9 的比例，里面的 <code>iframe</code> 也会随之缩放。</p>
+<h3 id="2-创建与宽度相关的等距边距"><a href="#2-创建与宽度相关的等距边距" class="headerlink" title="2. 创建与宽度相关的等距边距"></a><strong>2. 创建与宽度相关的等距边距</strong></h3><p>在某些设计中，你可能希望元素的内边距（特别是垂直方向的内边距）能够随着容器宽度的变化而等比例缩放，以保持视觉上的一致性。</p>
+<p><strong>示例：响应式卡片</strong></p>
+<p>假设你有一个卡片组件，希望卡片内部内容距离卡片边缘的间距（上下左右）在视觉上感觉是“相同”的，并且这个间距能随着卡片宽度的变化而调整。</p>
+<p><strong>HTML:</strong></p>
+<p><strong>HTML</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jsx">&lt;div <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;card&quot;</span>&gt;<br>  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>卡片标题<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span></span><br>  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>这是一段卡片内容...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><br>&lt;/div&gt;<br></code></pre></td></tr></table></figure>
+
+<p><strong>CSS:</strong></p>
+<p><strong>CSS</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs jsx">.<span class="hljs-property">card</span> &#123;<br>  <span class="hljs-attr">width</span>: <span class="hljs-number">80</span>%; <span class="hljs-comment">/* 卡片宽度是响应式的 */</span><br>  max-<span class="hljs-attr">width</span>: 400px;<br>  <span class="hljs-attr">margin</span>: 20px auto;<br>  <span class="hljs-attr">border</span>: 1px solid #ccc;<br>  background-<span class="hljs-attr">color</span>: #f9f9f9;<br><br>  <span class="hljs-comment">/* 设置统一的、相对于卡片宽度的内边距 */</span><br>  <span class="hljs-attr">padding</span>: <span class="hljs-number">5</span>%; <span class="hljs-comment">/* 上下左右内边距都是卡片宽度的 5% */</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个例子中，无论卡片因为父容器或屏幕尺寸变化而变成多宽，其内部内容距离四个边缘的空白（<code>padding</code>）都会是当时卡片宽度的 5%。这有助于在不同尺寸下维持相似的内部空间感。</p>
+<h3 id="3-全宽背景条带内的内容约束"><a href="#3-全宽背景条带内的内容约束" class="headerlink" title="3. 全宽背景条带内的内容约束"></a><strong>3. 全宽背景条带内的内容约束</strong></h3><p>有时你需要一个横跨整个页面宽度的背景色或背景图片条带，但内部的内容区域需要有一定的左右边距，并且这个边距也希望是响应式的。</p>
+<p><strong>HTML:</strong></p>
+<p><strong>HTML</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs jsx">&lt;div <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;full-width-band&quot;</span>&gt;<br>  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;content-wrapper&quot;</span>&gt;</span></span><br><span class="language-xml">    这里是主要内容区域...</span><br><span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br>&lt;/div&gt;<br></code></pre></td></tr></table></figure>
+
+<p><strong>CSS:</strong></p>
+<p><strong>CSS</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs jsx">.<span class="hljs-property">full</span>-width-band &#123;<br>  <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>%;<br>  background-<span class="hljs-attr">color</span>: #eee;<br>  <span class="hljs-comment">/* 注意：这里 padding 应用在内部容器上 */</span><br>&#125;<br><br>.<span class="hljs-property">content</span>-wrapper &#123;<br>  max-<span class="hljs-attr">width</span>: 1200px; <span class="hljs-comment">/* 限制内容最大宽度 */</span><br>  <span class="hljs-attr">margin</span>: <span class="hljs-number">0</span> auto;   <span class="hljs-comment">/* 内容居中 */</span><br><br>  <span class="hljs-comment">/* 使用 padding 百分比来创建响应式的左右内边距 */</span><br>  <span class="hljs-comment">/* 例如，左右各留出 5% 的边距 */</span><br>  padding-<span class="hljs-attr">left</span>: <span class="hljs-number">5</span>%;<br>  padding-<span class="hljs-attr">right</span>: <span class="hljs-number">5</span>%;<br><br>  <span class="hljs-comment">/* 如果也希望上下内边距与宽度相关 */</span><br>  <span class="hljs-comment">/* padding-top: 3%; */</span><br>  <span class="hljs-comment">/* padding-bottom: 3%; */</span><br><br>  <span class="hljs-comment">/* 如果 box-sizing 是 border-box，padding 不会增加总宽度 */</span><br>  box-<span class="hljs-attr">sizing</span>: border-box;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里，<code>.content-wrapper</code> 的左右 <code>padding</code> 是基于其包含块（很可能是 <code>.full-width-band</code> 或者更外层的元素，取决于布局，但通常是相对于一个明确宽度的祖先）的宽度计算的。这确保了即使在窄屏幕上，内容也不会紧贴屏幕边缘，并且这个间距是相对的。</p>
+<hr>
+<h3 id="注意事项与替代方案"><a href="#注意事项与替代方案" class="headerlink" title="注意事项与替代方案"></a><strong>注意事项与替代方案</strong></h3><ul>
+<li><strong><code>box-sizing</code> 的影响：</strong> <code>box-sizing: border-box;</code> 是现代 CSS 开发中常用的设置。它使得元素的 <code>width</code> 和 <code>height</code> 属性定义的是元素边框（border）以内（包括 padding 和 border）的总尺寸。即使在这种模式下，<code>padding</code> 的百分比值仍然是基于包含块的 <em>宽度</em> 计算的，这一点不变。</li>
+<li><strong>逻辑上的困惑：</strong> 记住 <code>padding-top</code> 和 <code>padding-bottom</code> 百分比参照的是宽度，这需要在使用时特别留意，避免直觉错误。</li>
+<li><strong>替代方案：</strong><ul>
+<li><strong>视口单位（Viewport Units）：</strong> 如果你希望内边距相对于视口（浏览器窗口）的宽度或高度，可以使用 <code>vw</code> (视口宽度的 1%) 或 <code>vh</code> (视口高度的 1%) 单位。例如 <code>padding: 5vw;</code>。</li>
+<li><strong><code>calc()</code> 函数：</strong> 可以结合百分比和其他单位进行计算，<code>padding: calc(20px + 5%);</code>。</li>
+<li><strong>Grid 和 Flexbox 的 <code>gap</code> 属性：</strong> 对于网格或弹性布局容器内的项目间距，<code>gap</code> 属性通常是更现代和方便的选择。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h2><p>你对 <code>padding</code> 百分比计算规则的理解是完全正确的！这是一个非常基础但又极其重要的 CSS 特性。</p>
+<p><strong>核心要点：</strong></p>
+<ul>
+<li><code>padding</code> 的所有四个方向（<code>top</code>, <code>right</code>, <code>bottom</code>, <code>left</code>）的百分比值，都参照其 <strong>包含块的宽度</strong> 进行计算。</li>
+<li>这个特性最常用于创建 <strong>固定宽高比</strong> 的容器。</li>
+<li>它也可以用来实现 <strong>与宽度相关的响应式内边距</strong>。</li>
+</ul>
+<p>掌握并理解这个特性，会让你在处理响应式布局和一些特殊布局需求时更加得心应手。继续加油，前端之路虽然细节繁多，但每一个知识点的掌握都会让你变得更强！</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CSS/" class="print-no-link">#CSS</a>
+      
+        <a href="/tags/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/" class="print-no-link">#前端开发</a>
+      
+        <a href="/tags/%E5%B8%83%E5%B1%80%E6%8A%80%E5%B7%A7/" class="print-no-link">#布局技巧</a>
+      
+        <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E8%AE%BE%E8%AE%A1/" class="print-no-link">#响应式设计</a>
+      
+        <a href="/tags/padding/" class="print-no-link">#padding</a>
+      
+        <a href="/tags/%E7%9B%92%E6%A8%A1%E5%9E%8B/" class="print-no-link">#盒模型</a>
+      
+        <a href="/tags/W3C%E8%A7%84%E8%8C%83/" class="print-no-link">#W3C规范</a>
+      
+        <a href="/tags/%E5%AE%BD%E9%AB%98%E6%AF%94%E5%B8%83%E5%B1%80/" class="print-no-link">#宽高比布局</a>
+      
+        <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="print-no-link">#工程实践</a>
+      
+        <a href="/tags/CSS%E8%AE%A1%E7%AE%97%E8%A7%84%E5%88%99/" class="print-no-link">#CSS计算规则</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>深入理解 css padding百分比规则</div>
+      <div>https://nanxfu.github.io/2025/04/22/深入理解-css-padding百分比规则/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Beitragsautor</div>
+          <div>nanxfu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Veröffentlicht am</div>
+          <div>April 22, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Urheberrechtshinweis</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/04/22/%E6%8D%A3%E4%B9%B1%E4%BB%A5%E5%8F%8A-visible-%E4%B8%BA%E4%BD%95%E5%A4%B1%E6%95%88%EF%BC%9F/" title="解密 CSS overflow：为何 auto 滚动条会“捣乱”以及 visible 为何“失效”？">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">解密 CSS overflow：为何 auto 滚动条会“捣乱”以及 visible 为何“失效”？</span>
+                        <span class="visible-mobile">Vorheriger</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/04/22/extension%E4%B8%ADurl%E8%A7%A3%E6%9E%90%E9%97%AE%E9%A2%98/" title="解决 Chrome 扩展中 URL 参数解析问题：从 useParams 到 URLSearchParams 的优雅转变">
+                        <span class="hidden-mobile">解决 Chrome 扩展中 URL 参数解析问题：从 useParams 到 URLSearchParams 的优雅转变</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Inhaltsverzeichnis</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog funktioniert am besten mit aktiviertem JavaScript</div>
+  </noscript>
+</body>
+</html>
