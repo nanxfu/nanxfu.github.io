@@ -2,7 +2,6 @@
 title: 深入理解 css padding百分比规则
 index_img: /img/
 date: 2025-04-22 22:35:11
-tags:
 tags: 
 - CSS
 - 前端开发
@@ -15,8 +14,6 @@ tags:
 - 工程实践
 - CSS计算规则
 ---
-# 深入理解 CSS Padding 百分比计算规则
-
 ## **深入理解 CSS Padding 百分比计算规则**
 
 ### **核心规则**
