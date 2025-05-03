@@ -1,0 +1,696 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="author" content="nanxfu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前端批量下载图片并统一转换格式的最佳实践在现代 Web 应用中，用户经常有批量下载图片的需求。比如：将页面上的多张图片打包成 zip 文件下载，或者统一转换为更高效的图片格式（如 webp、jpeg）以节省存储和带宽。本文将带你深入了解如何用 JavaScript 实现这一功能，并重点讲解 createImageBitmap 的优势和使用场景。 需求分析假设我们有一组图片 URL，用户希望一键下载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端批量下载图片并统一转换格式的最佳实践">
+<meta property="og:url" content="https://nanxfu.github.io/2025/05/04/%E5%89%8D%E7%AB%AF%E6%89%B9%E9%87%8F%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87%E5%B9%B6%E7%BB%9F%E4%B8%80%E8%BD%AC%E6%8D%A2%E6%A0%BC%E5%BC%8F%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="南小府の小屋">
+<meta property="og:description" content="前端批量下载图片并统一转换格式的最佳实践在现代 Web 应用中，用户经常有批量下载图片的需求。比如：将页面上的多张图片打包成 zip 文件下载，或者统一转换为更高效的图片格式（如 webp、jpeg）以节省存储和带宽。本文将带你深入了解如何用 JavaScript 实现这一功能，并重点讲解 createImageBitmap 的优势和使用场景。 需求分析假设我们有一组图片 URL，用户希望一键下载">
+<meta property="og:locale">
+<meta property="og:image" content="https://nanxfu.github.io/img/js.png">
+<meta property="article:published_time" content="2025-05-03T21:30:23.000Z">
+<meta property="article:modified_time" content="2025-05-03T21:33:03.402Z">
+<meta property="article:author" content="nanxfu">
+<meta property="article:tag" content="Web API">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="性能优化">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="图片处理">
+<meta property="article:tag" content="Canvas">
+<meta property="article:tag" content="文件下载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nanxfu.github.io/img/js.png">
+  
+  
+  
+  <title>前端批量下载图片并统一转换格式的最佳实践 - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>南小府</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/" target="_self">
+                <i class="iconfont icon-notebook"></i>
+                <span>心情</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/1623251880550.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="前端批量下载图片并统一转换格式的最佳实践"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-05-04 05:30" pubdate>
+          May 4, 2025 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          844 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          8 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">前端批量下载图片并统一转换格式的最佳实践</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前端批量下载图片并统一转换格式的最佳实践"><a href="#前端批量下载图片并统一转换格式的最佳实践" class="headerlink" title="前端批量下载图片并统一转换格式的最佳实践"></a>前端批量下载图片并统一转换格式的最佳实践</h1><p>在现代 Web 应用中，用户经常有批量下载图片的需求。比如：将页面上的多张图片打包成 zip 文件下载，或者统一转换为更高效的图片格式（如 webp、jpeg）以节省存储和带宽。本文将带你深入了解如何用 JavaScript 实现这一功能，并重点讲解 <code>createImageBitmap</code> 的优势和使用场景。</p>
+<h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><p>假设我们有一组图片 URL，用户希望一键下载所有图片，并且希望所有图片都被统一转换为 webp 或 jpeg 格式，最后打包成 zip 文件。</p>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><ul>
+<li><strong>JSZip</strong>：用于在前端生成 zip 文件。</li>
+<li><strong>canvas</strong>：用于图片格式转换。</li>
+<li><strong>createImageBitmap</strong>：高效解码图片，便于绘制到 canvas。</li>
+<li><strong>fetch</strong>：获取图片二进制数据。</li>
+</ul>
+<h2 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h2><ol>
+<li><strong>批量 fetch</strong>：将每个图片 URL 对应的二进制数据（Blob）拉取到前端。</li>
+<li><strong>解码为 ImageBitmap</strong>：通过 createImageBitmap(blob) 异步解码，不阻塞主线程。</li>
+<li><strong>绘制与格式转换</strong>：在（Offscreen）Canvas 上用 drawImage 渲染图像，再用 toBlob 或 convertToBlob 导出指定格式（webp&#x2F;jpeg）和质量。</li>
+<li><strong>打包 ZIP</strong>：借助 JSZip，按文件名和格式将每个 Blob 添加到 ZIP。</li>
+<li><strong>触发下载</strong>：生成 ZIP Blob 后，构造临时链接 <a> 并自动点击下载。</li>
+</ol>
+<h2 id="关键代码实现"><a href="#关键代码实现" class="headerlink" title="关键代码实现"></a>关键代码实现</h2><figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs tsx"><span class="hljs-keyword">import</span> <span class="hljs-title class_">JSZip</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;jszip&#x27;</span>;<br><br><span class="hljs-comment">// 批量下载并转换图片为指定格式</span><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">downloadImagesZip</span> = (<span class="hljs-params"><span class="hljs-attr">images</span>: <span class="hljs-built_in">string</span>[], <span class="hljs-attr">format</span>: <span class="hljs-string">&#x27;webp&#x27;</span> | <span class="hljs-string">&#x27;jpeg&#x27;</span> = <span class="hljs-string">&#x27;webp&#x27;</span></span>) =&gt; &#123;<br>  <span class="hljs-keyword">const</span> zip = <span class="hljs-keyword">new</span> <span class="hljs-title class_">JSZip</span>();<br>  <span class="hljs-keyword">const</span> folder = zip.<span class="hljs-title function_">folder</span>(<span class="hljs-string">&#x27;images&#x27;</span>);<br><br>  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>(<br>    images.<span class="hljs-title function_">map</span>(<span class="hljs-keyword">async</span> imgUrl =&gt; &#123;<br>      <span class="hljs-comment">// 1. 获取图片 Blob</span><br>      <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(imgUrl);<br>      <span class="hljs-keyword">const</span> blob = <span class="hljs-keyword">await</span> res.<span class="hljs-title function_">blob</span>();<br><br>      <span class="hljs-comment">// 2. 解码为 ImageBitmap</span><br>      <span class="hljs-keyword">const</span> imageBitmap = <span class="hljs-keyword">await</span> <span class="hljs-title function_">createImageBitmap</span>(blob);<br><br>      <span class="hljs-comment">// 3. 绘制到 canvas 并导出为目标格式</span><br>      <span class="hljs-keyword">const</span> canvas = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;canvas&#x27;</span>);<br>      canvas.<span class="hljs-property">width</span> = imageBitmap.<span class="hljs-property">width</span>;<br>      canvas.<span class="hljs-property">height</span> = imageBitmap.<span class="hljs-property">height</span>;<br>      <span class="hljs-keyword">const</span> ctx = canvas.<span class="hljs-title function_">getContext</span>(<span class="hljs-string">&#x27;2d&#x27;</span>);<br>      ctx?.<span class="hljs-title function_">drawImage</span>(imageBitmap, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br><br>      <span class="hljs-comment">// 4. 转为 webp 或 jpeg Blob</span><br>      <span class="hljs-keyword">const</span> <span class="hljs-attr">outBlob</span>: <span class="hljs-title class_">Blob</span> = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span><br>        canvas.<span class="hljs-title function_">toBlob</span>(<span class="hljs-function"><span class="hljs-params">b</span> =&gt;</span> <span class="hljs-title function_">resolve</span>(b <span class="hljs-keyword">as</span> <span class="hljs-title class_">Blob</span>), <span class="hljs-string">`image/<span class="hljs-subst">$&#123;format&#125;</span>`</span>)<br>      );<br><br>      <span class="hljs-comment">// 5. 添加到 zip</span><br>      <span class="hljs-keyword">const</span> name = imgUrl.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;/&#x27;</span>).<span class="hljs-title function_">pop</span>()?.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\\.\\w+$/</span>, <span class="hljs-string">&#x27;&#x27;</span>) || <span class="hljs-string">&#x27;image&#x27;</span>;<br>      folder?.<span class="hljs-title function_">file</span>(<span class="hljs-string">`<span class="hljs-subst">$&#123;name&#125;</span>.<span class="hljs-subst">$&#123;format&#125;</span>`</span>, outBlob);<br>    &#125;)<br>  ).<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-comment">// 6. 生成并下载 zip</span><br>    zip.<span class="hljs-title function_">generateAsync</span>(&#123; <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;blob&#x27;</span> &#125;).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">content</span> =&gt;</span> &#123;<br>      <span class="hljs-keyword">const</span> a = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;a&#x27;</span>);<br>      a.<span class="hljs-property">href</span> = <span class="hljs-variable constant_">URL</span>.<span class="hljs-title function_">createObjectURL</span>(content);<br>      a.<span class="hljs-property">download</span> = <span class="hljs-string">`images.zip`</span>;<br>      a.<span class="hljs-title function_">click</span>();<br>      <span class="hljs-variable constant_">URL</span>.<span class="hljs-title function_">revokeObjectURL</span>(a.<span class="hljs-property">href</span>);<br>    &#125;);<br>  &#125;);<br>&#125;;<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="为什么要用-createImageBitmap？"><a href="#为什么要用-createImageBitmap？" class="headerlink" title="为什么要用 createImageBitmap？"></a>为什么要用 createImageBitmap？</h2><h3 id="1-性能更优"><a href="#1-性能更优" class="headerlink" title="1. 性能更优"></a>1. 性能更优</h3><p><code>createImageBitmap</code> 是异步的，不会阻塞主线程，适合批量处理图片。相比 <code>&lt;img&gt;</code> 标签+onload 的传统方式，解码速度更快，体验更流畅。</p>
+<h3 id="2-代码更简洁"><a href="#2-代码更简洁" class="headerlink" title="2. 代码更简洁"></a>2. 代码更简洁</h3><p>无需创建和管理 <code>&lt;img&gt;</code> 元素，也不用处理 onload、URL 回收等繁琐细节。直接 await 得到 bitmap，马上就能绘制到 canvas。</p>
+<h3 id="3-灵活性更高"><a href="#3-灵活性更高" class="headerlink" title="3. 灵活性更高"></a>3. 灵活性更高</h3><p>支持多种图片源（Blob、File、ImageData、Canvas等），不仅限于 URL。</p>
+<h3 id="4-避免-DOM-污染"><a href="#4-避免-DOM-污染" class="headerlink" title="4. 避免 DOM 污染"></a>4. 避免 DOM 污染</h3><p>不需要在页面上插入临时 <code>&lt;img&gt;</code> 元素，减少内存泄漏和 DOM 污染的风险。</p>
+<h3 id="传统方式（不推荐）："><a href="#传统方式（不推荐）：" class="headerlink" title="传统方式（不推荐）："></a>传统方式（不推荐）：</h3><figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs tsx"><span class="hljs-keyword">const</span> imgEl = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Image</span>();<br>imgEl.<span class="hljs-property">onload</span> = <span class="hljs-function">() =&gt;</span> &#123;<br>  ctx.<span class="hljs-title function_">drawImage</span>(imgEl, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br>&#125;;<br>imgEl.<span class="hljs-property">src</span> = <span class="hljs-variable constant_">URL</span>.<span class="hljs-title function_">createObjectURL</span>(blob);<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="推荐方式（现代浏览器）："><a href="#推荐方式（现代浏览器）：" class="headerlink" title="推荐方式（现代浏览器）："></a>推荐方式（现代浏览器）：</h3><figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs tsx"><span class="hljs-keyword">const</span> imageBitmap = <span class="hljs-keyword">await</span> <span class="hljs-title function_">createImageBitmap</span>(blob);<br>ctx.<span class="hljs-title function_">drawImage</span>(imageBitmap, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="兼容性说明"><a href="#兼容性说明" class="headerlink" title="兼容性说明"></a>兼容性说明</h2><ul>
+<li><code>createImageBitmap</code> 支持主流现代浏览器（Chrome、Firefox、Edge、Safari）。</li>
+<li>如果需要兼容 IE 或极老旧浏览器，可以降级为 <code>&lt;img&gt;</code> 标签方式，但建议优先使用 <code>createImageBitmap</code>。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过 <code>createImageBitmap</code> + <code>canvas</code> + <code>JSZip</code>，我们可以高效地实现前端批量图片下载与格式统一转换。这样不仅提升了用户体验，还能有效节省带宽和存储空间。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Web-API/" class="print-no-link">#Web API</a>
+      
+        <a href="/tags/JavaScript/" class="print-no-link">#JavaScript</a>
+      
+        <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="print-no-link">#性能优化</a>
+      
+        <a href="/tags/%E5%89%8D%E7%AB%AF/" class="print-no-link">#前端</a>
+      
+        <a href="/tags/%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86/" class="print-no-link">#图片处理</a>
+      
+        <a href="/tags/Canvas/" class="print-no-link">#Canvas</a>
+      
+        <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD/" class="print-no-link">#文件下载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>前端批量下载图片并统一转换格式的最佳实践</div>
+      <div>https://nanxfu.github.io/2025/05/04/前端批量下载图片并统一转换格式的最佳实践/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Beitragsautor</div>
+          <div>nanxfu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Veröffentlicht am</div>
+          <div>May 4, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Urheberrechtshinweis</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/05/04/%E5%89%8D%E7%AB%AF%E9%AD%94%E6%B3%95%E8%A7%A3%E5%AF%86%EF%BC%9A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-File%E3%80%81Blob-%E4%B8%8E-Object-URL/" title="前端魔法解密：深入理解 File、Blob 与 Object URL">
+                        <span class="hidden-mobile">前端魔法解密：深入理解 File、Blob 与 Object URL</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Inhaltsverzeichnis</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog funktioniert am besten mit aktiviertem JavaScript</div>
+  </noscript>
+</body>
+</html>
