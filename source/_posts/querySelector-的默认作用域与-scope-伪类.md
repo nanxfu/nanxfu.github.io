@@ -1,6 +1,6 @@
 ---
 title: querySelector 的默认作用域与 :scope 伪类
-index_img: /img/
+index_img: /img/css-selectors.png
 date: 2025-05-04 05:06:55
 tags:
   - CSS
