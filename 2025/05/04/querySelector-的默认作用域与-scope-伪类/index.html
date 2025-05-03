@@ -1,0 +1,716 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#fd79a8">
+  <meta name="author" content="nanxfu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在这篇文章中，我们将系统地回顾如何在 CSS 和 JavaScript 中选中父容器的第 2 个子元素，重点剖析 :nth-child()、:nth-of-type() 与 :scope 三大伪类的差异及其在 querySelector 中的正确用法，并给出最佳实践示例。 摘要 :nth-child(n) 根据元素在所有兄弟节点中的位置进行匹配（计数包括任意类型的子节点） (nth-child()">
+<meta property="og:type" content="article">
+<meta property="og:title" content="querySelector 的默认作用域与 :scope 伪类">
+<meta property="og:url" content="https://nanxfu.github.io/2025/05/04/querySelector-%E7%9A%84%E9%BB%98%E8%AE%A4%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E-scope-%E4%BC%AA%E7%B1%BB/index.html">
+<meta property="og:site_name" content="南小府の小屋">
+<meta property="og:description" content="在这篇文章中，我们将系统地回顾如何在 CSS 和 JavaScript 中选中父容器的第 2 个子元素，重点剖析 :nth-child()、:nth-of-type() 与 :scope 三大伪类的差异及其在 querySelector 中的正确用法，并给出最佳实践示例。 摘要 :nth-child(n) 根据元素在所有兄弟节点中的位置进行匹配（计数包括任意类型的子节点） (nth-child()">
+<meta property="og:locale">
+<meta property="og:image" content="https://nanxfu.github.io/img/css-selectors.png">
+<meta property="article:published_time" content="2025-05-03T21:06:55.000Z">
+<meta property="article:modified_time" content="2025-05-03T21:21:52.591Z">
+<meta property="article:author" content="nanxfu">
+<meta property="article:tag" content="CSS">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="DOM">
+<meta property="article:tag" content="选择器">
+<meta property="article:tag" content="querySelector">
+<meta property="article:tag" content="伪类">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nanxfu.github.io/img/css-selectors.png">
+  
+  
+  
+  <title>querySelector 的默认作用域与 :scope 伪类 - 南小府の小屋</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"nanxfu.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#e84393","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>南小府</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mood/" target="_self">
+                <i class="iconfont icon-notebook"></i>
+                <span>心情</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/1623251880550.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="querySelector 的默认作用域与 :scope 伪类"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-05-04 05:06" pubdate>
+          May 4, 2025 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">querySelector 的默认作用域与 :scope 伪类</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在这篇文章中，我们将系统地回顾如何在 CSS 和 JavaScript 中选中父容器的第 2 个子元素，重点剖析 <code>:nth-child()</code>、<code>:nth-of-type()</code> 与 <code>:scope</code> 三大伪类的差异及其在 <code>querySelector</code> 中的正确用法，并给出最佳实践示例。</p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><ul>
+<li><strong><code>:nth-child(n)</code></strong> 根据元素在<strong>所有</strong>兄弟节点中的位置进行匹配（计数包括任意类型的子节点） (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/%3Anth-child?utm_source=chatgpt.com">nth-child() - CSS: Cascading Style Sheets - MDN Web Docs - Mozilla</a>)。</li>
+<li><strong><code>:nth-of-type(n)</code></strong> 则只在同类型元素之间计数，更加稳健（只统计相同标签名的兄弟节点） (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/%3Anth-of-type?utm_source=chatgpt.com">nth-of-type() - CSS: Cascading Style Sheets - MDN Web Docs - Mozilla</a>)。</li>
+<li>在 JavaScript 中，<code>document.querySelector(&#39;:nth-child(2)&#39;)</code> 会在全局或当前上下文中找到第一个”在其父元素中排名第二”的元素，但不保证是指定容器的直接第 2 个子元素 (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector?utm_source=chatgpt.com">Element: querySelector() method - Web APIs | MDN</a>)。</li>
+<li>正确方案是对目标容器调用 <code>element.querySelector(&#39;:scope &gt; :nth-child(2)&#39;)</code>，其中 <code>:scope</code> 明确将匹配限定在当前元素，<code>&gt;</code> 表示只匹配<strong>直系</strong>子节点 (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/%3Ascope?utm_source=chatgpt.com">scope - CSS: Cascading Style Sheets - MDN Web Docs</a>, <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll?utm_source=chatgpt.com">Element: querySelectorAll() method - Web APIs | MDN</a>)。</li>
+<li>最直观的替代写法是直接使用 DOM API：<code>element.children[1]</code>（下标从 0 开始） (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll?utm_source=chatgpt.com">Element: querySelectorAll() method - Web APIs | MDN</a>)。</li>
+</ul>
+<hr>
+<h2 id="CSS-伪类：-nth-child-vs-nth-of-type"><a href="#CSS-伪类：-nth-child-vs-nth-of-type" class="headerlink" title="CSS 伪类：:nth-child() vs :nth-of-type()"></a>CSS 伪类：<code>:nth-child()</code> vs <code>:nth-of-type()</code></h2><h3 id="nth-child-的工作原理"><a href="#nth-child-的工作原理" class="headerlink" title=":nth-child() 的工作原理"></a><code>:nth-child()</code> 的工作原理</h3><ul>
+<li><code>:nth-child(n)</code> 按照父元素的子节点列表顺序进行计数，所有类型的节点都参与排名，索引从 1 开始 (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/%3Anth-child?utm_source=chatgpt.com">nth-child() - CSS: Cascading Style Sheets - MDN Web Docs - Mozilla</a>)。</li>
+<li>常见用法包括数字（如 <code>:nth-child(2)</code>），关键字 <code>odd</code>&#x2F;<code>even</code>，以及公式 An+B（如 <code>2n+1</code>，表示所有奇数位） (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/%3Anth-child?utm_source=chatgpt.com">nth-child() - CSS: Cascading Style Sheets - MDN Web Docs - Mozilla</a>)。</li>
+</ul>
+<h3 id="nth-of-type-的优势"><a href="#nth-of-type-的优势" class="headerlink" title=":nth-of-type() 的优势"></a><code>:nth-of-type()</code> 的优势</h3><ul>
+<li><code>:nth-of-type(n)</code> 仅在同类型（标签名相同）的兄弟节点中进行计数，过滤掉中间不同标签的干扰，更适合”选中第 n 个段落””第 n 行表格”等场景 (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/%3Anth-of-type?utm_source=chatgpt.com">nth-of-type() - CSS: Cascading Style Sheets - MDN Web Docs - Mozilla</a>)。</li>
+<li>在 DOM 结构频繁变化或含插入元素时，<code>:nth-of-type()</code> 通常比 <code>:nth-child()</code> 更不易出错 (<a target="_blank" rel="noopener" href="https://css-tricks.com/the-difference-between-nth-child-and-nth-of-type/?utm_source=chatgpt.com">The Difference Between :nth-child and :nth-of-type - CSS-Tricks</a>)。</li>
+</ul>
+<hr>
+<h2 id="querySelector-的默认作用域与-scope-伪类"><a href="#querySelector-的默认作用域与-scope-伪类" class="headerlink" title="querySelector 的默认作用域与 :scope 伪类"></a><code>querySelector</code> 的默认作用域与 <code>:scope</code> 伪类</h2><h3 id="querySelector-在-Element-与-Document-上的差异"><a href="#querySelector-在-Element-与-Document-上的差异" class="headerlink" title="querySelector 在 Element 与 Document 上的差异"></a><code>querySelector</code> 在 Element 与 Document 上的差异</h3><ul>
+<li><code>Document.querySelector(selector)</code> 返回文档中第一个匹配 <code>selector</code> 的元素 (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector?utm_source=chatgpt.com">Document: querySelector() method - Web APIs | MDN</a>)。</li>
+<li><code>Element.querySelector(selector)</code> 则在该元素的整个子树（<strong>所有</strong>后代）中查找第一个匹配项，同样不限制深度，也不限定仅直系子节点 (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector?utm_source=chatgpt.com">Element: querySelector() method - Web APIs | MDN</a>)。</li>
+</ul>
+<h3 id="为什么需要-scope"><a href="#为什么需要-scope" class="headerlink" title="为什么需要 :scope"></a>为什么需要 <code>:scope</code></h3><ul>
+<li>默认情况下，<code>querySelectorAll()</code> 与 <code>querySelector()</code> 在 Element 上调用时，选择器仍会匹配整个后代树，而不是仅限直系子节点。要限定作用域，必须在选择器前加上 <code>:scope</code> (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll?utm_source=chatgpt.com">Element: querySelectorAll() method - Web APIs | MDN</a>)。</li>
+<li><code>:scope</code> 伪类在选择器中代表当前正在调用 <code>querySelector</code> 的元素本身，使得随后使用的子选择符（如 <code>&gt; ...</code>）都从该元素开始计算 (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/%3Ascope?utm_source=chatgpt.com">scope - CSS: Cascading Style Sheets - MDN Web Docs</a>)。</li>
+</ul>
+<hr>
+<h2 id="实战：选中容器的第-2-个子元素"><a href="#实战：选中容器的第-2-个子元素" class="headerlink" title="实战：选中容器的第 2 个子元素"></a>实战：选中容器的第 2 个子元素</h2><h3 id="方法一：纯-CSS（只在样式表中）"><a href="#方法一：纯-CSS（只在样式表中）" class="headerlink" title="方法一：纯 CSS（只在样式表中）"></a>方法一：纯 CSS（只在样式表中）</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-comment">/* 仅在样式表中：选中 parent-container 的第2个 div 直系子元素 */</span><br><span class="hljs-selector-class">.parent-container</span> &gt; <span class="hljs-selector-tag">div</span><span class="hljs-selector-pseudo">:nth-child</span>(<span class="hljs-number">2</span>) &#123;<br>  <span class="hljs-comment">/* 样式规则 */</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="方法二：JavaScript-scope"><a href="#方法二：JavaScript-scope" class="headerlink" title="方法二：JavaScript + :scope"></a>方法二：JavaScript + <code>:scope</code></h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-comment">// 获取目标容器</span><br><span class="hljs-keyword">const</span> feed = <span class="hljs-built_in">document</span>.<span class="hljs-built_in">querySelector</span>(<span class="hljs-string">&#x27;[role=&quot;feed&quot;]&#x27;</span>);<br><span class="hljs-comment">// 选中其第2个直系子元素</span><br><span class="hljs-keyword">const</span> secondChild = feed.<span class="hljs-built_in">querySelector</span>(<span class="hljs-string">&#x27;:scope &gt; :nth-child(2)&#x27;</span>);<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>:scope</code> 保证 <code>&gt;</code> 之后的 <code>:nth-child(2)</code> 只在 <code>feed</code> 的直接子节点里生效，而不会误匹配深层嵌套的节点 (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/%3Ascope?utm_source=chatgpt.com">scope - CSS: Cascading Style Sheets - MDN Web Docs</a>, <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll?utm_source=chatgpt.com">Element: querySelectorAll() method - Web APIs | MDN</a>)。</li>
+</ul>
+<h3 id="方法三：DOM-API（最简洁）"><a href="#方法三：DOM-API（最简洁）" class="headerlink" title="方法三：DOM API（最简洁）"></a>方法三：DOM API（最简洁）</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-keyword">const</span> feed = <span class="hljs-built_in">document</span>.<span class="hljs-built_in">querySelector</span>(<span class="hljs-string">&#x27;[role=&quot;feed&quot;]&#x27;</span>);<br><span class="hljs-comment">// children 返回仅直系子元素的集合，索引从0开始</span><br><span class="hljs-keyword">const</span> secondChild = feed.children[<span class="hljs-number">1</span>];<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>children</code> 返回 <code>HTMLCollection</code>，它只包含 Element 类型的直系子节点，不含文本或注释节点，读取速度也更快 (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll?utm_source=chatgpt.com">Element: querySelectorAll() method - Web APIs | MDN</a>)。</li>
+</ul>
+<hr>
+<h2 id="小结与规范建议"><a href="#小结与规范建议" class="headerlink" title="小结与规范建议"></a>小结与规范建议</h2><ol>
+<li><strong>选中同类型的第 n 个元素</strong>：优先使用 <code>:nth-of-type(n)</code>；</li>
+<li><strong>选中所有类型的第 n 个子元素</strong>：使用 <code>:nth-child(n)</code>；</li>
+<li><strong>在 JS 中严格限定父容器范围</strong>：在 <code>querySelector</code> 内部请加上 <code>:scope</code>，并使用子选择符 <code>&gt;</code>；</li>
+<li><strong>性能和可读性</strong>：若仅需获取元素节点，<code>element.children[ index ]</code> 简洁高效。</li>
+</ol>
+<p>通过正确理解各伪类计数范围及 <code>querySelector</code> 的作用域，你可以在开发复杂布局或动态脚本时，既保证选择器的准确性，又提升代码可维护性。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CSS/" class="print-no-link">#CSS</a>
+      
+        <a href="/tags/JavaScript/" class="print-no-link">#JavaScript</a>
+      
+        <a href="/tags/DOM/" class="print-no-link">#DOM</a>
+      
+        <a href="/tags/%E9%80%89%E6%8B%A9%E5%99%A8/" class="print-no-link">#选择器</a>
+      
+        <a href="/tags/querySelector/" class="print-no-link">#querySelector</a>
+      
+        <a href="/tags/%E4%BC%AA%E7%B1%BB/" class="print-no-link">#伪类</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>querySelector 的默认作用域与 :scope 伪类</div>
+      <div>https://nanxfu.github.io/2025/05/04/querySelector-的默认作用域与-scope-伪类/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Beitragsautor</div>
+          <div>nanxfu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Veröffentlicht am</div>
+          <div>May 4, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Urheberrechtshinweis</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/05/04/flex%E5%B8%83%E5%B1%80%EF%BC%9A%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%AD%90%E9%A1%B9%E8%B6%85%E5%87%BA%E7%88%B6%E5%AE%B9%E5%99%A8%E7%9A%84%E6%83%85%E5%86%B5%EF%BC%9F/" title="搞定Flexbox溢出：如何优雅处理子容器超出父容器的问题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">搞定Flexbox溢出：如何优雅处理子容器超出父容器的问题</span>
+                        <span class="visible-mobile">Vorheriger</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/04/22/clip-path%E4%B8%8Etransform%EF%BC%9Ascale%E4%BD%BF%E7%94%A8%E9%A1%BA%E5%BA%8F%E4%B8%8D%E5%90%8C%E4%BC%9A%E9%80%A0%E6%88%90%E7%BB%93%E6%9E%9C%E4%B8%8D%E5%90%8C%E5%90%97%EF%BC%9F/" title="clip-path与transform：scale使用顺序不同会造成结果不同吗？">
+                        <span class="hidden-mobile">clip-path与transform：scale使用顺序不同会造成结果不同吗？</span>
+                        <span class="visible-mobile">Nächster</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Inhaltsverzeichnis</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Suchen</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Stichwort</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog funktioniert am besten mit aktiviertem JavaScript</div>
+  </noscript>
+</body>
+</html>
