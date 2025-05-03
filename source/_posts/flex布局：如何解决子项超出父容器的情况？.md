@@ -1,6 +1,6 @@
 ---
 title: 搞定Flexbox溢出：如何优雅处理子容器超出父容器的问题
-index_img: /img/
+index_img: https://picbed-1251050137.cos.ap-nanjing.myqcloud.com/20250504053536.png
 date: 2025-05-04 05:13:58
 tags:
   - CSS
